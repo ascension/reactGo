@@ -2,7 +2,16 @@
 @import '../common/typography';
 
 .navigation {
-  padding: 0 28px;
+  z-index: 1;
+  -webkit-flex-shrink: 0;
+  -ms-flex-negative: 0;
+  flex-shrink: 0;
+  padding: 15px 25px;
+  background-color: #0067C8;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .item {
