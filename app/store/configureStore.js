@@ -4,6 +4,11 @@ import thunk from 'redux-thunk';
 import rootReducer from 'reducers';
 import promiseMiddleware from 'middlewares/promiseMiddleware';
 import createLogger from 'redux-logger';
+import createSocketIoMiddleware from 'redux-socket.io';
+import io from 'socket.io-client';
+
+let socket = io('http://localhost:3000');
+let socketIoMiddleware = createSocketIoMiddleware(socket, "server/");
 
 /*
  * @param {Object} initial state to bootstrap our stores with for server-side rendering
@@ -13,7 +18,7 @@ import createLogger from 'redux-logger';
  */
 export default function configureStore(initialState, history) {
   // Installs hooks that always keep react-router and redux store in sync
-  const middleware = [thunk, promiseMiddleware, routerMiddleware(history)];
+  const middleware = [thunk, promiseMiddleware, routerMiddleware(history), socketIoMiddleware];
   let store;
 
   if (__DEVCLIENT__) {
@@ -33,6 +38,15 @@ export default function configureStore(initialState, history) {
       store.replaceReducer(nextReducer);
     });
   }
+
+  store.subscribe(()=>{
+    console.log('new client state', store.getState());
+  });
+
+  setInterval(() => {
+    store.dispatch({type:'server/hello', data:'Hello!'});
+
+  }, 5000);
 
   return store;
 }

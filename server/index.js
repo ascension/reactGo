@@ -7,6 +7,7 @@ import expressConfig from './config/express';
 import routesConfig from './config/routes';
 const App = require('../public/assets/server');
 const app = express();
+import http from 'http';
 
 /*
  * Database-specific setup
@@ -50,5 +51,26 @@ routesConfig(app);
  * to initialize and return the React-rendered html string
  */
 app.get('*', App.default);
+var server = http.createServer(app);
 
-app.listen(app.get('port'));
+var socket_io = require('socket.io');
+var io = socket_io();
+io.attach(server);
+io.on('connection', function(socket){
+  console.log("Socket connected: " + socket.id);
+  socket.on('action', (action) => {
+    if(action.type === 'server/hello'){
+      console.log('Got hello data!', action.data);
+      socket.emit('action', {type:'message', data:'good day!'});
+    }
+
+    if(action.type === 'server/CREATE_TOPIC_REQUEST'){
+      console.log('Got CREATE_TOPIC_REQUEST!', action.data);
+      socket.emit('action', {type:'message', data:'good day!'});
+    }
+  });
+});
+
+server.listen(3000);
+
+// app.listen(app.get('port'));
