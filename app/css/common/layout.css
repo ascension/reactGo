@@ -8,3 +8,9 @@
     flex: 0 1 200px;
   }
 }
+
+.Flex {
+  box-sizing: border-box;
+  display: flex;
+  flex: 1 1 auto;
+}

@@ -52,4 +52,9 @@ export default (app) => {
   } else {
     console.warn(unsupportedMessage('topics routes'));
   }
+
+  // game routes
+  if (gamesController) {
+
+  }
 };
