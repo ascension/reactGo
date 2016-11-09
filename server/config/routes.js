@@ -7,6 +7,14 @@ import { controllers, passport as passportConfig } from '../db';
 
 const usersController = controllers && controllers.users;
 const topicsController = controllers && controllers.topics;
+const gamesController = controllers && controllers.games;
+
+function isAuthenticated(req, res, next) {
+  if (req.isAuthenticated())
+    return next();
+
+  res.redirect('/login');
+}
 
 export default (app) => {
   // user routes
@@ -55,6 +63,8 @@ export default (app) => {
 
   // game routes
   if (gamesController) {
-
+    app.get('/game', isAuthenticated, gamesController.all);
+    app.post('/game', isAuthenticated, gamesController.add);
+    app.put('/game/:id', isAuthenticated, gamesController.update);
   }
 };

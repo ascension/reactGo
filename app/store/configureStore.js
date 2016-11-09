@@ -16,6 +16,9 @@ let socketIoMiddleware = createSocketIoMiddleware(socket, "server/");
  *                          while using browserHistory for client-side
  *                          rendering.
  */
+
+let createGameTestInterval = false;
+
 export default function configureStore(initialState, history) {
   // Installs hooks that always keep react-router and redux store in sync
   const middleware = [thunk, promiseMiddleware, routerMiddleware(history), socketIoMiddleware];
@@ -43,10 +46,11 @@ export default function configureStore(initialState, history) {
     console.log('new client state', store.getState());
   });
 
-  setInterval(() => {
-    store.dispatch({type:'server/hello', data:'Hello!'});
-
-  }, 5000);
+  if (createGameTestInterval === false) {
+    createGameTestInterval = setInterval(() => {
+      // store.dispatch({type:'server/hello', data:'Hello!'});
+    }, 15000);
+  }
 
   return store;
 }

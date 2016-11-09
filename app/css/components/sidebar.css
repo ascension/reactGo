@@ -1,49 +1,49 @@
 .Sidebar {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    -ms-flex-pack: justify;
-    justify-content: space-between;
-    will-change: transform;
-    width: 180px;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+  will-change: transform;
+  width: 180px;
 }
 
 .SidebarContainer {
-    box-sizing: border-box;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    position: static;
-    width: auto;
-    border-right: 1px solid #E4E6E8;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    will-change: transform;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: static;
+  width: auto;
+  border-right: 1px solid #E4E6E8;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  will-change: transform;
 }
 
 .SidebarItemContainer {
-    padding: 20px 25px;
-    padding-right: 40px;
+  padding: 20px 25px;
+  padding-right: 40px;
 }
 
 a {
-    text-decoration: none;
-    cursor: pointer;
-    color: #0067C8;
+  text-decoration: none;
+  cursor: pointer;
+  color: #0067C8;
 }
 
 .SidebarItem {
-    margin-left: 10px;
-    font-weight: 500;
-    color: #5c6878;
-    transition: all .25s ease-in-out;
+  margin-left: 10px;
+  font-weight: 500;
+  color: #5c6878;
+  transition: all .25s ease-in-out;
 }
 
 .SidebarTitle {
-    margin-left: 10px;
-    font-size: 16px;
-    font-weight: 500;
-    color: #5C6878;
+  margin-left: 10px;
+  font-size: 16px;
+  font-weight: 500;
+  color: #5C6878;
 }

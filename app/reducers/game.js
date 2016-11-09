@@ -8,10 +8,19 @@ const game = (
   switch (action.type) {
     case types.CREATE_GAME:
       return {
-        id: action.game_id,
-        bet_amount: action.bet_amount,
-        user_id: action.user_id
+        id: action.id,
+        userId: action.userId,
+        hash: action.hash,
+        createdAt: action.createdAt,
+        startedAt: action.startedAt,
+        updatedAt: action.updatedAt
       };
+    case types.GAME_LOBBY_TICK:
+      if (state.id === action.id) {
+        return { ...state, remainingLobbyTime: state.remainingLobbyTime - 1 };
+      }
+      return state;
+      return state.map(t => game(t, action));
     default:
       return state;
   }
@@ -25,28 +34,17 @@ const games = (
     case types.REQUEST_SUCCESS:
       if (action.data) return action.data;
       return state;
-    default:
-      return state;
-  }
-};
-
-const newGame = (
-  state = '',
-  action
-) => {
-  switch (action.type) {
-    case types.TYPING:
-      return action.newTopic;
     case types.CREATE_GAME:
-      return '';
+      return [...state, game(undefined, action)];
+    case types.GAME_LOBBY_TICK:
+      return state.map(t => game(g, action));
     default:
       return state;
   }
 };
 
 const gameReducer = combineReducers({
-  games,
-  newGame
+  games
 });
 
 export default gameReducer;

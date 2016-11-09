@@ -1,59 +1,67 @@
-import passport from 'passport';
+import _ from 'lodash';
 import Models from '../models';
 const Game = Models.Game;
+const sequelize = Models.sequelize;
+import { GAME_TYPES } from '../../../config/constants';
 
 /**
- * POST /game
+ * List
  */
-export function login(req, res, next) {
-  // Do email and password validation for the server
-  passport.authenticate('local', (authErr, user, info) => {
-    if (authErr) return next(authErr);
-    if (!user) {
-      return res.status(401).json({ message: info.message });
-    }
-    // Passport exposes a login() function on req (also aliased as
-    // logIn()) that can be used to establish a login session
-    return req.logIn(user, (loginErr) => {
-      if (loginErr) return res.status(401).json({ message: loginErr });
-      return res.status(200).json({
-        message: 'You have been successfully logged in.'
-      });
-    });
-  })(req, res, next);
+export function all(req, res) {
+  Game.findAll().then((topics) => {
+    res.json(topics);
+  }).catch((err) => {
+    console.log(err);
+    res.status(500).send('Error in first query');
+  });
 }
 
+/**
+ * Add a Game
+ */
+export function add(req, res) {
+  const newGame = Object.assign({}, req.body, { userId: req.session.passport.user, gameType: GAME_TYPES.COIN_FLIP});
+  return Game.create(newGame).then((createdGame) => {
+    res.status(200).send(createdGame);
+  }).catch((err) => {
+    console.log(err);
+    res.status(400).send(err);
+  });
+}
 
 /**
- * POST /signup
- * Create a new local account
+ * Update a Game
  */
-export function signUp(req, res, next) {
-  User.findOne({ where: { email: req.body.email } }).then((existingUser) => {
-    if (existingUser) {
-      return res.status(409).json({ message: 'Account with this email address already exists!' });
-    }
+export function update(req, res) {
+  const query = { id: req.params.id };
+  const isIncrement = req.body.isIncrement;
+  const isFull = req.body.isFull;
+  const omitKeys = ['id', '_id', '_v', 'isIncrement', 'isFull'];
+  const data = _.omit(req.body, omitKeys);
 
-    const user = User.build({
-      email: req.body.email,
-      password: req.body.password
+  if (isFull) {
+    Game.update(data, { where: query }).then(() => {
+      res.status(200).send('Updated successfully');
+    }).catch((err) => {
+      console.log(err);
+      res.status(500).send('We failed to save for some reason');
     });
-
-    return user.save().then(() => {
-      req.logIn(user, (err) => {
-        if (err) return res.status(401).json({ message: err });
-        return res.status(200).json({
-          message: 'You have been successfully logged in.'
-        });
-      });
+  } else {
+    const sign = isIncrement ? '+' : '-';
+    Game.update({
+      count: sequelize.literal(`count${sign}1`)
+    }, { where: query }).then(() => {
+      res.status(200).send('Updated successfully');
+    }).catch((err) => {
+      console.log(err);
+      // Not sure if server status is the correct status to return
+      res.status(500).send('We failed to save for some reason');
     });
-  }).catch((err) =>
-    next(err)
-  );
+  }
 }
 
 export default {
-  login,
-  logout,
-  signUp
+  all,
+  add,
+  update
 };

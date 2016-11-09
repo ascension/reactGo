@@ -12,7 +12,7 @@ export function makeGameRequest(method, id, data, api = '/game') {
   return request[method](api + (id ? ('/' + id) : ''), data);
 }
 
-// Game Action Creators
+// Games Action Creators
 export function beginGame(user_id, amount) {
   return {
     type: types.BEGIN_GAME,
@@ -21,19 +21,23 @@ export function beginGame(user_id, amount) {
   };
 }
 
-export function createGameRequest(user_id, bet_amount, game_id) {
+export function createGameRequest(newGame) {
+  const { id, userId, hash, createdAt, startedAt, updatedAt } = newGame;
   return {
     type: types.CREATE_GAME,
-    user_id,
-    bet_amount,
-    game_id
+    id,
+    userId,
+    hash,
+    createdAt,
+    startedAt,
+    updatedAt
   }
 }
 
-export function createGame(bet_amount) {
+export function createGame(betAmount) {
   return (dispatch, getState) => {
     const data = {
-      bet_amount
+      betAmount
     };
 
     return makeGameRequest('post', false, data)
@@ -43,31 +47,11 @@ export function createGame(bet_amount) {
           // on success, but I've opted to leave that out
           // since we already did an optimistic update
           // We could return res.json();
-          const { user_id, bet_amount, game_id } = res.json();
-          return dispatch(createGameRequest(user_id, bet_amount, game_id));
+          return dispatch(createGameRequest(res.data));
         }
       })
       .catch(() => {
-        return dispatch(createTopicFailure({ id, error: 'Oops! Something went wrong and we couldn\'t create your topic'}));
-      });
-  };
-}
-
-export function manualLogin(data) {
-  return dispatch => {
-    dispatch(beginLogin());
-
-    return makeUserRequest('post', data, '/login')
-      .then(response => {
-        if (response.status === 200) {
-          dispatch(loginSuccess(response.data.message));
-          dispatch(push('/'));
-        } else {
-          dispatch(loginError('Oops! Something went wrong!'));
-        }
-      })
-      .catch(err => {
-        dispatch(loginError(getMessage(err)));
+        // return dispatch(createTopicFailure({ id, error: 'Oops! Something went wrong and we couldn\'t create your topic'}));
       });
   };
 }

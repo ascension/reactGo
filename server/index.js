@@ -55,18 +55,31 @@ var server = http.createServer(app);
 
 var socket_io = require('socket.io');
 var io = socket_io();
+
+let game_count = 2;
+
+let games = [];
+
+function createGame() {
+  return {
+    id: game_count++,
+    status: 'NOT_STARTED',
+    playerCount: 5,
+    remainingLobbyTime: 60,
+    timeTillRoll: 10
+  };
+}
+
 io.attach(server);
 io.on('connection', function(socket){
   console.log("Socket connected: " + socket.id);
   socket.on('action', (action) => {
     if(action.type === 'server/hello'){
       console.log('Got hello data!', action.data);
-      socket.emit('action', {type:'message', data:'good day!'});
-    }
-
-    if(action.type === 'server/CREATE_TOPIC_REQUEST'){
-      console.log('Got CREATE_TOPIC_REQUEST!', action.data);
-      socket.emit('action', {type:'message', data:'good day!'});
+      games.push(createGame());
+      socket.emit('action', {type:'CREATE_GAME',
+        games: games
+      });
     }
   });
 });
