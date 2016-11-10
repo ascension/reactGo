@@ -39,7 +39,7 @@ export default (store) => {
   return (
     <Route path="/" component={App}>
       <IndexRoute component={Vote} fetchData={fetchVoteData} />
-      <Route path="games" component={Games} onEnter={requireAuth}/>
+      <Route path="games" component={Games} fetchData={fetchGameData} onEnter={requireAuth}/>
       <Route path="login" component={LoginOrRegister} onEnter={redirectAuth} />
       <Route path="dashboard" component={Dashboard} onEnter={requireAuth} >
         <Route path="about" component={About} onEnter={redirectAuth} />

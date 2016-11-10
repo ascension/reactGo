@@ -63,7 +63,7 @@ export default (app) => {
 
   // game routes
   if (gamesController) {
-    app.get('/game', isAuthenticated, gamesController.all);
+    app.get('/game', gamesController.all);
     app.post('/game', isAuthenticated, gamesController.add);
     app.put('/game/:id', isAuthenticated, gamesController.update);
   }
