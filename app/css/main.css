@@ -1,13 +1,15 @@
 @import 'settings';
 @import 'common/layout';
 @import 'common/typography';
+@import 'common/colors';
+
 
 @import url(https://fonts.googleapis.com/css?family=Montserrat:400,700);
 
 * { box-sizing: border-box; }
 
 html {
-  background-color: #3F4152;
+  background-color: #1c262a;
 }
 
 body {
@@ -19,6 +21,10 @@ body {
   text-rendering: optimizeLegibility;
 }
 
+a, a:active, a:active:visited, a:focus, a:focus:visited, a:link, a:link:visited, a:visited {
+  color: var(--colorOrange);
+}
+
 .app {
   font-weight: normal;
   font-smoothing: antialiased;
@@ -26,7 +32,7 @@ body {
   display: flex;
   flex: 1 1 auto;
   height: 100%;
-  background-color: #3F4152;
+  background-color: #1c262a;
   color: #ffffff;
 }
 
@@ -37,7 +43,9 @@ body {
   flex: 1 1 auto;
 }
 
-
+::-webkit-scrollbar-thumb {
+  background: #4aed78;
+}
 
 /* Add your global styles below... */
 
@@ -49,3 +57,12 @@ body {
 }
 
 */
+
+.wrapper {
+  position: relative;
+  display: block;
+}
+
+.wrapper .has-sidebar {
+  margin-left: 300px;
+}

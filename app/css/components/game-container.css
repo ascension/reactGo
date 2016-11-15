@@ -1,0 +1,95 @@
+@import '../common/colors';
+
+.wrapper {
+  position: relative;
+  display: block;
+}
+
+.has-sidebar {
+  margin-left: 300px;
+}
+
+.chat-header {
+  text-align: center;
+}
+
+.sidebar {
+  top: 0;
+  background: #1a2328;
+  z-index: 500;
+  width: 300px;
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  color: #FF9900;
+}
+
+.ticker {
+  width: 33%;
+  display: inline-block;
+  text-align: center;
+}
+
+.chat-window {
+  position: absolute;
+  top: 70px;
+  bottom: 70px;
+  left: 0;
+  right: 0;
+  overflow: auto;
+}
+
+.chat-window ul {
+  padding: 0;
+}
+
+.chat-window ul li {
+  overflow: hidden;
+  padding: 10px 15px;
+  position: relative;
+}
+
+.chat-type {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 70px;
+  background: #192125;
+  border-top: solid 1px #141e20;
+  padding: 18px 15px;
+}
+
+.chat-type h3 {
+  line-height: 34px;
+  text-align: center;
+  color: #fff;
+  font-size: 14px;
+  font-size: .875rem;
+  margin: 0;
+}
+
+.chat-message {
+  list-style: none;
+}
+
+.chat-message p {
+  font-size: 14px;
+  line-height: 18px;
+  margin: 0;
+  color: #868d9b;
+}
+
+.chat-message h3 {
+  margin: 0;
+  color: #ffffff;
+  font-size: 14px;
+}
+
+.is-admin h3 {
+  color: var(--colorOrange);
+}
+
+.is-mod h3 {
+  color: var(--colorGreen);
+}

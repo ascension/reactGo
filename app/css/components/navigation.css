@@ -7,12 +7,13 @@
   -ms-flex-negative: 0;
   flex-shrink: 0;
   padding: 15px 25px;
-  background-color: #282933;
+  background-color: #192125;
   box-sizing: border-box;
   display: flex;
   align-items: center;
-  color: #717491;
+  color: var(--colorOrange);
   justify-content: space-between;
+  margin-left: 300px;
 }
 
 .item {
@@ -27,5 +28,5 @@
 }
 
 .active {
-  color: var(--colorDodgerBlue);
+  color: var(--colorOrange);
 }

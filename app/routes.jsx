@@ -5,6 +5,7 @@ import { fetchVoteData, fetchGameData } from './fetch-data';
 import App from 'containers/App';
 import Vote from 'containers/Vote';
 import Games from 'containers/Games';
+import Game from 'containers/GameContainer';
 // import Game from 'containers/Game';
 import About from 'containers/About';
 import LoginOrRegister from 'containers/LoginOrRegister';
@@ -40,6 +41,7 @@ export default (store) => {
     <Route path="/" component={App}>
       <IndexRoute component={Vote} fetchData={fetchVoteData} />
       <Route path="games" component={Games} fetchData={fetchGameData} onEnter={requireAuth}/>
+      <Route path="game/:gameId" component={Game} onEnter={requireAuth}/>
       <Route path="login" component={LoginOrRegister} onEnter={redirectAuth} />
       <Route path="dashboard" component={Dashboard} onEnter={requireAuth} >
         <Route path="about" component={About} onEnter={redirectAuth} />
