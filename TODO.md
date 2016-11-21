@@ -13,3 +13,21 @@
         * Create Global Channel for Games
         * Global Chat Channel
         * 
+        
+
+## Game Steps
+* CREATE_GAME
+    * Check User Balance
+    * Record Bet
+        * This prevents the user from over allocating available funds to many games. 
+        * Also prevents games from halting because the user now doesnt have enough balance.
+        * PENDING_BET
+        
+* JOIN_GAME
+    * Add 
+    * PENDING_BET - User, Amount
+    * 
+* CANCEL_BET
+* GAME_COUNTDOWN
+* GAME_FLIPPING
+    

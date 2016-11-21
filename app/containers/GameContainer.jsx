@@ -73,7 +73,8 @@ class GameContainer extends Component {
     this.setState({
       percent: 100,
       timeRemaining: 5.0,
-      isFlipping: false
+      isFlipping: false,
+      gameEnded: false
     }, this.startCountDown());
   }
 
@@ -82,6 +83,8 @@ class GameContainer extends Component {
   }
 
   render() {
+
+    const degreeFlipped = 3600;
     return (
       <div className={cx('wrapper','has-sidebar')}>
         <div className={cx('sidebar')}>

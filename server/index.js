@@ -9,6 +9,9 @@ const App = require('../public/assets/server');
 const app = express();
 import http from 'http';
 
+import socket from './socket';
+
+
 /*
  * Database-specific setup
  * - connect to MongoDB using mongoose
@@ -53,9 +56,6 @@ routesConfig(app);
 app.get('*', App.default);
 var server = http.createServer(app);
 
-var socket_io = require('socket.io');
-var io = socket_io();
-
 let game_count = 2;
 
 let games = [];
@@ -70,19 +70,21 @@ function createGame() {
   };
 }
 
-io.attach(server);
-io.on('connection', function(socket){
-  console.log("Socket connected: " + socket.id);
-  socket.on('action', (action) => {
-    if(action.type === 'server/hello'){
-      console.log('Got hello data!', action.data);
-      games.push(createGame());
-      socket.emit('action', {type:'CREATE_GAME',
-        games: games
-      });
-    }
-  });
-});
+socket(server);
+
+// io.attach(server);
+// io.on('connection', function(socket){
+//   console.log("Socket connected: " + socket.id);
+//   socket.on('action', (action) => {
+//     if(action.type === 'server/hello'){
+//       console.log('Got hello data!', action.data);
+//       games.push(createGame());
+//       socket.emit('action', {type:'CREATE_GAME',
+//         games: games
+//       });
+//     }
+//   });
+// });
 
 server.listen(3000);
 

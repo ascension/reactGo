@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import classNames from 'classnames/bind';
-import { createGame } from '../actions/game';
+import { createGame, joinGame } from '../actions/game';
 import styles from 'css/components/game';
 import autoBind from 'react-autobind';
 import CreateGame from '../components/CreateGame';
@@ -55,6 +55,7 @@ class Games extends Component {
           <div className={cx('game-row')}>
             <div>Game ID</div>
             <div>Pot</div>
+            <div>Players</div>
             <div>Created By</div>
             <div>Action</div>
           </div>
@@ -64,6 +65,7 @@ class Games extends Component {
              <div className={cx('game-row')} key={game.id}>
                <div>{game.id}</div>
                <div>{this.state.betAmount}</div>
+               <div>{game.GamePlays.length} / {game.maxPlayers}</div>
                <div>{moment(game.createdAt).format('MM-DD-YYYY')}</div>
                <div>
                  <button
@@ -94,4 +96,4 @@ function mapStateToProps(state) {
 
 // Read more about where to place `connect` here:
 // https://github.com/rackt/react-redux/issues/75#issuecomment-135436563
-export default connect(mapStateToProps, { createGame })(Games);
+export default connect(mapStateToProps, { createGame, joinGame })(Games);

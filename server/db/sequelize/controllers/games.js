@@ -1,14 +1,19 @@
 import _ from 'lodash';
 import Models from '../models';
 const Game = Models.Game;
+const GamePlay = Models.GamePlay;
 const sequelize = Models.sequelize;
-import { GAME_TYPES } from '../../../config/constants';
+import { GAME_TYPES, BET_STATES } from '../../../config/constants';
 
 /**
  * List
  */
 export function all(req, res) {
-  Game.findAll().then((topics) => {
+  Game.findAll({
+    include: [{
+      model: GamePlay
+    }]
+  }).then((topics) => {
     res.json(topics);
   }).catch((err) => {
     console.log(err);
@@ -20,13 +25,35 @@ export function all(req, res) {
  * Add a Game
  */
 export function add(req, res) {
-  const newGame = Object.assign({}, req.body, { userId: req.session.passport.user, gameType: GAME_TYPES.COIN_FLIP});
+  const newGame = Object.assign({}, req.body, {
+    userId: req.session.passport.user,
+    gameType: GAME_TYPES.COIN_FLIP,
+    maxPlayers: 2
+  });
   return Game.create(newGame).then((createdGame) => {
-    res.status(200).send(createdGame);
+    return Game.find({
+        where: {
+          id: createdGame.id
+        },
+        include: [{
+          model: GamePlay
+        }]
+      }
+    ).then((foundGame) => {
+      res.status(200).send(foundGame);
+    });
   }).catch((err) => {
     console.log(err);
     res.status(400).send(err);
   });
+}
+
+/**
+ * Join a Game
+ */
+
+export function join(req, res) {
+  return Promise.resolve();
 }
 
 /**
@@ -63,5 +90,6 @@ export function update(req, res) {
 export default {
   all,
   add,
+  join,
   update
 };

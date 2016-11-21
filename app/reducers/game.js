@@ -7,10 +7,13 @@ const game = (
 ) => {
   switch (action.type) {
     case types.CREATE_GAME:
+      debugger;
       return {
         id: action.id,
         userId: action.userId,
         hash: action.hash,
+        GamePlays: action.GamePlays,
+        maxPlayers: action.maxPlayers,
         createdAt: action.createdAt,
         startedAt: action.startedAt,
         updatedAt: action.updatedAt
@@ -21,6 +24,9 @@ const game = (
       }
       return state;
       return state.map(t => game(t, action));
+    case types.JOIN_GAME_SUCCESS:
+      console.log('JOIN_GAME_SUCCESS', action);
+      return state;
     default:
       return state;
   }

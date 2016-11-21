@@ -100,6 +100,7 @@
   height: 200px;
   position: relative;
   margin: 50px auto;
+  visibility: visible;
 }
 /*this specifies the transition effects*/
 .flip .card.flipped {
@@ -108,12 +109,8 @@
   transition: all 5s ease 0s;
 }
 
-.flip .card.gameEnded {
-  visibility: hidden;
-}
-
 .flip .card.lowered {
-  /*-webkit-transform-origin: 0% 0%;*/
+  -webkit-transform-origin: 0% 0%;
   -webkit-transform: translate(0px, 200px);
   transition: all 2s ease 0s;
 }
@@ -131,7 +128,7 @@
   width: 100%;
   height: 100%;
   -webkit-transform-style: preserve-3d;
-  -webkit-transition: 1s;
+  /*-webkit-transition: 1s;*/
 }
 .flip .card .face {
   width: 100%;

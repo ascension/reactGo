@@ -65,6 +65,7 @@ export default (app) => {
   if (gamesController) {
     app.get('/game', gamesController.all);
     app.post('/game', isAuthenticated, gamesController.add);
+    app.post('/game/:id/join', isAuthenticated, gamesController.join);
     app.put('/game/:id', isAuthenticated, gamesController.update);
   }
 };

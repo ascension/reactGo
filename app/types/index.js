@@ -33,3 +33,6 @@ export const CREATE_GAME = 'CREATE_GAME';
 export const BEGIN_GAME = 'SERVER:BEGIN_GAME';
 export const GAME_LOBBY_TICK = 'GAME_LOBBY_TICK';
 export const GAME_FLIP_TICK = 'GAME_LOBBY_TICK';
+export const JOIN_GAME = 'server/JOIN_GAME';
+export const JOIN_GAME_SUCCESS = 'server/JOIN_GAME_SUCCESS';
+export const JOIN_GAME_ERROR = 'JOIN_GAME_ERROR';

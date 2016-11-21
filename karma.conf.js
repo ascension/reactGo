@@ -22,7 +22,8 @@ module.exports = function(config) {
 
     // Run karma through preprocessor plugins
     preprocessors: {
-      'tests.webpack.js': [ 'webpack', 'sourcemap' ]
+      'tests.webpack.js': [ 'webpack', 'sourcemap' ],
+      'server/tests/**/*.spec.js': ['babel']
     },
 
     // Continuous Integration mode
@@ -39,7 +40,7 @@ module.exports = function(config) {
       module: {
         loaders: [
           {
-            test: /\.js$|\.jsx$/,
+            test: /\.js$|\.jsx$|\.es6$/,
             loader: 'babel',
             // Reason why we put this here instead of babelrc
             // https://github.com/gaearon/react-transform-hmr/issues/5#issuecomment-142313637
@@ -54,6 +55,11 @@ module.exports = function(config) {
             include: path.join(__dirname, 'app'),
             exclude: path.join(__dirname, '/node_modules/')
           },
+          {
+            test: /\.js$|\.jsx$|\.es6$/,
+            loader: 'babel',
+            include: path.join(__dirname, 'server/tests'),
+          },
           { test: /\.json$/, loader: 'json-loader' },
           { test: /\.css$/, loader: 'null-loader' }
         ],
@@ -65,9 +71,9 @@ module.exports = function(config) {
         'react/lib/ReactContext': true
       },
       resolve: {
-        extensions: ['', '.js', '.jsx', '.css'],
+        extensions: ['', '.js', '.jsx', '.css', '.es6'],
         modulesDirectories: [
-          'app', 'node_modules'
+          'app', 'node_modules', 'server'
         ]
       },
       node: {
@@ -92,6 +98,7 @@ module.exports = function(config) {
       'karma-mocha-reporter',
       'karma-sourcemap-loader',
       'karma-webpack',
+      'karma-babel-preprocessor'
     ],
 
     // test results reporter to use

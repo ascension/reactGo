@@ -4,6 +4,7 @@ import * as types from '../types';
 import { polyfill } from 'es6-promise';
 import request from 'axios';
 import md5 from 'spark-md5';
+import { browserHistory } from 'react-router';
 
 polyfill();
 
@@ -21,8 +22,28 @@ export function beginGame(user_id, amount) {
   };
 }
 
+export function joinGameRequest(gameId) {
+  return {
+    type: types.JOIN_GAME,
+    gameId
+  };
+}
+
+export function joinGameFailure(error) {
+  const { msg } = error;
+
+  return {
+    type: types.JOIN_GAME_ERROR,
+    msg
+  }
+}
+
+export function navigateToGame(gameId) {
+  browserHistory.push('/game/' + gameId);
+}
+
 export function createGameRequest(newGame) {
-  const { id, userId, hash, createdAt, startedAt, updatedAt } = newGame;
+  const { id, userId, hash, createdAt, startedAt, updatedAt, GamePlays, maxPlayers } = newGame;
   return {
     type: types.CREATE_GAME,
     id,
@@ -30,9 +51,40 @@ export function createGameRequest(newGame) {
     hash,
     createdAt,
     startedAt,
-    updatedAt
+    updatedAt,
+    GamePlays,
+    maxPlayers
   }
 }
+function joinGameRequest(gameId) {
+  return {
+    type: types.JOIN_GAME,
+    gameId
+  }
+}
+
+export function joinGame(gameId) {
+  return (dispatch) => {
+    browserHistory.push('/game/' + gameId);
+    return dispatch(joinGameRequest(gameId))
+  }
+}
+
+// export function joinGame(gameId) {
+//   return (dispatch, getState) => {
+//
+//     return makeGameRequest('post', gameId, requestPayload)
+//       .then((res) => {
+//         if (res.status === 200) {
+//           return dispatch(joinGameRequest(res.data));
+//         }
+//       })
+//       .catch((error) => {
+//         console.log('Join Game Error - ', error);
+//         return dispatch(joinGameFailure(error))
+//       });
+//   }
+// }
 
 export function createGame(betAmount) {
   return (dispatch, getState) => {

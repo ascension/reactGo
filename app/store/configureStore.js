@@ -6,8 +6,14 @@ import promiseMiddleware from 'middlewares/promiseMiddleware';
 import createLogger from 'redux-logger';
 import createSocketIoMiddleware from 'redux-socket.io';
 import io from 'socket.io-client';
+import { browserHistory } from 'react-router';
 
 let socket = io('http://localhost:3000');
+
+socket.on('#navigate', function(path){
+  browserHistory.push(path);
+});
+
 let socketIoMiddleware = createSocketIoMiddleware(socket, "server/");
 
 /*

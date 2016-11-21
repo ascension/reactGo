@@ -13,4 +13,24 @@ defaultExport.DB_TYPES = {
   NONE: 'NONE'
 };
 
+defaultExport.BET_STATES = {
+  PLACED: 'PLACED',
+  CANCELLED: 'CANCELLED'
+};
+
+defaultExport.LEDGER_TXN_TYPES = {
+  BET_PLACED: 'BET_PLACED',
+  BET_CANCELED: 'BET_CANCELED',
+  DEPOSIT: 'DEPOSIT',
+  WITHDRAWAL: 'WITHDRAWAL',
+  TRANSFER: 'TRANSFER',
+  HOUSE_CUT: 'HOUSE_CUT'
+};
+
+defaultExport.CURRENCY = {
+  BTC: 'BTC',
+  ETH: 'ETH',
+  LTC: 'LTC'
+};
+
 module.exports = defaultExport;

@@ -1,9 +1,9 @@
 'use strict';
 
-import { GAME_TYPES } from '../../../config/constants';
+var BET_STATES = require('../../../config/constants').BET_STATES;
 
 module.exports = function(sequelize, DataTypes) {
-  var Game = sequelize.define('Game', {
+  var GamePlay = sequelize.define('GamePlay', {
     id: {
       type: DataTypes.INTEGER,
       primaryKey: true,
@@ -17,31 +17,30 @@ module.exports = function(sequelize, DataTypes) {
         key: 'id'
       }
     },
-    gameType: {
-      type: DataTypes.ENUM(GAME_TYPES.COIN_FLIP, GAME_TYPES.PARTY, GAME_TYPES.BATTLE),
+    gameId: {
+      type: DataTypes.INTEGER,
+      references: {
+        model: 'Games',
+        key: 'id'
+      }
+    },
+    betAmount: {
+      type: DataTypes.INTEGER,
       allowNull: false
     },
-    hash: {
-      type: DataTypes.TEXT,
-      allowNull: true
+    status: {
+      type: DataTypes.ENUM(BET_STATES.PLACED, BET_STATES.CANCELLED),
+      allowNull: false
     },
     createdAt: {
       allowNull: false,
       type: DataTypes.DATE,
       defaultValue: DataTypes.NOW
     },
-    startedAt: {
-      allowNull: true,
-      type: DataTypes.DATE
-    },
     updatedAt: {
       allowNull: false,
       type: DataTypes.DATE,
       defaultValue: DataTypes.NOW
-    },
-    maxPlayers: {
-      allowNull: false,
-      type: DataTypes.INTEGER
     }
   }, {
     timestamps: false,
@@ -49,14 +48,11 @@ module.exports = function(sequelize, DataTypes) {
     classMethods: {
       associate: function(models) {
         // associations can be defined here
-        Game.belongsTo(models.User, {
+        GamePlay.belongsTo(models.User, {
           foreignKey: 'userId'
-        });
-        Game.hasMany(models.GamePlay, {
-          foreignKey: 'gameId'
         });
       }
     }
   });
-  return Game;
+  return GamePlay;
 };
