@@ -58,7 +58,8 @@ export default function render(req, res) {
       authenticated,
       isWaiting: false,
       message: '',
-      isLogin: true
+      isLogin: true,
+      username: req.user ? req.user.username : ''
     }
   }, history);
   const routes = createRoutes(store);

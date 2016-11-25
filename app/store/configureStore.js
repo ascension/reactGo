@@ -14,6 +14,10 @@ socket.on('#navigate', function(path){
   browserHistory.push(path);
 });
 
+socket.on('chat', function(message){
+  console.log('Chat Message: ', message);
+});
+
 let socketIoMiddleware = createSocketIoMiddleware(socket, "server/");
 
 /*

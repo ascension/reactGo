@@ -13,6 +13,22 @@ const isLogin = (
   }
 };
 
+const games = (state = [], action) => {
+  switch (action.type) {
+    case types.CREATE_GAME:
+      if (state) return [...state, action.gameId];
+      else return state;
+    default:
+      return state;
+  }
+};
+const username = (state = '', action) => {
+  switch (action.type) {
+    default:
+      return state;
+  }
+};
+
 const message = (
   state = '',
   action
@@ -72,11 +88,28 @@ const authenticated = (
   }
 };
 
+const isAdmin = (state = false, action) => {
+  switch (action.type) {
+    default:
+      return state;
+  }
+};
+
+const isMod = (state = false, action) => {
+  switch (action.type) {
+    default:
+      return state;
+  }
+};
+
 const userReducer = combineReducers({
   isLogin,
   isWaiting,
   authenticated,
-  message
+  message,
+  username,
+  isAdmin,
+  isMod
 });
 
 export default userReducer;

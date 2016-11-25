@@ -56,17 +56,19 @@ export function createGameRequest(newGame) {
     maxPlayers
   }
 }
-function joinGameRequest(gameId) {
+function joinGameRequest(gameId, betAmount) {
   return {
     type: types.JOIN_GAME,
-    gameId
+    gameId,
+    betAmount
   }
 }
 
 export function joinGame(gameId) {
   return (dispatch) => {
-    browserHistory.push('/game/' + gameId);
-    return dispatch(joinGameRequest(gameId))
+    // browserHistory.push('/game/' + gameId);
+    const betAmount = 1000000;
+    return dispatch(joinGameRequest(gameId, betAmount))
   }
 }
 

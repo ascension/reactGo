@@ -1,9 +1,11 @@
 import React, { Component, PropTypes } from 'react';
+import { connect } from 'react-redux';
 
 import classNames from 'classnames/bind';
 import styles from 'css/components/game-container';
 const cx = classNames.bind(styles);
 import { Circle } from 'rc-progress';
+import ChatBox from './Chat';
 
 import GamePlayer from '../components/GamePlayer';
 
@@ -83,31 +85,12 @@ class GameContainer extends Component {
   }
 
   render() {
-
     const degreeFlipped = 3600;
+    const { user } = this.props;
     return (
       <div className={cx('wrapper','has-sidebar')}>
         <div className={cx('sidebar')}>
-          <h2 className={cx('chat-header')}>Chat</h2>
-          <div className={cx('chat-window')}>
-            <ul className="chat-messages">
-              <li className={cx('chat-message')}>
-                <h3>Tim</h3>
-                <p>Testing</p>
-              </li>
-              <li className={cx('chat-message', {'is-mod': true})}>
-                <h3>Tim</h3>
-                <p>Testing</p>
-              </li>
-              <li className={cx('chat-message',{'is-admin': true})}>
-                <h3>Tim</h3>
-                <p>Testing</p>
-              </li>
-            </ul>
-          </div>
-          <div className={cx('chat-type')}>
-            <h3><a href="/login">Please Login</a> to chat.</h3>
-          </div>
+          <ChatBox className={cx('sidebar')}/>
         </div>
         <div className={cx('players')}>
           <GamePlayer/>
@@ -132,4 +115,16 @@ class GameContainer extends Component {
   }
 }
 
-export default GameContainer;
+GameContainer.propTypes = {
+  user: PropTypes.object
+};
+
+function mapStateToProps(state) {
+  return {
+    user: state.user
+  };
+}
+
+// Read more about where to place `connect` here:
+// https://github.com/rackt/react-redux/issues/75#issuecomment-135436563
+export default connect(mapStateToProps, {})(GameContainer);

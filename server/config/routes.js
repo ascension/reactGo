@@ -8,6 +8,7 @@ import { controllers, passport as passportConfig } from '../db';
 const usersController = controllers && controllers.users;
 const topicsController = controllers && controllers.topics;
 const gamesController = controllers && controllers.games;
+const messagesController = controllers && controllers.messages;
 
 function isAuthenticated(req, res, next) {
   if (req.isAuthenticated())
@@ -67,5 +68,11 @@ export default (app) => {
     app.post('/game', isAuthenticated, gamesController.add);
     app.post('/game/:id/join', isAuthenticated, gamesController.join);
     app.put('/game/:id', isAuthenticated, gamesController.update);
+  }
+
+  // message routes
+  if (messagesController) {
+    app.get('/message', messagesController.all);
+    app.post('/message', isAuthenticated, messagesController.add);
   }
 };

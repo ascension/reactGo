@@ -4,9 +4,14 @@ var cookieParser = require('cookie-parser');
 import { session as dbSession } from '../server/db';
 import { sessionSecret } from '../server/config/secrets';
 import GameManager from './GameManager';
+import { ADD_MESSAGE, RECEIVE_MESSAGE } from '../app/types';
+import Models from '../server/db/sequelize/models';
+const Message = Models.Message;
 
 // var ioCookieParser = require('socket.io-cookie');
 var restartTime = 5000; // How long from  game_starting -> game_started
+
+const gameManager = new GameManager();
 
 class Game {
   constructor(socket, gameId) {
@@ -21,12 +26,56 @@ let game_count = 3;
 
 let connectedUsers = 0;
 
-function gameActions(action, socket) {
+function chatActions(action, clientSocket) {
+  if (action.type === ADD_MESSAGE) {
+    console.log('Chat Message: ', action.message);
+
+    const messageToCreate = Object.assign({}, {
+      text: action.message.text,
+      userId: clientSocket.request.user.id,
+      channelId: action.channelId
+    });
+    return Message.create(messageToCreate)
+      .then((newMessage) => {
+        Message.find({
+          where: {
+            id: newMessage.id
+          },
+          include: [{
+            model: Models.Channel
+          },{
+            model: Models.User
+          }]
+        })
+        .then((foundMessage) => {
+          const message = {
+            channel: foundMessage.Channel.name,
+            id: foundMessage.id,
+            text: foundMessage.text,
+            user: foundMessage.User.username,
+            time: foundMessage.createdAt
+          };
+          // relay message to other clients
+          clientSocket.broadcast.emit("action", { type: RECEIVE_MESSAGE, message: message });
+        });
+      });
+  }
+}
+
+function gameActions(action, clientSocket) {
   console.log('GameActions', action);
   if (action.type === 'server/JOIN_GAME') {
-    socket.emit('#navigate', '/game/' + action.gameId);
+    console.log(`User: ${clientSocket.request.user.id} Joining Game: ${action.gameId}`);
+    return gameManager.userJoinGame(clientSocket.request.user, action.betAmount, action.gameId)
+      .then((success) => {
+        io.to('chat').emit('chat', {msg: 'jerrod has joined the game.', userName: 'Jerrod'});
+        clientSocket.emit('#navigate', '/game/' + action.gameId);
+      })
+      .catch(() => {
+      });
     // socket.emit('action', {type: 'server/JOIN_GAME_SUCCESS'})
   }
+
 }
 
 var io = socket_io();
@@ -85,11 +134,14 @@ export default function(server) {
     console.log('connectedUsers:', connectedUsers);
   }
   
-  function onConnection(socket) {
-    socket.on('action', (action, ack) => {
-      if (socket.request.isAuthenticated()) {
-        socket.request.isAuthenticated();
-        gameActions(action, socket);
+  function onConnection(clientSocket) {
+    clientSocket.on('action', (action, ack) => {
+      if (clientSocket.request.isAuthenticated()) {
+        clientSocket.join('chat');
+        clientSocket.join('games');
+
+        gameActions(action, clientSocket);
+        chatActions(action, clientSocket);
 
         console.log('User is authed!');
       } else {

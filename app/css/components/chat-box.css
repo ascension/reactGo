@@ -1,0 +1,107 @@
+.chat-window {
+  position: absolute;
+  top: 70px;
+  bottom: 131px;
+  left: 0;
+  right: 0;
+  overflow: auto;
+}
+
+.chat-window ul {
+  padding: 0;
+}
+
+.chat-window ul li {
+  overflow: hidden;
+  padding: 5px 15px;
+  position: relative;
+}
+
+.chat-type {
+  position: absolute;
+  bottom: 30px;
+  left: 0;
+  right: 0;
+  height: 100px;
+  background: #192125;
+  border-top: solid 1px #141e20;
+  padding: 18px 15px;
+}
+
+.chat-type h3 {
+  line-height: 34px;
+  text-align: center;
+  color: #fff;
+  font-size: 14px;
+  font-size: .875rem;
+  margin: 0;
+}
+
+.chat-message {
+  list-style: none;
+}
+
+.chat-message p {
+  font-size: 14px;
+  line-height: 18px;
+  margin: 0;
+  color: #868d9b;
+}
+
+.chat-message h3 {
+  margin: 0;
+  color: #ffffff;
+  font-size: 14px;
+}
+
+.is-admin h3 {
+  color: var(--colorOrange);
+}
+
+.is-mod h3 {
+  color: var(--colorGreen);
+}
+
+.chat-box {
+  min-height: 100px;
+  width: 100%;
+  background-color: #1c262a;
+  box-shadow: none;
+  border: none;
+  color: white;
+  outline: none;
+  font-size: 15px;
+  resize: none;
+}
+
+.chat-box::-webkit-input-placeholder {
+  color: rgba(255, 255, 255, 0.4);
+  text-shadow: none;
+}
+.chat-box::-moz-placeholder { /* Firefox 19+ */
+  color: rgba(255, 255, 255, 0.4);
+  text-shadow: none;
+}
+.chat-box:-ms-input-placeholder { /* IE 10+ */
+  color: rgba(255, 255, 255, 0.4);
+  text-shadow: none;
+}
+.chat-box:-moz-placeholder { /* Firefox 18- */
+  color: rgba(255, 255, 255, 0.4);
+  text-shadow: none;
+}
+
+.chat-mention span {
+  color: #FF9900;
+}
+
+::-webkit-scrollbar              {
+  color:  #4aed78;
+  border-radius: 5px;
+}
+::-webkit-scrollbar-button       { /* 2 */ }
+::-webkit-scrollbar-track        { /* 3 */ }
+::-webkit-scrollbar-track-piece  { /* 4 */ }
+::-webkit-scrollbar-thumb        { /* 5 */ }
+::-webkit-scrollbar-corner       { /* 6 */ }
+::-webkit-resizer                { /* 7 */ }
