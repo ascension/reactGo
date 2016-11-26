@@ -9,7 +9,8 @@ import Game from 'containers/GameContainer';
 // import Game from 'containers/Game';
 import About from 'containers/About';
 import LoginOrRegister from 'containers/LoginOrRegister';
-import Dashboard from 'containers/Dashboard';
+import Account from 'containers/Account';
+import Withdraw from 'containers/Withdraw';
 
 /*
  * @param {Redux Store}
@@ -39,16 +40,13 @@ export default (store) => {
   };
   return (
     <Route path="/" component={App}>
-      <IndexRoute component={Vote} fetchData={fetchVoteData} />
-      <Route path="games" component={Games} fetchData={fetchGameData} onEnter={requireAuth}/>
+      <IndexRoute component={Games} fetchData={fetchGameData}/>
+      <Route path="games" component={Games} fetchData={fetchGameData}/>
       <Route path="game/:gameId" component={Game} onEnter={requireAuth}/>
       <Route path="login" component={LoginOrRegister} onEnter={redirectAuth} />
-      <Route path="dashboard" component={Dashboard} onEnter={requireAuth} >
-        <Route path="about" component={About} onEnter={redirectAuth} />
+      <Route path="account" component={Account} onEnter={requireAuth}>
+        <Route path="withdraw" component={Withdraw} onEnter={redirectAuth} />
       </Route>
     </Route>
   );
 };
-
-//       <Route path="games/:gameId" component={Game} fetchData={fetchGameData} />
-

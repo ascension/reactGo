@@ -1,5 +1,15 @@
 // NOTE:Chat actions
-import { ADD_MESSAGE, RECEIVE_MESSAGE, RECEIVE_CHANNEL, ADD_CHANNEL, TYPING, STOP_TYPING, CHANGE_CHANNEL} from '../types';
+import {
+  ADD_MESSAGE,
+  RECEIVE_MESSAGE,
+  RECEIVE_CHANNEL,
+  ADD_CHANNEL,
+  TYPING,
+  STOP_TYPING,
+  CHANGE_CHANNEL,
+  LOAD_MESSAGES_SUCCESS,
+  LOAD_MESSAGES
+} from '../types';
 import request from 'axios';
 
 /*
@@ -23,6 +33,24 @@ function addMessage(message) {
     message,
     channelId: 1
   };
+}
+
+function loadMessages() {
+  return {
+    type: LOAD_MESSAGES,
+    date: Date.now(),
+    channel: state.activeChannel,
+
+  }
+}
+
+function fetchMessages(messages, channel) {
+  return {
+    type: LOAD_MESSAGES_SUCCESS,
+    date: Date.now(),
+    channel,
+    messages
+  }
 }
 
 export function receiveRawMessage(message) {
@@ -70,6 +98,18 @@ export function changeChannel(channel) {
 export function createMessage(message) {
   return dispatch => {
     return dispatch(addMessage(message));
+  }
+}
+
+export function fetchMessagesRequest(channel) {
+  return (dispatch) => {
+    return makeMessageRequest('get', channel)
+      .then((messages) => {
+        dispatch(fetchMessages(messages.data, channel))
+      })
+      .catch((error) => {
+        console.log('Fetch Messages Error: ', error);
+      })
   }
 }
 

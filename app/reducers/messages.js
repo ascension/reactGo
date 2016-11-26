@@ -24,7 +24,7 @@ export default function messages(state = initialState, action) {
         loading: false,
         loaded: true,
         fetchHistory: [...state.fetchHistory, { lastFetch: action.date, channelName: action.channel }],
-        data: [...state.data.filter(message => message.channelID !== action.channel), ...action.json]
+        data: [...state.data.filter(message => message.channelID !== action.channel), ...action.messages]
       };
     case LOAD_MESSAGES_FAIL:
       return {...state,

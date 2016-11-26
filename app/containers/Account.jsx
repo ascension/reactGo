@@ -15,8 +15,6 @@ import { Link } from 'react-router';
 class Dashboard extends React.Component {
   constructor(props) {
     super(props);
-
-
   }
 
   render() {
@@ -25,7 +23,7 @@ class Dashboard extends React.Component {
         <Sidebar />
         <div className={cx('ContentContainer')}>
           <div className={cx('Flex')}>
-            Testing
+            {this.props.children}
           </div>
         </div>
       </div>

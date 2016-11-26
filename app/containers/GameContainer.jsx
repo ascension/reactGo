@@ -88,11 +88,7 @@ class GameContainer extends Component {
     const degreeFlipped = 3600;
     const { user } = this.props;
     return (
-      <div className={cx('wrapper','has-sidebar')}>
-        <div className={cx('sidebar')}>
-          <ChatBox className={cx('sidebar')}/>
-        </div>
-        <div className={cx('players')}>
+      <div className={cx('players')}>
           <GamePlayer/>
           <span className={cx('ticker')}>
             <div className={cx('flip')}>
@@ -110,7 +106,6 @@ class GameContainer extends Component {
           </span>
           <GamePlayer/>
         </div>
-      </div>
     );
   }
 }

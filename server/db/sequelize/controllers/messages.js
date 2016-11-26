@@ -7,7 +7,19 @@ const sequelize = Models.sequelize;
  * List
  */
 export function all(req, res) {
-  Message.findAll().then((messages) => {
+  const channel = req.params.channel ? req.params.channel : 'Lobby';
+  console.log('Get Messages: ', channel );
+  return Message.findAll({
+    include: [{
+      model: Models.Channel,
+      where: { name: channel }
+    },
+    {
+      model: Models.User,
+      attributes: ['username']
+    }
+    ]
+  }).then((messages) => {
     res.json(messages);
   }).catch((err) => {
     console.log(err);

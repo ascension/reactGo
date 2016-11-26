@@ -20,32 +20,17 @@ class Sidebar extends React.Component {
     return (
       <div className={cx('SidebarContainer')}>
         <div>
-          <Link to="dashboard">
+          <Link to="/account/withdraw">
             <div className={cx('SidebarItemContainer')}>
-              <div className={cx('SidebarTitle')}>Dashboard</div>
+              <div className={cx('SidebarTitle')}>Withdraw</div>
             </div>
           </Link>
-          <Link to="dashboard">
+          <Link to="/account/deposit">
             <div className={cx('SidebarItemContainer')}>
-              <div className={cx('SidebarTitle')}>Buy</div>
+              <div className={cx('SidebarTitle')}>Deposit</div>
             </div>
           </Link>
-          <Link to="dashboard">
-            <div className={cx('SidebarItemContainer')}>
-              <div className={cx('SidebarTitle')}>Sell</div>
-            </div>
-          </Link>
-          <Link to="dashboard">
-            <div className={cx('SidebarItemContainer')}>
-              <div className={cx('SidebarTitle')}>Account</div>
-            </div>
-          </Link>
-          <Link to="dashboard">
-            <div className={cx('SidebarItemContainer')}>
-              <div className={cx('SidebarTitle')}>Tools</div>
-            </div>
-          </Link>
-          <Link to="dashboard">
+          <Link to="/account/settings">
             <div className={cx('SidebarItemContainer')}>
               <div className={cx('SidebarTitle')}>Settings</div>
             </div>

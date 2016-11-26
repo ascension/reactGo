@@ -5,6 +5,7 @@ import { createGame, joinGame } from '../actions/game';
 import styles from 'css/components/game';
 import autoBind from 'react-autobind';
 import CreateGame from '../components/CreateGame';
+import AppContainer from '../containers/AppContainer';
 import moment from 'moment';
 
 
@@ -71,7 +72,11 @@ class Games extends Component {
                  <button
                    className={cx('game-btn')}
                    onClick={() => {joinGame(game.id)}}
-                 >Join Game</button>
+                 >
+                   {
+                     this.props.user.authenticated ? 'Join Game' : 'Login to Play'
+                   }
+                 </button>
                </div>
              </div>
              )
@@ -90,7 +95,8 @@ Games.propTypes = {
 
 function mapStateToProps(state) {
   return {
-    games: state.game.games
+    games: state.game.games,
+    user: state.user
   };
 }
 

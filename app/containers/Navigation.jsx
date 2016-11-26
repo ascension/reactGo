@@ -13,16 +13,16 @@ const Navigation = ({ user, logOut }) => {
       <nav className={cx('navigation')} role="navigation">
         <Link to="/"
           className={cx('item', 'logo')}
-          activeClassName={cx('active')}>CoinRocket</Link>
+          activeClassName={cx('active')}>CryptoDuel</Link>
+          <Link to="/about" className={cx('item')} activeClassName={cx('active')}>About</Link>
+          <Link className={cx('item')} to="/games">Games</Link>
+          <Link className={cx('item')} to="/account">Account</Link>
           { user.authenticated ? (
             <Link onClick={logOut}
-              className={cx('item')} to="/">Logout</Link>
+                  className={cx('item')} to="/">Logout</Link>
           ) : (
             <Link className={cx('item')} to="/login">Log in</Link>
           )}
-          <Link className={cx('item')} to="/games">Games</Link>
-          <Link className={cx('item')} to="/dashboard">Dashboard</Link>
-          <Link to="/about" className={cx('item')} activeClassName={cx('active')}>About</Link>
       </nav>
     );
 };

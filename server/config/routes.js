@@ -72,7 +72,7 @@ export default (app) => {
 
   // message routes
   if (messagesController) {
-    app.get('/message', messagesController.all);
+    app.get('/message/:channel', messagesController.all);
     app.post('/message', isAuthenticated, messagesController.add);
   }
 };

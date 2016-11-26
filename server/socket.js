@@ -52,7 +52,7 @@ function chatActions(action, clientSocket) {
             channel: foundMessage.Channel.name,
             id: foundMessage.id,
             text: foundMessage.text,
-            user: foundMessage.User.username,
+            User: { username: foundMessage.User.username , isMod: false, isAdmin: false },
             time: foundMessage.createdAt
           };
           // relay message to other clients

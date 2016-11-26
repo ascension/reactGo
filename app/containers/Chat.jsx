@@ -2,17 +2,18 @@ import React, { Component, PropTypes } from 'react';
 import classNames from 'classnames/bind';
 import { connect } from 'react-redux';
 import styles from 'css/components/chat-box';
-import { createMessage } from '../actions/chat';
-import moment from 'moment';
-const cx = classNames.bind(styles);
+import { createMessage, fetchMessagesRequest } from '../actions/chat';
+import Message from '../components/ChatMessage';
 
-const initialChannel = 'main';
+const cx = classNames.bind(styles);
+const initialChannel = 'Lobby';
 
 class ChatBox extends Component {
   constructor(props) {
     super(props);
     this.handleKeyPress = this.handleKeyPress.bind(this);
     this.submitMessage = this.submitMessage.bind(this);
+    this.setMessageRef = this.setMessageRef.bind(this);
   }
 
   handleKeyPress(event) {
@@ -29,34 +30,28 @@ class ChatBox extends Component {
     this.props.createMessage({
       id: Date.now(),
       text: message,
-      user: user.username,
+      User: { username: user.username },
       channel: activeChannel,
       createdAt: Date.now()
     });
   }
 
   componentDidMount() {
-    // Fetch the chat messages here.
+    this.props.fetchMessagesRequest(initialChannel);
 
-    // Scroll to the bottom on initialization
     if (this.lastMessage) {
       this.lastMessage.scrollIntoView();
     }
   }
 
   componentDidUpdate() {
-    // Scroll as new elements come along
     if (this.lastMessage) {
       this.lastMessage.scrollIntoView();
     }
   }
 
-  renderMessageText(message) {
-    const { user } = this.props;
-    var replace = message.replace(`@${user.username}`, `<span>@${user.username}</span>`);
-    return (
-      <p className={cx('chat-mention')} dangerouslySetInnerHTML={{__html: replace}}/>
-    );
+  setMessageRef(ref) {
+    this.lastMessage = ref;
   }
 
   render() {
@@ -68,16 +63,7 @@ class ChatBox extends Component {
           <ul className="chat-messages">
             {
               messages.map((message) => {
-                return (
-                  <li
-                    ref={(input) => { this.lastMessage = input; }}
-                    key={message.id}
-                    className={cx('chat-message', {'is-mod': message.user.isMod, 'is-admin': message.user.isAdmin})}
-                  >
-                    <h3>{message.user} <small>{moment(message.createdAt).format('HH:mm')}</small></h3>
-                    {this.renderMessageText(message.text)}
-                  </li>
-                );
+                return <Message key={message.id} message={message} setMessageRef={this.setMessageRef}/>
               })
             }
           </ul>
@@ -100,7 +86,6 @@ ChatBox.propTypes = {
   user: PropTypes.object.isRequired,
   channels: PropTypes.array.isRequired,
   activeChannel: PropTypes.string.isRequired,
-  // typers: PropTypes.array.isRequired
 };
 
 function mapStateToProps(state) {
@@ -109,10 +94,9 @@ function mapStateToProps(state) {
     channels: state.channels.data,
     activeChannel: state.activeChannel.name,
     user: state.user
-    // typers: state.typers,
   }
 }
 
 // Read more about where to place `connect` here:
 // https://github.com/rackt/react-redux/issues/75#issuecomment-135436563
-export default connect(mapStateToProps, { createMessage })(ChatBox);
+export default connect(mapStateToProps, { createMessage, fetchMessagesRequest })(ChatBox);

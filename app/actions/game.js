@@ -5,6 +5,7 @@ import { polyfill } from 'es6-promise';
 import request from 'axios';
 import md5 from 'spark-md5';
 import { browserHistory } from 'react-router';
+import { push } from 'react-router-redux';
 
 polyfill();
 
@@ -65,7 +66,13 @@ function joinGameRequest(gameId, betAmount) {
 }
 
 export function joinGame(gameId) {
-  return (dispatch) => {
+  return (dispatch, getState) => {
+    const user = getState().user;
+
+    if (!user.authenticated) {
+      return dispatch(push('/login'));
+    }
+
     // browserHistory.push('/game/' + gameId);
     const betAmount = 1000000;
     return dispatch(joinGameRequest(gameId, betAmount))
