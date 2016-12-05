@@ -102,6 +102,13 @@ const isMod = (state = false, action) => {
   }
 };
 
+const id = (state = null, action) => {
+  switch (action.type) {
+    default:
+      return state;
+  }
+};
+
 const userReducer = combineReducers({
   isLogin,
   isWaiting,
@@ -109,7 +116,8 @@ const userReducer = combineReducers({
   message,
   username,
   isAdmin,
-  isMod
+  isMod,
+  id
 });
 
 export default userReducer;

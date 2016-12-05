@@ -58,17 +58,18 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: true
     },
     createdAt: {
-      allowNull: false,
+      allowNull: true,
       type: DataTypes.DATE,
       defaultValue: DataTypes.NOW
     },
     updatedAt: {
-      allowNull: false,
+      allowNull: true,
       type: DataTypes.DATE
     }
   }, {
     timestamps: false,
     paranoid: true,
+    tableName: 'Ledger',
     classMethods: {
       associate: function(models) {
         // associations can be defined here

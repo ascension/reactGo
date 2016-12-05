@@ -1,6 +1,7 @@
 import _ from 'lodash';
 import Models from '../models';
 const Game = Models.Game;
+const User = Models.User;
 const GamePlay = Models.GamePlay;
 const sequelize = Models.sequelize;
 import { GAME_TYPES, BET_STATES } from '../../../config/constants';
@@ -11,10 +12,26 @@ import { GAME_TYPES, BET_STATES } from '../../../config/constants';
 export function all(req, res) {
   Game.findAll({
     include: [{
-      model: GamePlay
+      model: GamePlay,
+      include: [{ model: User, attributes: ['username'] }]
     }]
-  }).then((topics) => {
-    res.json(topics);
+  }).then((games) => {
+    res.json(games);
+  }).catch((err) => {
+    console.log(err);
+    res.status(500).send('Error in first query');
+  });
+}
+
+export function one(req, res) {
+  Game.findOne({
+    include: [{
+      model: GamePlay,
+      include: [{ model: User, attributes: ['username'] }]
+    }],
+    where: { id: req.params.id }
+  }).then((game) => {
+    res.json(game);
   }).catch((err) => {
     console.log(err);
     res.status(500).send('Error in first query');
@@ -89,6 +106,7 @@ export function update(req, res) {
 
 export default {
   all,
+  one,
   add,
   join,
   update

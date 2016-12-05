@@ -64,10 +64,11 @@ export default (app) => {
 
   // game routes
   if (gamesController) {
-    app.get('/game', gamesController.all);
-    app.post('/game', isAuthenticated, gamesController.add);
-    app.post('/game/:id/join', isAuthenticated, gamesController.join);
-    app.put('/game/:id', isAuthenticated, gamesController.update);
+    app.get('/api/game', gamesController.all);
+    app.get('/api/game/:id', gamesController.one);
+    app.post('/api/game', isAuthenticated, gamesController.add);
+    app.post('/api/game/:id/join', isAuthenticated, gamesController.join);
+    app.put('/api/game/:id', isAuthenticated, gamesController.update);
   }
 
   // message routes

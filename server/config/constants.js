@@ -1,6 +1,11 @@
 /* Use this old export style until sequelize cli supports es6 syntax */
 function defaultExport() {}
 
+defaultExport.GAME_STATES = {
+  WAITING: 'WAITING',
+  STARTING: 'STARTING'
+};
+
 defaultExport.GAME_TYPES = {
   COIN_FLIP: 'COIN_FLIP',
   PARTY: 'PARTY',

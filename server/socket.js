@@ -4,14 +4,13 @@ var cookieParser = require('cookie-parser');
 import { session as dbSession } from '../server/db';
 import { sessionSecret } from '../server/config/secrets';
 import GameManager from './GameManager';
-import { ADD_MESSAGE, RECEIVE_MESSAGE } from '../app/types';
+import { ADD_MESSAGE, RECEIVE_MESSAGE, JOIN_GAME_SUCCESS, NOT_ENOUGH_BALANCE } from '../app/types';
 import Models from '../server/db/sequelize/models';
 const Message = Models.Message;
 
 // var ioCookieParser = require('socket.io-cookie');
 var restartTime = 5000; // How long from  game_starting -> game_started
 
-const gameManager = new GameManager();
 
 class Game {
   constructor(socket, gameId) {
@@ -67,19 +66,26 @@ function gameActions(action, clientSocket) {
   if (action.type === 'server/JOIN_GAME') {
     console.log(`User: ${clientSocket.request.user.id} Joining Game: ${action.gameId}`);
     return gameManager.userJoinGame(clientSocket.request.user, action.betAmount, action.gameId)
-      .then((success) => {
+      .then((gamePlay) => {
         io.to('chat').emit('chat', {msg: 'jerrod has joined the game.', userName: 'Jerrod'});
-        clientSocket.emit('#navigate', '/game/' + action.gameId);
+        gameManager.getGame(action.gameId)
+          .then((game) => {
+            io.emit("action", { type: JOIN_GAME_SUCCESS, game });
+            clientSocket.emit('#navigate', '/game/' + action.gameId);
+          });
       })
-      .catch(() => {
+      .catch((error) => {
+        clientSocket.emit('action', { type: NOT_ENOUGH_BALANCE, message: 'Not enough balance.' });
+        console.log('Join Game Error: ', error);
       });
     // socket.emit('action', {type: 'server/JOIN_GAME_SUCCESS'})
   }
-
 }
 
 var io = socket_io();
 let sessionStore = dbSession();
+const gameManager = new GameManager(io);
+
 
 io.use(passportSocketIo.authorize({
   cookieParser: cookieParser,       // the same middleware you registrer in express

@@ -11,6 +11,8 @@ export default function message(state = {
   type: 'SUCCESS'
 }, action = {}) {
   switch (action.type) {
+    case types.NOT_ENOUGH_BALANCE:
+      return {...state, message: action.message, type: 'ERROR'};
     case types.LOGIN_SUCCESS_USER:
     case types.SIGNUP_SUCCESS_USER:
       return {...state, message: action.message, type: 'SUCCESS'};

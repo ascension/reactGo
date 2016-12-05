@@ -10,11 +10,12 @@ class GamePlayer extends Component {
   }
 
   render() {
+    const { username, betAmount, chance } = this.props;
     return (
       <span className={cx('wrapper')}>
           <div className={cx('avatar')}>Avatar</div>
-          <div className={cx('username')}>Username</div>
-          <div className={cx('chance')}>$100 - 50.55%</div>
+          <div className={cx('username')}>{username}</div>
+          <div className={cx('chance')}>{betAmount} - {chance}%</div>
       </span>
     );
   }

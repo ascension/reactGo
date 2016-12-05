@@ -59,7 +59,8 @@ export default function render(req, res) {
       isWaiting: false,
       message: '',
       isLogin: true,
-      username: req.user ? req.user.username : ''
+      username: req.user ? req.user.username : '',
+      id: req.user ? req.user.id : null
     }
   }, history);
   const routes = createRoutes(store);

@@ -1,13 +1,9 @@
 import Chance from 'chance';
 import crypto from  'crypto';
-
+import { BEGIN_GAME, GAME_STARTING, GAME_LOBBY_TICK } from '../app/types';
 const TICK_RATE = 150; // ping the client every X milliseconds
 const COUNTDOWN_TIME = 5000; // how many seconds do we countdown the timer.
-
-const GAME_STATES = {
-  WAITING: 'WAITING', // We are waiting for more players.
-  STARTING: 'STARTING', // .
-};
+import { GAME_COUNTDOWN_SEC, GAME_TICK_INTERVAL, GAME_STATES } from './config/constants';
 
 // Server Seed should be composed of a
 
@@ -23,10 +19,16 @@ function hash256(toBeHashed) {
   return sha256.update(toBeHashed).digest("hex");
 }
 
-export default class Game {
-  constructor() {
-    this.players = []; // { userId: 100000 } - Key will be the users ID and their bet.
+export default class GameEngine {
+  // Will take an instance of the Game Model and extract the data it needs.
+  constructor(socket, Game) {
+    this.gameId = Game.id; // ID is from the DB.
+    this.players = Game.GamePlays; // { userId: 100000 } - Key will be the users ID and their bet.
     this.serverSeed = hash256(serverSecret);
+    this.socket = socket;
+    this.state = GAME_STATES.WAITING;
+    this.remainingWaitTime = GAME_COUNTDOWN_SEC;
+    this.interval = null;
   }
 
   /**
@@ -60,7 +62,16 @@ export default class Game {
     
     const rollSeed = hash256(this.serverSeed);
     const chance = Chance(rollSeed);
-    const outsome = chance.weighted(players, weights);
+    const outcome = chance.weighted(players, weights);
+    console.log('*** Game Outcome *** ', outcome);
+    this.interval = setInterval(() => {
+      this.remainingWaitTime = this.remainingWaitTime - GAME_TICK_INTERVAL;
+      if (this.remainingWaitTime <= 0) {
+        clearInterval(this.interval);
+        this.socket.emit('action', { type: BEGIN_GAME, gameId: this.gameId, outcome });
+      }
+      this.socket.emit('action', { type: GAME_LOBBY_TICK, gameId: this.gameId, remainingWaitTime: this.remainingWaitTime })
+    }, GAME_TICK_INTERVAL);
     // record outcome in DB
     // emit result to players
   }
@@ -79,11 +90,3 @@ export default class Game {
     // emit player joined
   }
 }
-
-const game = new Game();
-
-game.placeBet({id: 1}, 200000, 1, new Chance().hash());
-game.placeBet({id: 2}, 400000, 1, new Chance().hash());
-
-game.runGame();
-game.runGame();

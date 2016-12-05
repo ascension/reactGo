@@ -1,13 +1,14 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
+import { browserHistory } from 'react-router';
 import classNames from 'classnames/bind';
 import { createGame, joinGame } from '../actions/game';
 import styles from 'css/components/game';
 import autoBind from 'react-autobind';
 import CreateGame from '../components/CreateGame';
+import NavigationButton from '../components/NavigationButton';
 import AppContainer from '../containers/AppContainer';
 import moment from 'moment';
-
 
 const cx = classNames.bind(styles);
 
@@ -21,7 +22,8 @@ class Games extends Component {
     autoBind(this,
       'betAmountOnChange',
       'closeCreateGameForm',
-      'onSubmitCreateGame');
+      'onSubmitCreateGame',
+      'renderButton');
   }
 
   betAmountOnChange(event, newValue) {
@@ -40,8 +42,39 @@ class Games extends Component {
     });
   }
 
+  renderButton(game) {
+    const { user, joinGame } = this.props;
+
+    const userHasAlreadyJoined = game.GamePlays.find((gamePlay) => {
+      return gamePlay.userId === user.id;
+    });
+
+    const loggedInText = userHasAlreadyJoined ? 'Already Joined' : 'Join Game';
+
+    return (
+      <button
+        className={cx('game-btn')}
+        onClick={() => {joinGame(game.id)}}
+      >
+        {
+          this.props.user.authenticated ? loggedInText : 'Login to Play'
+        }
+      </button>
+    );
+  }
+
+  calculateGamePot(gamePlays) {
+    let totalBets = 0;
+
+    gamePlays.forEach((gp) => {
+      totalBets += gp.betAmount;
+    });
+
+    return totalBets;
+  }
+
   render() {
-    const { newGame, games, createGame, joinGame } = this.props;
+    const { games, createGame } = this.props;
     return (
       <div className={cx('gameTable')}>
         <div>
@@ -65,18 +98,14 @@ class Games extends Component {
              return(
              <div className={cx('game-row')} key={game.id}>
                <div>{game.id}</div>
-               <div>{this.state.betAmount}</div>
+               <div>{this.calculateGamePot(game.GamePlays)} bits</div>
                <div>{game.GamePlays.length} / {game.maxPlayers}</div>
                <div>{moment(game.createdAt).format('MM-DD-YYYY')}</div>
+               <NavigationButton buttonText="VIEW GAME" link={`/game/${game.id}`} className="game-btn"/>
                <div>
-                 <button
-                   className={cx('game-btn')}
-                   onClick={() => {joinGame(game.id)}}
-                 >
-                   {
-                     this.props.user.authenticated ? 'Join Game' : 'Login to Play'
-                   }
-                 </button>
+                 {
+                   this.renderButton(game)
+                 }
                </div>
              </div>
              )

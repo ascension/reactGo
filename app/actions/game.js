@@ -10,7 +10,7 @@ import { push } from 'react-router-redux';
 polyfill();
 
 
-export function makeGameRequest(method, id, data, api = '/game') {
+export function makeGameRequest(method, id, data, api = '/api/game') {
   return request[method](api + (id ? ('/' + id) : ''), data);
 }
 
@@ -74,7 +74,7 @@ export function joinGame(gameId) {
     }
 
     // browserHistory.push('/game/' + gameId);
-    const betAmount = 1000000;
+    const betAmount = 100000;
     return dispatch(joinGameRequest(gameId, betAmount))
   }
 }

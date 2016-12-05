@@ -7,7 +7,6 @@ const game = (
 ) => {
   switch (action.type) {
     case types.CREATE_GAME:
-      debugger;
       return {
         id: action.id,
         userId: action.userId,
@@ -16,16 +15,15 @@ const game = (
         maxPlayers: action.maxPlayers,
         createdAt: action.createdAt,
         startedAt: action.startedAt,
-        updatedAt: action.updatedAt
+        updatedAt: action.updatedAt,
+        remainingWaitTime: 5000
       };
     case types.GAME_LOBBY_TICK:
-      if (state.id === action.id) {
-        return { ...state, remainingLobbyTime: state.remainingLobbyTime - 1 };
+      if (state.id === action.gameId) {
+        return { ...state, remainingWaitTime: action.remainingWaitTime };
       }
       return state;
-      return state.map(t => game(t, action));
     case types.JOIN_GAME_SUCCESS:
-      console.log('JOIN_GAME_SUCCESS', action);
       return state;
     default:
       return state;
@@ -38,12 +36,27 @@ const games = (
 ) => {
   switch (action.type) {
     case types.REQUEST_SUCCESS:
-      if (action.data) return action.data;
+      if (action.data) {
+        if (Array.isArray(action.data)) {
+          debugger;
+          return [...state.filter(game => game.id !== action.data.id), ...action.data];
+        }
+      }
       return state;
     case types.CREATE_GAME:
       return [...state, game(undefined, action)];
     case types.GAME_LOBBY_TICK:
-      return state.map(t => game(g, action));
+      debugger;
+      return state.map(g => game(g, action));
+    case types.JOIN_GAME_SUCCESS:
+      const findGame = state.find((game) => {
+        return game.id === action.game.id;
+      });
+      if (findGame) {
+        return [...state.filter(game => game.id !== action.game.id), action.game]
+      } else {
+        return state
+      }
     default:
       return state;
   }

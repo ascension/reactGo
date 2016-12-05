@@ -1,9 +1,12 @@
 import { gameService } from '../services';
 
-const fetchGameData = () => {
+export const fetchGameData = () => {
   return gameService.getGames()
     .then(res => res.data);
 };
 
-export default fetchGameData;
-
+export const fetchGame = (params) => {
+  console.log('gameId: ', params.id);
+  return gameService.getGame(params.id)
+    .then(res => [res.data]);
+};

@@ -29,12 +29,14 @@ export const LOGOUT_ERROR_USER = 'LOGOUT_ERROR_USER';
 
 // Games Events
 export const CREATE_GAME = 'CREATE_GAME';
-export const BEGIN_GAME = 'SERVER:BEGIN_GAME';
+export const BEGIN_GAME = 'server/BEGIN_GAME';
+export const GAME_STARTING = 'server/GAME_STARTING';
 export const GAME_LOBBY_TICK = 'GAME_LOBBY_TICK';
 export const GAME_FLIP_TICK = 'GAME_LOBBY_TICK';
 export const JOIN_GAME = 'server/JOIN_GAME';
 export const JOIN_GAME_SUCCESS = 'server/JOIN_GAME_SUCCESS';
 export const JOIN_GAME_ERROR = 'JOIN_GAME_ERROR';
+export const NOT_ENOUGH_BALANCE = 'NOT_ENOUGH_BALANCE';
 
 export const ADD_MESSAGE = 'server/ADD_MESSAGE';
 export const RECEIVE_MESSAGE = 'RECEIVE_MESSAGE';
