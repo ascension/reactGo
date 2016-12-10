@@ -1,0 +1,29 @@
+@import '../variables';
+@import '../mixins';
+
+.button {
+  display: block;
+  width: 100%;
+  padding: 0.75rem 1.25rem;
+  @include small;
+  text-decoration: none;
+  text-align: center;
+  border-radius: 4px;
+  border-style: solid;
+  border-width: 2px;
+  cursor: pointer;
+  transition: 0.1s background-color ease;
+}
+
+.greenButton {
+  @apply .button;
+  color: $colorWhite;
+  background: $colorSalem;
+  border-color: $colorSalem;
+
+  &
+  :hover {
+    background: $colorDarkerSalem;
+    border-color: $colorDarkerSalem;
+  }
+}

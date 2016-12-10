@@ -16,6 +16,8 @@ const store = configureStore(initialState, browserHistory);
 const history = syncHistoryWithStore(browserHistory, store);
 const routes = createRoutes(store);
 
+import './css/app.scss';
+
 /**
  * Callback function handling frontend route changes.
  */

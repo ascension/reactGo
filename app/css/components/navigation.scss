@@ -11,7 +11,6 @@
   box-sizing: border-box;
   display: flex;
   align-items: center;
-  color: var(--colorOrange);
   justify-content: space-between;
   margin-left: 300px;
 }
@@ -24,9 +23,7 @@
 }
 
 .logo {
-  font-size: var(--fontHuge);
 }
 
 .active {
-  color: var(--colorOrange);
 }

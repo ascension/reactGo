@@ -1,0 +1,19 @@
+@import '../variables';
+@import '../mixins';
+
+.main-section {
+  width: 50%;
+  border-radius: $globalRadius;
+}
+
+.header {
+  @include subHeading;
+  background: #ed193a;
+  color: #fff;
+}
+
+.list {
+  list-style: none;
+  padding: 16px;
+}
+

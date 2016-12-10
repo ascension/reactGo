@@ -42,19 +42,6 @@ var commonLoaders = [
   { test: /\.html$/, loader: 'html-loader' }
 ];
 
-var postCSSConfig = function () {
-  return [
-    require('postcss-import')({
-      path: path.join(__dirname, '..', 'app', 'css'),
-      addDependencyTo: webpack // for hot-reloading
-    }),
-    require('postcss-cssnext')({
-      browsers: ['> 1%', 'last 2 versions']
-    }),
-    require('postcss-reporter')({ clearMessages: true })
-  ];
-};
-
 module.exports = {
     // eval - Each module is executed with eval and //@ sourceURL.
     devtool: 'eval',
@@ -94,18 +81,14 @@ module.exports = {
       publicPath: '/assets/'
     },
     module: {
-      loaders: commonLoaders.concat([
-        { test: /\.css$/,
-          loader: 'style!css?module&localIdentName=[name]__[local]___[hash:base64:5]!postcss-loader'
-        }
-      ])
+      loaders: commonLoaders
     },
     resolve: {
       root: [path.join(__dirname, '..', 'app')],
       extensions: ['', '.js', '.jsx', '.css', '.es6'],
     },
     plugins: [
-      new ExtractTextPlugin('/assets/app.css'),
+      new ExtractTextPlugin('app.css'),
       new webpack.HotModuleReplacementPlugin(),
         new webpack.NoErrorsPlugin(),
         new webpack.DefinePlugin({
@@ -117,6 +100,5 @@ module.exports = {
           context: path.join(__dirname, '..', 'app'),
           files: '**/*.?(sa|sc|c)ss'
         })
-    ],
-    postcss: postCSSConfig
+    ]
 };

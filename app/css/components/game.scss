@@ -31,8 +31,8 @@
 }
 
 .input {
-  @apply --heading;
-  @apply --input;
+  @include heading;
+  @include input;
   text-align: center;
   outline: none;
   display: block;

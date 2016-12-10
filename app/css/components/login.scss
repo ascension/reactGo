@@ -1,0 +1,70 @@
+@import "../variables";
+@import "../mixins";
+
+.login {
+  width: 420px;
+  margin: 0 auto;
+  //background-color: var(--colorAthensGray);
+  //border: 2px solid var(--colorMercury);
+  //border-radius: var(--globalRadius);
+}
+
+.waiting {
+  .loading {
+    display: block;
+  }
+}
+
+.alternative {
+  //background: var(--colorWhite);
+  padding: 12px 8px;
+  font-size: $fontMedium;
+  text-align: center;
+}
+
+.alternative-link {
+  color: $colorDodgerBlue;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.loading {
+  display: none;
+  text-align: center;
+  margin: 24px auto;
+}
+
+.email-container {
+  padding: 16px 12px;
+  //border-bottom: 2px solid var(--colorMercury);
+}
+
+.google-container {
+  padding: 16px 12px;
+}
+
+.header {}
+
+.heading {
+  @include subHeading;
+  padding: 16px 12px;
+  text-align: center;
+}
+
+.input {
+  @include input;
+}
+
+.message {
+  //color: var(--colorCrimson);
+  //font-size: var(--fontSmall);
+}
+
+.button {
+  //@apply --greenButton;
+}
+
+.hint {
+  //@include small;
+  //color: var(--colorBombay);
+}

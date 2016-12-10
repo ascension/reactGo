@@ -1,7 +1,5 @@
-@import 'settings';
-@import 'common/layout';
-@import 'common/typography';
-@import 'common/colors';
+@import "variables";
+@import "mixins";
 
 
 @import url(https://fonts.googleapis.com/css?family=Montserrat:400,700);
@@ -47,16 +45,12 @@ a, a:active, a:active:visited, a:focus, a:focus:visited, a:link, a:link:visited,
   background: #4aed78;
 }
 
-/* Add your global styles below... */
 
-/* ex:
-
-:global {
-  & .red { color: red; }
-  & .blue { color: blue; }
+.Flex {
+  box-sizing: border-box;
+  display: flex;
+  flex: 1 1 auto;
 }
-
-*/
 
 .wrapper {
   position: relative;
