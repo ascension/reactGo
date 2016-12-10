@@ -1,6 +1,7 @@
 var path = require('path');
 var webpack = require('webpack');
 var styleLintPlugin = require('stylelint-webpack-plugin');
+var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var assetsPath = path.join(__dirname, '..', 'public', 'assets');
 var hotMiddlewareScript = 'webpack-hot-middleware/client?path=/__webpack_hmr&timeout=20000&reload=true';
 
@@ -28,6 +29,15 @@ var commonLoaders = [
         name: '[hash].[ext]',
         limit: 10000,
     }
+  },
+  {
+    test: /\.scss$/,
+    exclude: /main.scss/,
+    loader: ExtractTextPlugin.extract(
+      'style-loader',
+      'css-loader?' +
+      'modules&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]' +
+      '!sass')
   },
   { test: /\.html$/, loader: 'html-loader' }
 ];
@@ -95,7 +105,8 @@ module.exports = {
       extensions: ['', '.js', '.jsx', '.css', '.es6'],
     },
     plugins: [
-        new webpack.HotModuleReplacementPlugin(),
+      new ExtractTextPlugin('/assets/app.css'),
+      new webpack.HotModuleReplacementPlugin(),
         new webpack.NoErrorsPlugin(),
         new webpack.DefinePlugin({
           __DEVCLIENT__: true,

@@ -102,3 +102,10 @@
 .rc-progress-circle-trail {
   stroke: transparent;
 }
+
+.waiting {
+  position: absolute;
+  left: 0;
+  top: 25%;
+  width: 100%;
+}

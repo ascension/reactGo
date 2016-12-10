@@ -6,9 +6,12 @@ import { createGame, joinGame } from '../actions/game';
 import styles from 'css/components/game';
 import autoBind from 'react-autobind';
 import CreateGame from '../components/CreateGame';
+import Loader from '../components/Loader';
 import NavigationButton from '../components/NavigationButton';
 import AppContainer from '../containers/AppContainer';
 import moment from 'moment';
+
+import GameRow from '../components/GameRow';
 
 const cx = classNames.bind(styles);
 
@@ -74,7 +77,8 @@ class Games extends Component {
   }
 
   render() {
-    const { games, createGame } = this.props;
+    const { games, createGame, gamePlays } = this.props;
+    debugger;
     return (
       <div className={cx('gameTable')}>
         <div>
@@ -94,22 +98,17 @@ class Games extends Component {
             <div>Action</div>
           </div>
           {
-            games.map((game) => {
+            games && typeof gamePlays !== 'undefined' ?
+            Object.keys(games).map((gameId) => {
+              const game = games[gameId];
+              const { gamePlays } = this.props;
+              debugger;
              return(
-             <div className={cx('game-row')} key={game.id}>
-               <div>{game.id}</div>
-               <div>{this.calculateGamePot(game.GamePlays)} bits</div>
-               <div>{game.GamePlays.length} / {game.maxPlayers}</div>
-               <div>{moment(game.createdAt).format('MM-DD-YYYY')}</div>
-               <NavigationButton buttonText="VIEW GAME" link={`/game/${game.id}`} className="game-btn"/>
-               <div>
-                 {
-                   this.renderButton(game)
-                 }
-               </div>
-             </div>
+               <GameRow key={game.id} game={game} gamePlays={gamePlays}/>
              )
             })
+              :
+              <Loader isLoading={true}/>
           }
         </div>
       </div>
@@ -118,13 +117,14 @@ class Games extends Component {
 }
 
 Games.propTypes = {
-  games: PropTypes.array.isRequired,
+  games: PropTypes.object.isRequired,
   createGame: PropTypes.func.isRequired
 };
 
 function mapStateToProps(state) {
   return {
     games: state.game.games,
+    gamePlays: state.game.gamePlays,
     user: state.user
   };
 }

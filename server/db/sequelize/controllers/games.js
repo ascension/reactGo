@@ -13,7 +13,7 @@ export function all(req, res) {
   Game.findAll({
     include: [{
       model: GamePlay,
-      include: [{ model: User, attributes: ['username'] }]
+      include: [{ model: User, attributes: ['username', 'id'] }]
     }]
   }).then((games) => {
     res.json(games);
@@ -27,7 +27,7 @@ export function one(req, res) {
   Game.findOne({
     include: [{
       model: GamePlay,
-      include: [{ model: User, attributes: ['username'] }]
+      include: [{ model: User, attributes: ['username', 'id'] }]
     }],
     where: { id: req.params.id }
   }).then((game) => {

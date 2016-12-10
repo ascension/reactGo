@@ -1,8 +1,13 @@
 import { gameService } from '../services';
+import { normalize, arrayOf } from 'normalizr';
+import gameSchema from '../schemas/gameSchema';
 
 export const fetchGameData = () => {
   return gameService.getGames()
-    .then(res => res.data);
+    .then(res => {
+      const normalized = normalize(res.data, arrayOf(gameSchema));
+      return normalized;
+    });
 };
 
 export const fetchGame = (params) => {

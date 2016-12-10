@@ -1,9 +1,24 @@
 /* Use this old export style until sequelize cli supports es6 syntax */
 function defaultExport() {}
 
+defaultExport.GAME_COUNTDOWN_SEC = 5000;
+defaultExport.GAME_TICK_INTERVAL = 100;
+
+/**
+ * NOT_STARTED: Game has been created. No GamePlays.
+ * CANCELLED: User has cancelled the game.
+ * WAITING: At least on player has joined.
+ * STARTING: Countdown has begun.
+ * IN_PROGRESS: Outcome is being calculated. GamePlays are finalized.
+ * COMPLETE: Outcome has been recorded and winnings distributed.
+ */
 defaultExport.GAME_STATES = {
+  NOT_STARTED: 'NOT_STARTED',
+  CANCELLED: 'CANCELLED',
   WAITING: 'WAITING',
-  STARTING: 'STARTING'
+  STARTING: 'STARTING',
+  IN_PROGRESS: 'IN_PROGRESS',
+  COMPLETE: 'COMPLETE'
 };
 
 defaultExport.GAME_TYPES = {

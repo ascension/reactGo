@@ -6,7 +6,6 @@ const COUNTDOWN_TIME = 5000; // how many seconds do we countdown the timer.
 import { GAME_COUNTDOWN_SEC, GAME_TICK_INTERVAL, GAME_STATES } from './config/constants';
 
 // Server Seed should be composed of a
-
 const serverSecret = 'aspdf87j12l3kjnbjh1ta8sdfaklsdbfli8y71923nman,sdfhals';
 
 var serverSeed = hash256(serverSecret);
@@ -66,11 +65,23 @@ export default class GameEngine {
     console.log('*** Game Outcome *** ', outcome);
     this.interval = setInterval(() => {
       this.remainingWaitTime = this.remainingWaitTime - GAME_TICK_INTERVAL;
-      if (this.remainingWaitTime <= 0) {
+      console.log('remainingWaitTime: ', this.remainingWaitTime);
+      if (this.remainingWaitTime < 0) {
         clearInterval(this.interval);
-        this.socket.emit('action', { type: BEGIN_GAME, gameId: this.gameId, outcome });
+        this.socket.emit('action', {
+          type: BEGIN_GAME,
+          gameId: this.gameId,
+          status: GAME_STATES.COMPLETE,
+          outcome
+        });
+      } else {
+        this.socket.emit('action', {
+          type: GAME_LOBBY_TICK,
+          gameId: this.gameId,
+          status: GAME_STATES.IN_PROGRESS,
+          remainingWaitTime: this.remainingWaitTime
+        });
       }
-      this.socket.emit('action', { type: GAME_LOBBY_TICK, gameId: this.gameId, remainingWaitTime: this.remainingWaitTime })
     }, GAME_TICK_INTERVAL);
     // record outcome in DB
     // emit result to players

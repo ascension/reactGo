@@ -4,6 +4,7 @@ import topic from 'reducers/topic';
 import message from 'reducers/message';
 import messages from 'reducers/messages';
 import channels from 'reducers/channels';
+import gamePlay from 'reducers/gamePlay';
 import activeChannel from 'reducers/activeChannel';
 import game from 'reducers/game';
 import { routerReducer as routing } from 'react-router-redux';
@@ -32,7 +33,8 @@ const rootReducer = combineReducers({
   messages,
   channels,
   activeChannel,
-  routing
+  routing,
+  gamePlay
 });
 
 export default rootReducer;

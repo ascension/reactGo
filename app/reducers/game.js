@@ -1,6 +1,7 @@
 import { combineReducers } from 'redux';
 import * as types from '../types';
 
+
 const game = (
   state = {},
   action
@@ -11,6 +12,7 @@ const game = (
         id: action.id,
         userId: action.userId,
         hash: action.hash,
+        status: 'WAITING',
         GamePlays: action.GamePlays,
         maxPlayers: action.maxPlayers,
         createdAt: action.createdAt,
@@ -20,7 +22,12 @@ const game = (
       };
     case types.GAME_LOBBY_TICK:
       if (state.id === action.gameId) {
-        return { ...state, remainingWaitTime: action.remainingWaitTime };
+        return { ...state, remainingWaitTime: action.remainingWaitTime, status: action.status };
+      }
+      return state;
+    case types.BEGIN_GAME:
+      if (state.id === action.gameId) {
+        return { ...state, status: action.status };
       }
       return state;
     case types.JOIN_GAME_SUCCESS:
@@ -31,22 +38,21 @@ const game = (
 };
 
 const games = (
-  state = [],
+  state = { games: {} },
   action
 ) => {
   switch (action.type) {
     case types.REQUEST_SUCCESS:
       if (action.data) {
-        if (Array.isArray(action.data)) {
-          debugger;
-          return [...state.filter(game => game.id !== action.data.id), ...action.data];
-        }
+        const { games } = action.data.entities;
+        return { ...state, ...games }
       }
       return state;
     case types.CREATE_GAME:
       return [...state, game(undefined, action)];
     case types.GAME_LOBBY_TICK:
-      debugger;
+      return state.map(g => game(g, action));
+    case types.BEGIN_GAME:
       return state.map(g => game(g, action));
     case types.JOIN_GAME_SUCCESS:
       const findGame = state.find((game) => {

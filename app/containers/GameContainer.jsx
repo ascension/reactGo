@@ -28,6 +28,18 @@ class GameContainer extends Component {
     this.startCountDown = this.startCountDown.bind(this);
   }
 
+  componentWillReceiveProps(nextProps) {
+
+    const { games } = nextProps;
+
+    const game = games.find((game) => {
+      return game.id === Number(this.props.params.id);
+    });
+    this.setState({
+      gameStatus: game.status
+    });
+  }
+
   componentDidMount() {
     // TODO - Fetch Game by id.
     // fetchGame(this.props.params.gameId)
@@ -104,18 +116,30 @@ class GameContainer extends Component {
     const game = games.find((game) => {
       return game.id === parseInt(params.id);
     });
+    debugger;
     const percent = (game.GamePlays.length / game.maxPlayers) * 100;
+    const gameIsFull = game.GamePlays.length === game.maxPlayers;
     return (
       <div>
       {
-        this.state.gameStatus === GAME_STATES.WAITING ?
+        game.status === GAME_STATES.WAITING ?
         <div>
-          <span><h2>Waiting for player to join</h2></span>
+          {
+            gameIsFull ?
+              ''
+              :
+              <span className={cx('waiting')}><h3>Waiting for <br/>players to join<br/>{game.GamePlays.length} / {game.maxPlayers}</h3></span>
+
+          }
+
           <Circle style={{width: '200px', margin: '0 auto', position: 'absolute', top: '0', left: '0'}}
                   percent={percent}
                   strokeWidth="4"
                   strokeColor={this.getStrokeColor()}
           />
+          {
+            game.status === GAME_STATES.IN_PROGRESS ? <h3>{game.remainingWaitTime} sec</h3> : ''
+          }
         </div>:
         <div>
           <div className={cx('card', {flipped: this.state.isFlipping, gameEnded: this.state.gameEnded})}>
@@ -176,14 +200,6 @@ class GameContainer extends Component {
                 this.renderCoin()
               }
             </div>
-            Flipping in....
-            <br/>
-          {game.remainingWaitTime} sec
-            <br/>
-          {
-            usersInGame.length < game.maxPlayers ? <span><h2>Waiting for player to join</h2></span> : ''
-          }
-          <button onClick={this.handleClick} disabled={this.state.disable}>Flip</button>
           </span>
         {
           others.map((user) => <GamePlayer username={user.username}

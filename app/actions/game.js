@@ -6,6 +6,8 @@ import request from 'axios';
 import md5 from 'spark-md5';
 import { browserHistory } from 'react-router';
 import { push } from 'react-router-redux';
+import { normalize, arrayOf } from 'normalizr';
+import gameSchema from '../schemas/gameSchema';
 
 polyfill();
 

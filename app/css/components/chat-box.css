@@ -9,6 +9,7 @@
 
 .chat-header {
   margin-left: 15px;
+  color: var(--colorNeonGreen);
 }
 
 .chat-window ul {
