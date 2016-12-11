@@ -3,7 +3,6 @@ import { Route, IndexRoute } from 'react-router';
 
 import { fetchGameData, fetchGame } from './fetch-data';
 import App from 'containers/App';
-import Vote from 'containers/Vote';
 import Games from 'containers/Games';
 import Game from 'containers/GameContainer';
 // import Game from 'containers/Game';

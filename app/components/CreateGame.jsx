@@ -1,9 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import autoBind from 'react-autobind';
-import classNames from 'classnames/bind';
-import styles from 'css/components/game';
-
-const cx = classNames.bind(styles);
+import CSSModules from 'react-css-modules';
+import styles from '../css/components/game.scss';
 
 class CreateGame extends Component {
   constructor(props) {
@@ -31,9 +29,9 @@ class CreateGame extends Component {
       <div style={{visibility: this.props.show ? 'visible' : 'hidden'}}>
         <label>
           Bet Amount
-          <input type="number" className={cx('input')} onChange={this.handleChange} value={this.props.betAmount}/>
+          <input type="number" className={'input'} onChange={this.handleChange} value={this.props.betAmount}/>
         </label>
-        <button type="submit" className={cx('game-btn')} onClick={this.handleSubmit}>Create Game</button>
+        <button type="submit" className={'game-btn'} onClick={this.handleSubmit}>Create Game</button>
       </div>
     );
   }
@@ -46,4 +44,4 @@ CreateGame.propTypes = {
   show: PropTypes.bool
 };
 
-export default CreateGame;
+export default CSSModules(CreateGame, styles);

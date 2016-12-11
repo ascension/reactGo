@@ -1,22 +1,18 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-
-import classNames from 'classnames/bind';
-import styles from 'css/components/game-container';
-const cx = classNames.bind(styles);
+import CSSModules from 'react-css-modules';
+import styles from '../css/components/game-container.scss';
 import { Circle } from 'rc-progress';
 import ChatBox from './Chat';
-
-import GamePlayer from '../components/GamePlayer';
 
 class GameContainer extends Component {
   render() {
     return (
-      <div className={cx('wrapper','has-sidebar')}>
-        <div className={cx('sidebar')}>
-          <ChatBox className={cx('sidebar')}/>
+      <div className={'wrapper has-sidebar'}>
+        <div className={'sidebar'}>
+          <ChatBox className={'sidebar'}/>
         </div>
-        <div className={cx('players')}>
+        <div className={'players'}>
           {this.props.children}
         </div>
       </div>
@@ -36,4 +32,4 @@ function mapStateToProps(state) {
 
 // Read more about where to place `connect` here:
 // https://github.com/rackt/react-redux/issues/75#issuecomment-135436563
-export default connect(mapStateToProps, {})(GameContainer);
+export default CSSModules(connect(mapStateToProps, {})(GameContainer), styles);

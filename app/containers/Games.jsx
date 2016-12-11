@@ -1,19 +1,14 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { browserHistory } from 'react-router';
-import classNames from 'classnames/bind';
 import { createGame, joinGame } from '../actions/game';
-import styles from 'css/components/game';
+import CSSModules from 'react-css-modules';
+import styles from '../css/components/game.scss';
 import autoBind from 'react-autobind';
 import CreateGame from '../components/CreateGame';
 import Loader from '../components/Loader';
-import NavigationButton from '../components/NavigationButton';
-import AppContainer from '../containers/AppContainer';
-import moment from 'moment';
 
 import GameRow from '../components/GameRow';
 
-const cx = classNames.bind(styles);
 
 class Games extends Component {
   constructor(props) {
@@ -56,7 +51,7 @@ class Games extends Component {
 
     return (
       <button
-        className={cx('game-btn')}
+        className={'game-btn'}
         onClick={() => {joinGame(game.id)}}
       >
         {
@@ -80,7 +75,7 @@ class Games extends Component {
     const { games, createGame, gamePlays } = this.props;
     debugger;
     return (
-      <div className={cx('gameTable')}>
+      <div className={'gameTable'}>
         <div>
           <CreateGame
             onSubmit={createGame}
@@ -90,7 +85,7 @@ class Games extends Component {
           />
         </div>
         <div>
-          <div className={cx('game-row')}>
+          <div className={'game-row'}>
             <div>Game ID</div>
             <div>Pot</div>
             <div>Players</div>
@@ -131,4 +126,4 @@ function mapStateToProps(state) {
 
 // Read more about where to place `connect` here:
 // https://github.com/rackt/react-redux/issues/75#issuecomment-135436563
-export default connect(mapStateToProps, { createGame, joinGame })(Games);
+export default CSSModules(connect(mapStateToProps, { createGame, joinGame })(Games), styles);

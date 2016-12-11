@@ -1,8 +1,8 @@
-import classNames from 'classnames/bind';
+import CSSModules from 'react-css-modules';
 import styles from 'css/components/game';
 import { browserHistory } from 'react-router';
 
-const cx = classNames.bind(styles);
+
 
 function ViewGame(props) {
 
@@ -15,7 +15,7 @@ function ViewGame(props) {
     <div>
       <button
         onClick={onClick}
-        className={cx('game-btn')}
+        className={game-btn'}
       >VIEW GAME</button>
     </div>
   );

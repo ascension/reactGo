@@ -1,29 +1,41 @@
 import React from 'react';
-import classNames from 'classnames/bind';
 import moment from 'moment';
-import styles from 'css/components/chat-message';
+import styles from '../css/components/chat-message.scss';
+import CSSModules from 'react-css-modules';
 
-const cx = classNames.bind(styles);
-
-export default function ChatMessage(props) {
+function ChatMessage(props) {
   const { message, setMessageRef } = props;
   function renderMessageText(message) {
     const messageText = message.text;
     var replace = messageText.replace(`@${message.User.username}`, `<span><a href='/user/${message.User.username}'>@${message.User.username}</a></span>`);
     return (
-      <p className={cx('chat-mention')} dangerouslySetInnerHTML={{__html: replace}}/>
+      <p styleName={'chat-mention'} dangerouslySetInnerHTML={{__html: replace}}/>
     );
+  }
+
+  function isMod() {
+    return message.User.isMod ? 'is-mod' : '';
+  }
+
+  function isAdmin() {
+    return message.User.isAdmin ? 'is-admin' : '';
+  }
+
+  function getStyleNames() {
+    return 'chat-message ' + isMod() + isAdmin();
   }
 
   return (
       <li
         ref={(input) => { setMessageRef(input); }}
-        className={cx('chat-message', {'is-mod': message.User.isMod, 'is-admin': message.User.isAdmin})}
+        styleName={getStyleNames()}
       >
         <h3>{message.User.username}</h3>
-        <span className={cx('timestamp')}>{moment(message.createdAt).format('HH:mm')}</span>
+        <span styleName={'timestamp'}>{moment(message.createdAt).format('HH:mm')}</span>
 
         {renderMessageText(message)}
       </li>
   )
 }
+
+export default CSSModules(ChatMessage, styles, { allowMultiple: true });

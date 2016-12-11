@@ -2,26 +2,23 @@ import React, { PropTypes } from 'react';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
 import { logOut } from 'actions/users';
-
-import classNames from 'classnames/bind';
-import styles from 'css/components/navigation';
-
-const cx = classNames.bind(styles);
+import CSSModules from 'react-css-modules';
+import styles from '../css/components/navigation.scss';
 
 const Navigation = ({ user, logOut }) => {
     return (
-      <nav className={cx('navigation')} role="navigation">
+      <nav className={'navigation'} role="navigation">
         <Link to="/"
-          className={cx('item', 'logo')}
-          activeClassName={cx('active')}>CryptoDuel</Link>
-          <Link to="/about" className={cx('item')} activeClassName={cx('active')}>About</Link>
-          <Link className={cx('item')} to="/games">Games</Link>
-          <Link className={cx('item')} to="/account">Account</Link>
+          styleName={'item logo'}
+          activeClassName={'active'}>CryptoDuel</Link>
+          <Link to="/about" styleName={'item'} activeClassName={'active'}>About</Link>
+          <Link styleName={'item'} to="/games">Games</Link>
+          <Link styleName={'item'} to="/account">Account</Link>
           { user.authenticated ? (
             <Link onClick={logOut}
-                  className={cx('item')} to="/">Logout</Link>
+                  styleName={'item'} to="/">Logout</Link>
           ) : (
-            <Link className={cx('item')} to="/login">Log in</Link>
+            <Link styleName={'item'} to="/login">Log in</Link>
           )}
       </nav>
     );
@@ -38,4 +35,4 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps, { logOut })(Navigation);
+export default CSSModules(connect(mapStateToProps, { logOut })(Navigation), styles);

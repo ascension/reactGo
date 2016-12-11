@@ -1,9 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-
-import classNames from 'classnames/bind';
-import styles from 'css/components/game-container';
-const cx = classNames.bind(styles);
+import CSSModules from 'react-css-modules';
+import styles from '../css/components/game-container.scss';
 import { Circle } from 'rc-progress';
 import { GAME_STATES } from '../../server/config/constants';
 import GamePlayer from '../components/GamePlayer';
@@ -119,6 +117,11 @@ class GameContainer extends Component {
     debugger;
     const percent = (game.GamePlays.length / game.maxPlayers) * 100;
     const gameIsFull = game.GamePlays.length === game.maxPlayers;
+
+    let coinStyle = 'card';
+    coinStyle += this.state.isFlipping ? ' flipped' : '';
+    coinStyle += this.state.gameEnded ? ' gameEnded' : '';
+
     return (
       <div>
       {
@@ -128,7 +131,7 @@ class GameContainer extends Component {
             gameIsFull ?
               ''
               :
-              <span className={cx('waiting')}><h3>Waiting for <br/>players to join<br/>{game.GamePlays.length} / {game.maxPlayers}</h3></span>
+              <span styleName={'waiting'}><h3>Waiting for <br/>players to join<br/>{game.GamePlays.length} / {game.maxPlayers}</h3></span>
 
           }
 
@@ -142,9 +145,9 @@ class GameContainer extends Component {
           }
         </div>:
         <div>
-          <div className={cx('card', {flipped: this.state.isFlipping, gameEnded: this.state.gameEnded})}>
-            <div className={cx('face', 'front')}>Heads</div>
-            <div className={cx('face', 'back')}>Tails</div>
+          <div styleName={coinStyle}>
+            <div styleName={'face front'}>Heads</div>
+            <div styleName={'face back'}>Tails</div>
           </div>
           <Circle style={{width: '200px', margin: '0 auto', position: 'absolute', top: '0', left: '0'}}
           percent={percent}
@@ -194,8 +197,8 @@ class GameContainer extends Component {
             betAmount={userIsInGame.betAmount}
           />
         }
-        <span className={cx('ticker')}>
-            <div className={cx('flip')}>
+        <span styleName={'ticker'}>
+            <div styleName={'flip'}>
               {
                 this.renderCoin()
               }
@@ -212,7 +215,7 @@ class GameContainer extends Component {
 
   render() {
     return (
-      <div className={cx('players')}>
+      <div styleName={'players'}>
         {
           this.gameExists() ? this.renderGame() : <div><h1>Loading...</h1></div>
         }
@@ -235,4 +238,4 @@ function mapStateToProps(state) {
 
 // Read more about where to place `connect` here:
 // https://github.com/rackt/react-redux/issues/75#issuecomment-135436563
-export default connect(mapStateToProps, {})(GameContainer);
+export default CSSModules(connect(mapStateToProps, {})(GameContainer));

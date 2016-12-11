@@ -1,7 +1,7 @@
 import React from 'react';
-import styles from 'css/components/sidebar';
-import classNames from 'classnames/bind';
-const cx = classNames.bind(styles);
+import styles from '../css/components/sidebar.scss';
+import CSSModules from 'react-css-modules';
+
 
 import { Link } from 'react-router';
 
@@ -18,21 +18,21 @@ class Sidebar extends React.Component {
 
   render() {
     return (
-      <div className={cx('SidebarContainer')}>
+      <div className={'SidebarContainer'}>
         <div>
           <Link to="/account/withdraw">
-            <div className={cx('SidebarItemContainer')}>
-              <div className={cx('SidebarTitle')}>Withdraw</div>
+            <div className={'SidebarItemContainer'}>
+              <div className={'SidebarTitle'}>Withdraw</div>
             </div>
           </Link>
           <Link to="/account/deposit">
-            <div className={cx('SidebarItemContainer')}>
-              <div className={cx('SidebarTitle')}>Deposit</div>
+            <div className={'SidebarItemContainer'}>
+              <div className={'SidebarTitle'}>Deposit</div>
             </div>
           </Link>
           <Link to="/account/settings">
-            <div className={cx('SidebarItemContainer')}>
-              <div className={cx('SidebarTitle')}>Settings</div>
+            <div className={'SidebarItemContainer'}>
+              <div className={'SidebarTitle'}>Settings</div>
             </div>
           </Link>
         </div>

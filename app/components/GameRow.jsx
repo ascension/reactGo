@@ -1,9 +1,7 @@
 import React, { PropTypes } from 'react';
-import classNames from 'classnames/bind';
-import styles from 'css/components/game';
+import CSSModules from 'react-css-modules';
+import styles from '../css/components/game.scss';
 import moment from 'moment';
-
-const cx = classNames.bind(styles);
 
 const propTypes = {
   game: PropTypes.object.isRequired,
@@ -25,12 +23,12 @@ function GameRow(props) {
   }
   debugger;
   return (
-    <div className={cx('game-row')} key={game.id}>
+    <div styleName={'game-row'} key={game.id}>
       <div>{game.id}</div>
       <div>{calculateGamePot()} bits</div>
       <div>{game.GamePlays.length} / {game.maxPlayers}</div>
       <div>{moment(game.createdAt).format('MM-DD-YYYY')}</div>
-      <NavigationButton buttonText="VIEW GAME" link={`/game/${game.id}`} className="game-btn"/>
+      <NavigationButton buttonText="VIEW GAME" link={`/game/${game.id}`} styleName="game-btn"/>
       <div>
         {
           this.renderButton(game)
@@ -42,4 +40,4 @@ function GameRow(props) {
 
 GameRow.propTypes = propTypes;
 
-export default GameRow;
+export default CSSModules(GameRow, styles);

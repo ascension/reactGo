@@ -1,10 +1,5 @@
 import React from 'react';
-import styles from 'css/components/dashboard';
-import classNames from 'classnames/bind';
-const cx = classNames.bind(styles);
 import Sidebar from '../components/Sidebar';
-import { Link } from 'react-router';
-
 
 /*
  * Note: This is kept as a container-level component,
@@ -19,10 +14,10 @@ class Dashboard extends React.Component {
 
   render() {
     return (
-      <div className={cx('Flex')}>
+      <div className={'Flex'}>
         <Sidebar />
-        <div className={cx('ContentContainer')}>
-          <div className={cx('Flex')}>
+        <div className={'ContentContainer'}>
+          <div className={'Flex'}>
             {this.props.children}
           </div>
         </div>

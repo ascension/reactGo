@@ -2,25 +2,13 @@ import React, { PropTypes } from 'react';
 import Navigation from 'containers/Navigation';
 import Message from 'containers/Message';
 import AppContainer from '../containers/AppContainer';
-import classNames from 'classnames/bind';
-import styles from 'css/main';
+import CSSModules from 'react-css-modules';
+import styles from '../css/app.scss';
 
-const cx = classNames.bind(styles);
-
-
-/*
- * React-router's <Router> component renders <Route>'s
- * and replaces `this.props.children` with the proper React Component.
- *
- * Please refer to `routes.jsx` for the route config.
- *
- * A better explanation of react-router is available here:
- * https://github.com/rackt/react-router/blob/latest/docs/Introduction.md
- */
 const App = ({children}) => {
   return (
-    <div className={cx('app')}>
-      <div className={cx('appContainer')}>
+    <div styleName={'app'}>
+      <div styleName={'appContainer'}>
         <Navigation />
         <AppContainer>
           <Message />
@@ -35,4 +23,4 @@ App.propTypes = {
   children: PropTypes.object
 };
 
-export default App;
+export default CSSModules(App, styles);

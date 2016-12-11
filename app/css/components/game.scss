@@ -1,5 +1,5 @@
-@import '../common/typography';
-@import '../common/input';
+@import '../variables';
+@import '../mixins';
 
 .game-row {
   position: relative;

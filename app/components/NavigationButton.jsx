@@ -1,9 +1,7 @@
 import React, { PropTypes } from 'react';
-import classNames from 'classnames/bind';
-import styles from 'css/components/game';
+import CSSModules from 'react-css-modules';
+import styles from '../css/components/game.scss';
 import { browserHistory } from 'react-router';
-
-const cx = classNames.bind(styles);
 
 const propTypes = {
   buttonText: PropTypes.string.isRequired,
@@ -21,7 +19,7 @@ function NavigationButton(props) {
     <div>
       <button
         onClick={onClick}
-        className={cx(className)}
+        className={className}
       >
         {buttonText}
       </button>
@@ -31,4 +29,4 @@ function NavigationButton(props) {
 
 NavigationButton.propTypes = propTypes;
 
-export default NavigationButton;
+export default CSSModules(NavigationButton, styles);
