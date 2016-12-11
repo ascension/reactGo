@@ -13,15 +13,18 @@
   text-align: center;
 }
 
-.sidebar {
-  top: 0;
-  background: #1a2328;
-  z-index: 500;
-  width: 300px;
-  position: fixed;
-  left: 0;
-  bottom: 0;
-  color: #FF9900;
+.sidebarWrapper {
+  -webkit-flex: 1;
+  flex: 1;
+}
+
+.contentWrapper {
+  -webkit-flex: 2;
+  flex: 2;
+}
+
+.flex {
+  display: flex;
 }
 
 .ticker {

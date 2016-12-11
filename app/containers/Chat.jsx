@@ -1,11 +1,13 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
+import CSSModules from 'react-css-modules';
 import styles from '../css/components/chat-box.scss';
 import { createMessage, fetchMessagesRequest } from '../actions/chat';
 import Message from '../components/ChatMessage';
 
 const initialChannel = 'Lobby';
 
+@CSSModules(styles)
 class ChatBox extends Component {
   constructor(props) {
     super(props);
@@ -55,9 +57,9 @@ class ChatBox extends Component {
   render() {
     const { user, messages } = this.props;
     return (
-      <div>
-        <h2 className={'chat-header'}>Chat</h2>
-        <div className={'chat-window'}>
+      <div styleName='chatContainer'>
+        <h2 styleName='chat-header'>Chat</h2>
+        <div styleName='chat-window'>
           <ul className="chat-messages">
             {
               messages.map((message) => {
@@ -66,10 +68,10 @@ class ChatBox extends Component {
             }
           </ul>
         </div>
-        <div className={'chat-type'}>
+        <div styleName={'chat-type'}>
           {
             user.authenticated
-              ? <textarea onKeyPress={this.handleKeyPress} placeholder="Type To Chat" className={'chat-box'}/>
+              ? <textarea onKeyPress={this.handleKeyPress} placeholder="Type To Chat" styleName={'chat-box'}/>
               : <h3><a href="/login">Please Login</a> to chat.</h3>
           }
 

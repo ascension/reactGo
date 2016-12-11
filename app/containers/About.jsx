@@ -1,7 +1,4 @@
 import React from 'react';
-import styles from 'css/components/about';
-
-
 
 /*
  * Note: This is kept as a container-level component,

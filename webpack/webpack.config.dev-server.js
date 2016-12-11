@@ -69,10 +69,10 @@ module.exports = {
   },
   resolve: {
     root: [path.join(__dirname, '..', 'app')],
-    extensions: ['', '.js', '.jsx', '.css'],
+    extensions: ['', '.js', '.jsx', '.scss'],
   },
   plugins: [
-    new ExtractTextPlugin('/assets/app.css'),
+    new ExtractTextPlugin('app.css'),
     new webpack.DefinePlugin({
       __DEVCLIENT__: false,
       __DEVSERVER__: true

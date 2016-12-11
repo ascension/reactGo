@@ -30,15 +30,7 @@ var commonLoaders = [
         limit: 10000,
     }
   },
-  {
-    test: /\.scss$/,
-    exclude: /main.scss/,
-    loader: ExtractTextPlugin.extract(
-      'style-loader',
-      'css-loader?' +
-      'modules&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]' +
-      '!sass')
-  },
+
   { test: /\.html$/, loader: 'html-loader' }
 ];
 
@@ -81,11 +73,19 @@ module.exports = {
       publicPath: '/assets/'
     },
     module: {
-      loaders: commonLoaders
+      loaders: commonLoaders.concat({
+        test: /\.scss$/,
+        exclude: /main.scss/,
+        loader: ExtractTextPlugin.extract(
+          'style-loader',
+          'css-loader?' +
+          'modules&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]' +
+          '!sass')
+      })
     },
     resolve: {
       root: [path.join(__dirname, '..', 'app')],
-      extensions: ['', '.js', '.jsx', '.css', '.es6'],
+      extensions: ['', '.js', '.jsx', '.scss', '.es6'],
     },
     plugins: [
       new ExtractTextPlugin('app.css'),

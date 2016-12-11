@@ -7,9 +7,9 @@ import styles from '../css/components/navigation.scss';
 
 const Navigation = ({ user, logOut }) => {
     return (
-      <nav className={'navigation'} role="navigation">
+      <nav styleName={'navigation'} role="navigation">
         <Link to="/"
-          styleName={'item logo'}
+          styleName='item logo'
           activeClassName={'active'}>CryptoDuel</Link>
           <Link to="/about" styleName={'item'} activeClassName={'active'}>About</Link>
           <Link styleName={'item'} to="/games">Games</Link>
@@ -35,4 +35,4 @@ function mapStateToProps(state) {
   };
 }
 
-export default CSSModules(connect(mapStateToProps, { logOut })(Navigation), styles);
+export default CSSModules(connect(mapStateToProps, { logOut })(Navigation), styles, { allowMultiple: true });

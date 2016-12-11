@@ -1,15 +1,23 @@
+@import '../variables';
+@import '../mixins';
+
+.chatContainer {
+  overflow-y: scroll;
+  display: flex;
+  -webkit-flex-direction: column; /* Safari */
+  flex-direction:         column;
+  height: 100vh;
+  min-width: 350px;
+}
+
 .chat-window {
-  position: absolute;
-  top: 70px;
-  bottom: 131px;
-  left: 0;
-  right: 0;
   overflow: auto;
+  flex: 1;
 }
 
 .chat-header {
   margin-left: 15px;
-  color: var(--colorNeonGreen);
+  color: $colorNeonGreen;
 }
 
 .chat-window ul {
@@ -23,11 +31,6 @@
 }
 
 .chat-type {
-  position: absolute;
-  bottom: 30px;
-  left: 0;
-  right: 0;
-  height: 100px;
   background: #192125;
   border-top: solid 1px #141e20;
   padding: 18px 15px;
@@ -70,11 +73,11 @@
 }
 
 .is-admin h3 {
-  color: var(--colorOrange);
+  color: $colorOrange;
 }
 
 .is-mod h3 {
-  color: var(--colorGreen);
+  color: $colorNeonGreen;
 }
 
 .chat-box {

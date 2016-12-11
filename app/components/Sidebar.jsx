@@ -18,21 +18,21 @@ class Sidebar extends React.Component {
 
   render() {
     return (
-      <div className={'SidebarContainer'}>
+      <div styleName={'SidebarContainer'}>
         <div>
           <Link to="/account/withdraw">
-            <div className={'SidebarItemContainer'}>
-              <div className={'SidebarTitle'}>Withdraw</div>
+            <div styleName={'SidebarItemContainer'}>
+              <div styleName={'SidebarTitle'}>Withdraw</div>
             </div>
           </Link>
           <Link to="/account/deposit">
-            <div className={'SidebarItemContainer'}>
-              <div className={'SidebarTitle'}>Deposit</div>
+            <div styleName={'SidebarItemContainer'}>
+              <div styleName={'SidebarTitle'}>Deposit</div>
             </div>
           </Link>
           <Link to="/account/settings">
-            <div className={'SidebarItemContainer'}>
-              <div className={'SidebarTitle'}>Settings</div>
+            <div styleName={'SidebarItemContainer'}>
+              <div styleName={'SidebarTitle'}>Settings</div>
             </div>
           </Link>
         </div>
@@ -41,4 +41,4 @@ class Sidebar extends React.Component {
   }
 }
 
-export default Sidebar;
+export default CSSModules(Sidebar, styles);
