@@ -8,6 +8,7 @@ import GamePlayer from '../components/GamePlayer';
 
 let tm;
 
+@CSSModules(styles, { allowMultiple: true })
 class GameContainer extends Component {
   constructor(props) {
     super(props);
@@ -18,6 +19,8 @@ class GameContainer extends Component {
       timeRemaining: 5.0,
       isFlipping: false,
       gameEnded: false,
+      games: props.games,
+      gamePlays: props.gamePlays
     };
 
     this.getStrokeColor = this.getStrokeColor.bind(this);
@@ -27,14 +30,14 @@ class GameContainer extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
+    const { games, gamePlays } = nextProps;
 
-    const { games } = nextProps;
+    const gameId = this.props.params.id;
 
-    const game = games.find((game) => {
-      return game.id === Number(this.props.params.id);
-    });
     this.setState({
-      gameStatus: game.status
+      gameStatus: games[gameId].status,
+      games,
+      gamePlays
     });
   }
 
@@ -102,19 +105,16 @@ class GameContainer extends Component {
 
   gameExists() {
     const { games, params } = this.props;
-
-    const gameExists = games.find((game) => {
-      return game.id === parseInt(params.id);
-    });
-    return gameExists;
+    console.log('Client gameExists: ', games[params.id]);
+    return games[params.id];
   }
 
   renderCoin() {
-    const { games, params } = this.props;
-    const game = games.find((game) => {
-      return game.id === parseInt(params.id);
-    });
-    debugger;
+    const { params } = this.props;
+
+    const { games } = this.state;
+
+    const game = games[params.id];
     const percent = (game.GamePlays.length / game.maxPlayers) * 100;
     const gameIsFull = game.GamePlays.length === game.maxPlayers;
 
@@ -135,7 +135,7 @@ class GameContainer extends Component {
 
           }
 
-          <Circle style={{width: '200px', margin: '0 auto', position: 'absolute', top: '0', left: '0'}}
+          <Circle style={{width: '200px', margin: '0 auto'}}
                   percent={percent}
                   strokeWidth="4"
                   strokeColor={this.getStrokeColor()}
@@ -162,10 +162,9 @@ class GameContainer extends Component {
 
   renderGame() {
     const degreeFlipped = 3600;
-    const { user, games, params } = this.props;
-    const game = games.find((game) => {
-      return game.id === parseInt(params.id);
-    });
+    const { user, games, params, gamePlays } = this.props;
+
+    const game = games[params.id];
 
     let totalBets = 0;
 
@@ -173,7 +172,9 @@ class GameContainer extends Component {
       totalBets += gamePlay.betAmount;
     });
 
-    const usersInGame = game.GamePlays.map((gamePlay) => {
+    const usersInGame = game.GamePlays.map((gamePlayId) => {
+      const gamePlay = gamePlays[gamePlayId];
+      debugger;
       const chance = parseFloat(Math.round((gamePlay.betAmount / 2250000) * 100) / 100).toFixed(4) * 100;
       return { userId: gamePlay.userId, username: gamePlay.User.username, betAmount: gamePlay.betAmount, chance }
     });
@@ -232,10 +233,11 @@ GameContainer.propTypes = {
 function mapStateToProps(state) {
   return {
     games: state.game.games,
+    gamePlays: state.gamePlay.gamePlays,
     user: state.user
   };
 }
 
 // Read more about where to place `connect` here:
 // https://github.com/rackt/react-redux/issues/75#issuecomment-135436563
-export default CSSModules(connect(mapStateToProps, {})(GameContainer));
+export default connect(mapStateToProps, {})(GameContainer);

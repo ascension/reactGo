@@ -3,6 +3,8 @@ import CSSModules from 'react-css-modules';
 import styles from '../css/components/game.scss';
 import moment from 'moment';
 
+import NavigationButton from '../components/NavigationButton';
+
 const propTypes = {
   game: PropTypes.object.isRequired,
   gamePlays: PropTypes.object.isRequired
@@ -21,17 +23,39 @@ function GameRow(props) {
 
     return gamePot;
   }
-  debugger;
+
+  function renderButton(game) {
+    const { user, joinGame } = props;
+
+    const userHasAlreadyJoined = game.GamePlays.find((gamePlay) => {
+      return gamePlay.userId === user.id;
+    });
+
+    const loggedInText = userHasAlreadyJoined ? 'Already Joined' : 'Join Game';
+
+    return (
+      <button
+        className={'game-btn'}
+        onClick={() => {joinGame(game.id)}}
+      >
+        {
+          user.authenticated ? loggedInText : 'Login to Play'
+        }
+      </button>
+    );
+  }
+
+
   return (
     <div styleName={'game-row'} key={game.id}>
       <div>{game.id}</div>
-      <div>{calculateGamePot()} bits</div>
+      <div>{game.GamePlays ? calculateGamePot() : '0'} bits</div>
       <div>{game.GamePlays.length} / {game.maxPlayers}</div>
       <div>{moment(game.createdAt).format('MM-DD-YYYY')}</div>
       <NavigationButton buttonText="VIEW GAME" link={`/game/${game.id}`} styleName="game-btn"/>
       <div>
         {
-          this.renderButton(game)
+          renderButton(game)
         }
       </div>
     </div>

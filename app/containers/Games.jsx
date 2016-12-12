@@ -3,13 +3,12 @@ import { connect } from 'react-redux';
 import { createGame, joinGame } from '../actions/game';
 import CSSModules from 'react-css-modules';
 import styles from '../css/components/game.scss';
-import autoBind from 'react-autobind';
 import CreateGame from '../components/CreateGame';
 import Loader from '../components/Loader';
 
 import GameRow from '../components/GameRow';
 
-
+@CSSModules(styles)
 class Games extends Component {
   constructor(props) {
     super(props);
@@ -17,11 +16,14 @@ class Games extends Component {
     this.state = {
       betAmount: 0
     };
-    autoBind(this,
-      'betAmountOnChange',
-      'closeCreateGameForm',
-      'onSubmitCreateGame',
-      'renderButton');
+
+    this.betAmountOnChange = this.betAmountOnChange.bind(this);
+    this.closeCreateGameForm = this.closeCreateGameForm.bind(this);
+    this.onSubmitCreateGame = this.onSubmitCreateGame.bind(this);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    debugger;
   }
 
   betAmountOnChange(event, newValue) {
@@ -40,27 +42,6 @@ class Games extends Component {
     });
   }
 
-  renderButton(game) {
-    const { user, joinGame } = this.props;
-
-    const userHasAlreadyJoined = game.GamePlays.find((gamePlay) => {
-      return gamePlay.userId === user.id;
-    });
-
-    const loggedInText = userHasAlreadyJoined ? 'Already Joined' : 'Join Game';
-
-    return (
-      <button
-        className={'game-btn'}
-        onClick={() => {joinGame(game.id)}}
-      >
-        {
-          this.props.user.authenticated ? loggedInText : 'Login to Play'
-        }
-      </button>
-    );
-  }
-
   calculateGamePot(gamePlays) {
     let totalBets = 0;
 
@@ -71,11 +52,36 @@ class Games extends Component {
     return totalBets;
   }
 
+  renderGamesTable() {
+    const { games } = this.props;
+
+    return (
+      <div>
+        <div styleName={'game-row'}>
+          <div>Game ID</div>
+          <div>Pot</div>
+          <div>Players</div>
+          <div>Created By</div>
+          <div>Action</div>
+        </div>
+        {
+            Object.keys(games).map((gameId) => {
+              const game = games[gameId];
+              const { gamePlays, joinGame, user } = this.props;
+              return(
+                <GameRow key={game.id} game={game} user={user} gamePlays={gamePlays} joinGame={joinGame}/>
+              )
+            })
+        }
+      </div>
+    );
+  }
+
   render() {
     const { games, createGame, gamePlays } = this.props;
     debugger;
     return (
-      <div className={'gameTable'}>
+      <div styleName={'gameTable'}>
         <div>
           <CreateGame
             onSubmit={createGame}
@@ -85,23 +91,9 @@ class Games extends Component {
           />
         </div>
         <div>
-          <div className={'game-row'}>
-            <div>Game ID</div>
-            <div>Pot</div>
-            <div>Players</div>
-            <div>Created By</div>
-            <div>Action</div>
-          </div>
           {
-            games && typeof gamePlays !== 'undefined' ?
-            Object.keys(games).map((gameId) => {
-              const game = games[gameId];
-              const { gamePlays } = this.props;
-              debugger;
-             return(
-               <GameRow key={game.id} game={game} gamePlays={gamePlays}/>
-             )
-            })
+            Object.keys(games).length > 0 ?
+              this.renderGamesTable()
               :
               <Loader isLoading={true}/>
           }
@@ -119,11 +111,11 @@ Games.propTypes = {
 function mapStateToProps(state) {
   return {
     games: state.game.games,
-    gamePlays: state.game.gamePlays,
+    gamePlays: state.gamePlay.gamePlays,
     user: state.user
   };
 }
 
 // Read more about where to place `connect` here:
 // https://github.com/rackt/react-redux/issues/75#issuecomment-135436563
-export default CSSModules(connect(mapStateToProps, { createGame, joinGame })(Games), styles);
+export default connect(mapStateToProps, { createGame, joinGame })(Games);

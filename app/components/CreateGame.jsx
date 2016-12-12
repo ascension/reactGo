@@ -1,5 +1,4 @@
 import React, { Component, PropTypes } from 'react';
-import autoBind from 'react-autobind';
 import CSSModules from 'react-css-modules';
 import styles from '../css/components/game.scss';
 
@@ -7,7 +6,8 @@ class CreateGame extends Component {
   constructor(props) {
     super(props);
 
-    autoBind(this, 'handleChange', 'handleSubmit');
+    this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   handleChange(event) {

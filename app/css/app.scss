@@ -53,3 +53,49 @@ a, a:active, a:active:visited, a:focus, a:focus:visited, a:link, a:link:visited,
 ::-webkit-scrollbar-thumb {
   background: #4aed78;
 }
+
+input[type=text], input[type=email], input[type=password], input[type=tel], input[type=url], input[type=color], input[type=number], input[type=week], input[type=date], input[type=month], input[type=time], input[type=datetime], input[type=datetime-local], input[type=search], select {
+  background: #141e20;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  -ms-border-radius: 3px;
+  border-radius: 3px;
+  box-shadow: none;
+
+  height: 34px;
+  padding: 5px 10px;
+  font-size: 13px;
+  border-width: 0;
+  color: #868d9b;
+}
+
+.btn, a.btn, button, input[type=submit] {
+  box-shadow: none;
+  background: #41ec71;
+  line-height: 40px;
+  height: 40px;
+  text-shadow: none;
+  color: #105925;
+}
+
+.btn, a.btn, button, input[type=submit] {
+  border: none;
+  -webkit-border-radius: 2px;
+  -moz-border-radius: 2px;
+  -ms-border-radius: 2px;
+  border-radius: 2px;
+  cursor: pointer !important;
+  text-transform: uppercase !important;
+  margin-bottom: 0;
+  font-family: "Open Sans", helvetica, arial, serif !important;
+  font-weight: 700;
+  transition: all 50ms;
+  padding: 0 10px;
+}
+
+.btn, a.btn, button, input[type=submit] {
+  display: inline-block;
+  font-size: .86em;
+  text-decoration: none;
+  outline: 0;
+}

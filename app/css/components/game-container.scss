@@ -21,6 +21,8 @@
 .contentWrapper {
   -webkit-flex: 2;
   flex: 2;
+  max-height: 100vh;
+  overflow: hidden;
 }
 
 .flex {
@@ -111,4 +113,8 @@
   left: 0;
   top: 25%;
   width: 100%;
+}
+
+.players {
+  display: inherit;
 }

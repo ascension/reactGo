@@ -3,23 +3,12 @@ import * as types from '../types';
 
 
 const game = (
-  state = {},
+  state = { GamePlays: [] },
   action
 ) => {
   switch (action.type) {
     case types.CREATE_GAME:
-      return {
-        id: action.id,
-        userId: action.userId,
-        hash: action.hash,
-        status: 'WAITING',
-        GamePlays: action.GamePlays,
-        maxPlayers: action.maxPlayers,
-        createdAt: action.createdAt,
-        startedAt: action.startedAt,
-        updatedAt: action.updatedAt,
-        remainingWaitTime: 5000
-      };
+      return { ...action, status: 'WAITING', remainingWaitTime: 5000 };
     case types.GAME_LOBBY_TICK:
       if (state.id === action.gameId) {
         return { ...state, remainingWaitTime: action.remainingWaitTime, status: action.status };
@@ -38,18 +27,19 @@ const game = (
 };
 
 const games = (
-  state = { games: {} },
+  state = {},
   action
 ) => {
   switch (action.type) {
     case types.REQUEST_SUCCESS:
-      if (action.data) {
+      debugger;
+      if (action.data.entities) {
         const { games } = action.data.entities;
         return { ...state, ...games }
       }
       return state;
     case types.CREATE_GAME:
-      return [...state, game(undefined, action)];
+      return {...state, [action.id]: game(undefined, action)};
     case types.GAME_LOBBY_TICK:
       return state.map(g => game(g, action));
     case types.BEGIN_GAME:
