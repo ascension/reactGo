@@ -1,7 +1,7 @@
 @import '../variables';
 @import '../mixins';
 
-.game-row {
+.row {
   position: relative;
   display: flex;
   flex-direction: row;
@@ -11,25 +11,23 @@
   }
 }
 
-.game-row:last-of-type {
+.row:last-of-type {
   margin-bottom: 100px;
 }
 
-.game-row > div {
+.row > div {
   position: relative;
   flex: 1;
   padding: 0 1em;
 }
 
-.game-row > .flex-none {
+.row > .flex-none {
   flex: none;
 }
 
-.game-row-time {
-  font-size: 0.6825em;
-}
 
-.gameTable {
+
+.wrapper {
   margin: 1em;
   height: 100%;
   background-color: $colorAppSecondary;
@@ -39,18 +37,3 @@
   overflow-y: scroll;
   height: 100%;
 }
-
-.input {
-  @include heading;
-  @include input;
-  text-align: center;
-  outline: none;
-  display: block;
-}
-
-input[type=number]::-webkit-inner-spin-button,
-input[type=number]::-webkit-outer-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
-

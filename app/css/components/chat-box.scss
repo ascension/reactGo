@@ -8,6 +8,7 @@
   flex-direction:         column;
   height: 100vh;
   min-width: 350px;
+  background-color: $colorAppPrimary;
 }
 
 .chat-window {
@@ -31,8 +32,8 @@
 }
 
 .chat-type {
-  background: #192125;
-  border-top: solid 1px #141e20;
+  background-color: $colorAppSecondary;
+  border-top: solid 1px $colorSidebarBorder;
   padding: 18px 15px;
 }
 
@@ -83,7 +84,7 @@
 .chat-box {
   min-height: 100px;
   width: 100%;
-  background-color: #1c262a;
+  background-color: $colorAppPrimary;
   box-shadow: none;
   border: none;
   color: white;

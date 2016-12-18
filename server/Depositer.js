@@ -1,0 +1,1 @@
+import bcoin from 'bcoin'

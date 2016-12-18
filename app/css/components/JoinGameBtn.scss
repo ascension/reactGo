@@ -1,0 +1,13 @@
+@import '../common/button';
+
+.game-btn {
+  @extend .greenButton;
+  //height: 50px;
+  //background-color: green;
+  //color: white;
+  //font-size: 1.25em;
+  //outline: none;
+  //padding: 0.75rem 1rem;
+  //border: 2px solid #c3c8ce;
+  //border-radius: 4px;
+}

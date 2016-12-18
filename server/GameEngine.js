@@ -21,6 +21,7 @@ function hash256(toBeHashed) {
 export default class GameEngine {
   // Will take an instance of the Game Model and extract the data it needs.
   constructor(socket, Game) {
+    this.game = Game;
     this.gameId = Game.id; // ID is from the DB.
     this.players = Game.GamePlays; // { userId: 100000 } - Key will be the users ID and their bet.
     this.serverSeed = hash256(serverSecret);
@@ -68,6 +69,9 @@ export default class GameEngine {
       console.log('remainingWaitTime: ', this.remainingWaitTime);
       if (this.remainingWaitTime < 0) {
         clearInterval(this.interval);
+        this.game.status = GAME_STATES.COMPLETE;
+        this.game.hash = outcome;
+        this.game.save();
         this.socket.emit('action', {
           type: BEGIN_GAME,
           gameId: this.gameId,

@@ -6,10 +6,6 @@
 
 * { box-sizing: border-box; }
 
-html {
-  background-color: #1c262a;
-}
-
 body {
   margin: 0;
   font-family: "Avenir Next",-apple-system,BlinkMacSystemFont,"Segoe UI","Roboto","Oxygen","Ubuntu","Cantarell","Fira Sans","Droid Sans","Helvetica Neue",sans-serif;
@@ -21,33 +17,15 @@ body {
 
 html, body {
   height: 100%;
+  background: $colorMain;
 }
 
 a, a:active, a:active:visited, a:focus, a:focus:visited, a:link, a:link:visited, a:visited {
-  color: var(--colorOrange);
+  color: $colorNeonGreen;
 }
 
-.app {
-  font-weight: normal;
-  font-smoothing: antialiased;
-  box-sizing: border-box;
-  height: 100%;
-  background-color: #1c262a;
-  color: #ffffff;
-}
-
-.appContainer {
-  box-sizing: border-box;
-  display: -webkit-flex; /* Safari */
-  display: flex;
-  flex-direction: column;
-
-  flex-wrap: nowrap;
-  justify-content: flex-start;
-  align-items: stretch;
-  align-content: stretch;
-
-  height: 100%;
+a.active {
+  box-shadow: inset 0 -3px 0 0 #41ec71;
 }
 
 ::-webkit-scrollbar-thumb {
@@ -61,7 +39,7 @@ input[type=text], input[type=email], input[type=password], input[type=tel], inpu
   -ms-border-radius: 3px;
   border-radius: 3px;
   box-shadow: none;
-
+  outline: 0;
   height: 34px;
   padding: 5px 10px;
   font-size: 13px;
@@ -98,4 +76,8 @@ input[type=text], input[type=email], input[type=password], input[type=tel], inpu
   font-size: .86em;
   text-decoration: none;
   outline: 0;
+}
+
+.flex-none {
+  flex: none;
 }

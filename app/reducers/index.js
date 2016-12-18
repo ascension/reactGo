@@ -1,6 +1,5 @@
 import { combineReducers } from 'redux';
 import user from 'reducers/user';
-import topic from 'reducers/topic';
 import message from 'reducers/message';
 import messages from 'reducers/messages';
 import channels from 'reducers/channels';
@@ -26,7 +25,6 @@ const isFetching = ( state = false, action ) => {
 // router state
 const rootReducer = combineReducers({
   isFetching,
-  topic,
   game,
   user,
   message,

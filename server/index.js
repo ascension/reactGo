@@ -56,35 +56,7 @@ routesConfig(app);
 app.get('*', App.default);
 var server = http.createServer(app);
 
-let game_count = 2;
-
-let games = [];
-
-function createGame() {
-  return {
-    id: game_count++,
-    status: 'NOT_STARTED',
-    playerCount: 5,
-    remainingLobbyTime: 60,
-    timeTillRoll: 10
-  };
-}
-
 socket(server);
-
-// io.attach(server);
-// io.on('connection', function(socket){
-//   console.log("Socket connected: " + socket.id);
-//   socket.on('action', (action) => {
-//     if(action.type === 'server/hello'){
-//       console.log('Got hello data!', action.data);
-//       games.push(createGame());
-//       socket.emit('action', {type:'CREATE_GAME',
-//         games: games
-//       });
-//     }
-//   });
-// });
 
 server.listen(3000);
 

@@ -16,14 +16,12 @@ function NavigationButton(props) {
   }
 
   return (
-    <div>
-      <button
-        onClick={onClick}
-        className={className}
-      >
-        {buttonText}
-      </button>
-    </div>
+    <button
+      onClick={onClick}
+      className={className}
+    >
+      {buttonText}
+    </button>
   );
 }
 

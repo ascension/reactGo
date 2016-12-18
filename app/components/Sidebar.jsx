@@ -1,8 +1,6 @@
 import React from 'react';
 import styles from '../css/components/sidebar.scss';
 import CSSModules from 'react-css-modules';
-
-
 import { Link } from 'react-router';
 
 /*
@@ -19,23 +17,21 @@ class Sidebar extends React.Component {
   render() {
     return (
       <div styleName={'SidebarContainer'}>
-        <div>
-          <Link to="/account/withdraw">
-            <div styleName={'SidebarItemContainer'}>
-              <div styleName={'SidebarTitle'}>Withdraw</div>
-            </div>
-          </Link>
-          <Link to="/account/deposit">
-            <div styleName={'SidebarItemContainer'}>
-              <div styleName={'SidebarTitle'}>Deposit</div>
-            </div>
-          </Link>
-          <Link to="/account/settings">
-            <div styleName={'SidebarItemContainer'}>
-              <div styleName={'SidebarTitle'}>Settings</div>
-            </div>
-          </Link>
-        </div>
+        <Link to="/account/withdraw">
+          <div styleName={'SidebarItemContainer'}>
+            <div styleName={'SidebarTitle'}>Withdraw</div>
+          </div>
+        </Link>
+        <Link to="/account/deposit">
+          <div styleName={'SidebarItemContainer'}>
+            <div styleName={'SidebarTitle'}>Deposit</div>
+          </div>
+        </Link>
+        <Link to="/account/settings">
+          <div styleName={'SidebarItemContainer'}>
+            <div styleName={'SidebarTitle'}>Settings</div>
+          </div>
+        </Link>
       </div>
     )
   }

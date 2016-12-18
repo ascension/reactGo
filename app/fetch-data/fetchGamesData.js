@@ -13,5 +13,8 @@ export const fetchGameData = () => {
 export const fetchGame = (params) => {
   console.log('gameId: ', params.id);
   return gameService.getGame(params.id)
-    .then(res => [res.data]);
+    .then(res => {
+      const normalized = normalize(res.data, gameSchema);
+      return normalized;
+    });
 };

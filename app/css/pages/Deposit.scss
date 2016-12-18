@@ -1,0 +1,19 @@
+.depositForm {
+  input {
+    display: block;
+    width: 100%;
+    margin-bottom: 1em;
+  }
+
+  label {
+    color: #868d9b;
+    font-size: .75em;
+    text-transform: uppercase;
+    font-weight: 700;
+    font-family: proxima-nova-alt-condensed,helvetica,arial,serif;
+    margin-bottom: 6px;
+    display: inline-block;
+    cursor: pointer;
+    transition: color .2s ease-in-out;
+  }
+}

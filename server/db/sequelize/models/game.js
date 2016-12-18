@@ -1,6 +1,6 @@
 'use strict';
 
-import { GAME_TYPES } from '../../../config/constants';
+import { GAME_TYPES, GAME_STATES } from '../../../config/constants';
 
 module.exports = function(sequelize, DataTypes) {
   var Game = sequelize.define('Game', {
@@ -20,6 +20,16 @@ module.exports = function(sequelize, DataTypes) {
     gameType: {
       type: DataTypes.ENUM(GAME_TYPES.COIN_FLIP, GAME_TYPES.PARTY, GAME_TYPES.BATTLE),
       allowNull: false
+    },
+    status: {
+      type: DataTypes.ENUM(
+        GAME_STATES.NOT_STARTED,
+        GAME_STATES.CANCELLED,
+        GAME_STATES.WAITING,
+        GAME_STATES.STARTING,
+        GAME_STATES.IN_PROGRESS,
+        GAME_STATES.COMPLETE),
+      allowNull: true
     },
     hash: {
       type: DataTypes.TEXT,

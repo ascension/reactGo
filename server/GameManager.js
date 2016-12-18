@@ -4,11 +4,11 @@ import Models from './db/sequelize/models';
 const { Game, GamePlay, User } = Models;
 import assert from 'assert';
 import { BEGIN_GAME, GAME_STARTING } from '../app/types';
-import { GAME_COUNTDOWN_SEC } from './config/constants';
+import { GAME_COUNTDOWN_SEC, GAME_STATES } from './config/constants';
 import GameEngine from './GameEngine';
-import TransactionServive from './TransactionService';
+import TransactionService from './TransactionService';
 
-const transactionService = new TransactionServive();
+const transactionService = new TransactionService();
 
 export default class GameManager {
   constructor(socket) {
@@ -18,16 +18,23 @@ export default class GameManager {
 
   // Players aka GamePlays
   createGame(game) {
-    // Create Game Engine Since all the players have joined.
-    const gameEngine = new GameEngine(this.socket, game);
-    // Pop the new game engine to the games array so we know about it later.
-    this.games.push(gameEngine);
-    this.socket.emit('action', { type: GAME_STARTING, gameId: game.id });
-    setTimeout(() => {
-      gameEngine.runGame();
-    }, GAME_COUNTDOWN_SEC)
-
-
+    console.log('Creating Game: ', game);
+    game.status = GAME_STATES.STARTING;
+    const gameSaveResult = game.save();
+    return gameSaveResult.then((updateResult) => {
+      console.log('Update Result: ', updateResult);
+      // Create Game Engine Since all the players have joined.
+      const gameEngine = new GameEngine(this.socket, game);
+      // Pop the new game engine to the games array so we know about it later.
+      this.games.push(gameEngine);
+      this.socket.emit('action', { type: GAME_STARTING, gameId: game.id });
+      setTimeout(() => {
+        gameEngine.runGame();
+      }, GAME_COUNTDOWN_SEC)
+    })
+    .catch((error) => {
+      console.log('Update Result Error: ', error);
+    });
   }
 
   getGame(gameId) {
@@ -95,6 +102,9 @@ export default class GameManager {
         .then((game) => {
           if (game.GamePlays.length === game.maxPlayers) {
             this.startGame(game);
+          } else {
+            game.status = GAME_STATES.STARTING;
+            const gameSaveResult = game.save();
           }
           return newGamePlay;
         });

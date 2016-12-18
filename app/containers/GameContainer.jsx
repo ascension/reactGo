@@ -121,11 +121,10 @@ class GameContainer extends Component {
     let coinStyle = 'card';
     coinStyle += this.state.isFlipping ? ' flipped' : '';
     coinStyle += this.state.gameEnded ? ' gameEnded' : '';
-
     return (
       <div>
       {
-        game.status === GAME_STATES.WAITING ?
+        game.status === GAME_STATES.IN_PROGRESS ?
         <div>
           {
             gameIsFull ?
@@ -150,14 +149,21 @@ class GameContainer extends Component {
             <div styleName={'face back'}>Tails</div>
           </div>
           <Circle style={{width: '200px', margin: '0 auto', position: 'absolute', top: '0', left: '0'}}
-          percent={percent}
-          strokeWidth="4"
-          strokeColor={this.getStrokeColor()}
+            percent={percent}
+            strokeWidth="4"
+            strokeColor={this.getStrokeColor()}
           />
         </div>
       }
       </div>
     )
+  }
+
+  usersChance(totalBets, betAmount) {
+    const result = parseFloat(Math.round((betAmount / totalBets) * 100) / 100).toFixed(4) * 100;
+    console.log('User Chance: ', result);
+    debugger;
+    return result;
   }
 
   renderGame() {
@@ -169,13 +175,12 @@ class GameContainer extends Component {
     let totalBets = 0;
 
     game.GamePlays.forEach((gamePlay) => {
-      totalBets += gamePlay.betAmount;
+      totalBets += parseInt(gamePlay.betAmount);
     });
 
     const usersInGame = game.GamePlays.map((gamePlayId) => {
       const gamePlay = gamePlays[gamePlayId];
-      debugger;
-      const chance = parseFloat(Math.round((gamePlay.betAmount / 2250000) * 100) / 100).toFixed(4) * 100;
+      const chance = this.usersChance(gamePlay.betAmount);
       return { userId: gamePlay.userId, username: gamePlay.User.username, betAmount: gamePlay.betAmount, chance }
     });
 
@@ -193,9 +198,12 @@ class GameContainer extends Component {
         {
           userIsInGame &&
           <GamePlayer
+            key={user.id}
             username={userIsInGame.username}
             chance={userIsInGame.chance}
+            userId={user.id}
             betAmount={userIsInGame.betAmount}
+            gameOutcome={game.hash}
           />
         }
         <span styleName={'ticker'}>
@@ -206,9 +214,12 @@ class GameContainer extends Component {
             </div>
           </span>
         {
-          others.map((user) => <GamePlayer username={user.username}
-                                           chance={user.chance}
-                                           betAmount={user.betAmount} />)
+          others.map((otherUser) => <GamePlayer username={otherUser.username}
+                                           chance={otherUser.chance}
+                                           userId={otherUser.userId}
+                                           key={otherUser.userId}
+                                           betAmount={otherUser.betAmount}
+                                           gameOutcome={game.hash}/>)
         }
       </div>
     );

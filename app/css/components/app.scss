@@ -1,0 +1,24 @@
+@import "../variables";
+@import "../mixins";
+
+.app {
+  font-weight: normal;
+  font-smoothing: antialiased;
+  box-sizing: border-box;
+  height: 100%;
+  color: #ffffff;
+}
+
+.appContainer {
+  box-sizing: border-box;
+  display: -webkit-flex; /* Safari */
+  display: flex;
+  flex-direction: column;
+
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  align-items: stretch;
+  align-content: stretch;
+
+  height: 100%;
+}

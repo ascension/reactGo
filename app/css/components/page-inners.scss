@@ -1,0 +1,13 @@
+@import "../variables";
+
+.pageInner {
+  max-width: 500px;
+  margin: 20px auto;
+  background: $colorAppSecondary;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  -ms-border-radius: 5px;
+  border-radius: 5px;
+  padding: 15px;
+  overflow: hidden;
+}

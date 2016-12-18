@@ -8,6 +8,7 @@ import configureStore from 'store/configureStore';
 import * as types from 'types';
 import preRenderMiddleware from 'middlewares/preRenderMiddleware';
 import header from 'components/Meta';
+// import './css/main.scss';
 
 const clientConfig = {
   host: process.env.HOSTNAME || 'localhost',

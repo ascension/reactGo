@@ -29,6 +29,12 @@ var commonLoaders = [
       limit: 10000,
     }
   },
+  {
+    test: /\.scss$/,
+    exclude: /node_modules/,
+    include: /main.scss/,
+    loader: 'style!css!sass'
+  },
   {test: /\.html$/, loader: 'html-loader'}
 ];
 

@@ -1,6 +1,7 @@
 import { combineReducers } from 'redux';
 import * as types from '../types';
-
+import { normalize, arrayOf } from 'normalizr';
+import gameSchema from '../schemas/gameSchema';
 
 const game = (
   state = { GamePlays: [] },
@@ -10,13 +11,15 @@ const game = (
     case types.CREATE_GAME:
       return { ...action, status: 'WAITING', remainingWaitTime: 5000 };
     case types.GAME_LOBBY_TICK:
-      if (state.id === action.gameId) {
-        return { ...state, remainingWaitTime: action.remainingWaitTime, status: action.status };
+      const game = state[action.gameId];
+      if (game) {
+        const newGame = { ...game, remainingWaitTime: action.remainingWaitTime, status: action.status };
+        return newGame;
       }
       return state;
     case types.BEGIN_GAME:
       if (state.id === action.gameId) {
-        return { ...state, status: action.status };
+        return { ...state, status: action.status, hash: action.outcome };
       }
       return state;
     case types.JOIN_GAME_SUCCESS:
@@ -32,8 +35,7 @@ const games = (
 ) => {
   switch (action.type) {
     case types.REQUEST_SUCCESS:
-      debugger;
-      if (action.data.entities) {
+      if (action.data && action.data.entities) {
         const { games } = action.data.entities;
         return { ...state, ...games }
       }
@@ -41,18 +43,20 @@ const games = (
     case types.CREATE_GAME:
       return {...state, [action.id]: game(undefined, action)};
     case types.GAME_LOBBY_TICK:
-      return state.map(g => game(g, action));
-    case types.BEGIN_GAME:
-      return state.map(g => game(g, action));
-    case types.JOIN_GAME_SUCCESS:
-      const findGame = state.find((game) => {
-        return game.id === action.game.id;
-      });
-      if (findGame) {
-        return [...state.filter(game => game.id !== action.game.id), action.game]
-      } else {
-        return state
+      if (state[action.gameId]) {
+        return { ...state, [action.gameId]: game(state, action) };
       }
+      return state;
+    case types.BEGIN_GAME:
+      if (state[action.gameId]) {
+        return { ...state, [action.gameId]: game(state[action.gameId], action) };
+      }
+      return state;
+    case types.JOIN_GAME_SUCCESS:
+      const normalized = normalize(action.game, gameSchema);
+      const { games } = normalized.entities;
+      const newState = { ...state, ...games };
+      return newState;
     default:
       return state;
   }

@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react';
 
 import AppContainer from '../containers/AppContainer';
 import CSSModules from 'react-css-modules';
-import styles from '../css/app.scss';
+import styles from '../css/components/app.scss';
 
 const App = ({children}) => {
   return (

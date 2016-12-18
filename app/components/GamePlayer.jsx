@@ -8,12 +8,24 @@ class GamePlayer extends Component {
   }
 
   render() {
-    const { username, betAmount, chance } = this.props;
+    const { username, betAmount, chance, gameOutcome, userId } = this.props;
+    let userIsWinner = false;
+    let outcomeIsSet = false;
+
+    if (gameOutcome !== null) {
+      debugger;
+      outcomeIsSet = outcomeIsSet !== null;
+      userIsWinner = userId == gameOutcome;
+    }
     return (
       <span styleName={'wrapper'}>
           <div styleName={'avatar'}>Avatar</div>
           <div styleName={'username'}>{username}</div>
           <div styleName={'chance'}>{betAmount} - {chance}%</div>
+          {
+            outcomeIsSet && userIsWinner &&
+            <h3>Winner</h3>
+          }
       </span>
     );
   }

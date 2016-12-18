@@ -1,0 +1,26 @@
+@import '../variables';
+@import '../mixins';
+
+.game-row {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  padding: 0.5em;
+  &:nth-child(even) {
+    background-color: $colorAppPrimary;
+  }
+}
+
+.game-row:last-of-type {
+  margin-bottom: 100px;
+}
+
+.game-row > div {
+  position: relative;
+  flex: 1;
+  padding: 0 1em;
+}
+
+.game-row > .flex-none {
+  flex: none;
+}

@@ -5,13 +5,25 @@
   -webkit-flex-shrink: 0;
   -ms-flex-negative: 0;
   flex-shrink: 0;
-  padding: 15px 25px;
   background-color: #192125;
   box-sizing: border-box;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-left: 300px;
+  a {
+    line-height: 70px;
+    display: block;
+    padding: 0;
+    color: #868d9b !important;
+    font-weight: 600;
+    text-decoration: none!important;
+    font-size: 1.25em;
+  }
+}
+
+.navigation-active {
+  @extend .navigation;
+  box-shadow: inset 0 -3px 0 0 #41ec71;
 }
 
 .item {

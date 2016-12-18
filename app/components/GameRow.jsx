@@ -25,9 +25,10 @@ function GameRow(props) {
   }
 
   function renderButton(game) {
-    const { user, joinGame } = props;
+    const { user, joinGame, gamePlays } = props;
 
-    const userHasAlreadyJoined = game.GamePlays.find((gamePlay) => {
+    const userHasAlreadyJoined = game.GamePlays.find((gamePlayId) => {
+      const gamePlay = gamePlays[gamePlayId];
       return gamePlay.userId === user.id;
     });
 
@@ -48,12 +49,13 @@ function GameRow(props) {
 
   return (
     <div styleName={'game-row'} key={game.id}>
-      <div>{game.id}</div>
+      <div styleName={'game-row-time'}>{moment(game.createdAt).format('MM-DD-YYYY')}</div>
       <div>{game.GamePlays ? calculateGamePot() : '0'} bits</div>
       <div>{game.GamePlays.length} / {game.maxPlayers}</div>
-      <div>{moment(game.createdAt).format('MM-DD-YYYY')}</div>
-      <NavigationButton buttonText="VIEW GAME" link={`/game/${game.id}`} styleName="game-btn"/>
-      <div>
+      <div styleName="flex-none">
+        <NavigationButton buttonText="VIEW GAME" link={`/game/${game.id}`} className="game-btn"/>
+      </div>
+      <div styleName="flex-none">
         {
           renderButton(game)
         }

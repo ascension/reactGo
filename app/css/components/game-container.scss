@@ -1,5 +1,19 @@
 @import '../variables';
 
+.appContainer {
+  box-sizing: border-box;
+  display: -webkit-flex; /* Safari */
+  display: flex;
+  flex-direction: column;
+
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  align-items: stretch;
+  align-content: stretch;
+
+  height: 100%;
+}
+
 .wrapper {
   position: relative;
   display: block;

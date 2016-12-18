@@ -23,7 +23,6 @@ class Games extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    debugger;
   }
 
   betAmountOnChange(event, newValue) {
@@ -56,9 +55,8 @@ class Games extends Component {
     const { games } = this.props;
 
     return (
-      <div>
+      <div styleName='table'>
         <div styleName={'game-row'}>
-          <div>Game ID</div>
           <div>Pot</div>
           <div>Players</div>
           <div>Created By</div>
@@ -79,7 +77,6 @@ class Games extends Component {
 
   render() {
     const { games, createGame, gamePlays } = this.props;
-    debugger;
     return (
       <div styleName={'gameTable'}>
         <div>
@@ -90,7 +87,7 @@ class Games extends Component {
             betAmount={this.state.betAmount}
           />
         </div>
-        <div>
+        <div style={{height: '100%', marginBottom:'2em'}}>
           {
             Object.keys(games).length > 0 ?
               this.renderGamesTable()
