@@ -24,9 +24,6 @@ class GameContainer extends Component {
     };
 
     this.getStrokeColor = this.getStrokeColor.bind(this);
-    this.handleClick = this.handleClick.bind(this);
-    this.startGame = this.startGame.bind(this);
-    this.startCountDown = this.startCountDown.bind(this);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -37,150 +34,99 @@ class GameContainer extends Component {
     this.setState({
       gameStatus: games[gameId].status,
       games,
-      gamePlays
+      gamePlays,
+      timeRemaining: games[gameId].timeRemaining,
+      isFlipping: games[gameId].status === GAME_STATES.COMPLETE
     });
   }
 
   componentDidMount() {
     // TODO - Fetch Game by id.
-    // fetchGame(this.props.params.gameId)
-    //   .then((game) => {
-    //     console.log('game: ', game);
-    //   })
   }
 
   getStrokeColor() {
-    // if (this.state.percent > 75) {
-    // } else if(this.state.percent > 50) {
-    //   return '#FF9900';
-    // } else {
-    //   return '#db4437';
-    // }
     return '#19FF65';
-  }
-
-  startCountDown() {
-    tm = setInterval(() => {
-      if (this.state.timeRemaining <= 0) {
-        clearInterval(tm);
-        this.setState({
-          isFlipping: true,
-          percent: 0,
-          timeRemaining: 0,
-        }, () => setTimeout(() => {
-          this.setState({
-            isFlipping: false,
-            gameEnded: true
-          })
-        }, 5000));
-      } else {
-
-        const tick = this.state.timeRemaining - 0.2;
-
-        this.setState({
-          isFlipping: false,
-          percent: tick > 0 ? tick * 20 : 0,
-          timeRemaining: tick
-        });
-      }
-    }, 200);
-  }
-
-  startGame() {
-    this.setState({
-      percent: 100,
-      timeRemaining: 5.0,
-      isFlipping: false,
-      gameEnded: false
-    }, this.startCountDown());
-  }
-
-  handleClick() {
-    this.startGame()
-  }
-
-  getGameFromStore() {
-
   }
 
   gameExists() {
     const { games, params } = this.props;
-    console.log('Client gameExists: ', games[params.id]);
     return games[params.id];
   }
 
-  renderCoin() {
+  renderCoin(currentUser, otherUsers) {
     const { params } = this.props;
 
     const { games } = this.state;
 
     const game = games[params.id];
-    const percent = (game.GamePlays.length / game.maxPlayers) * 100;
+
+    const percent = game.status === GAME_STATES.STARTING ? (parseInt(this.state.timeRemaining) / 5000) * 100 : (game.GamePlays.length / game.maxPlayers) * 100;
     const gameIsFull = game.GamePlays.length === game.maxPlayers;
 
+    // If Current user is undefined it means they are an observer.
+    let playerOne = {};
+    let playerTwo = {};
+
+    if(currentUser) {
+      playerOne = {...currentUser};
+      playerTwo = {...otherUsers[0]}
+    } else if(otherUsers[0] && otherUsers[1]) {
+      playerOne = {...otherUsers[0]};
+      playerTwo = {...otherUsers[1]};
+    }
+
     let coinStyle = 'card';
-    coinStyle += this.state.isFlipping ? ' flipped' : '';
-    coinStyle += this.state.gameEnded ? ' gameEnded' : '';
+    // coinStyle += this.state.isFlipping ? ' flipped' : '';
+    let rotate = '0';
+    if (game.status === GAME_STATES.COMPLETE && game.hash == playerOne.userId) {
+      rotate = 2 * -180 * 10;
+    }
+    else if (game.status === GAME_STATES.COMPLETE && game.hash == playerTwo.userId) {
+      rotate = (2 * -180 * 10) + 180;
+    }
+
+
+    console.log('rotating: ', rotate);
     return (
       <div>
-      {
-        game.status === GAME_STATES.IN_PROGRESS ?
         <div>
-          {
-            gameIsFull ?
-              ''
-              :
-              <span styleName={'waiting'}><h3>Waiting for <br/>players to join<br/>{game.GamePlays.length} / {game.maxPlayers}</h3></span>
-
-          }
-
-          <Circle style={{width: '200px', margin: '0 auto'}}
-                  percent={percent}
-                  strokeWidth="4"
-                  strokeColor={this.getStrokeColor()}
-          />
-          {
-            game.status === GAME_STATES.IN_PROGRESS ? <h3>{game.remainingWaitTime} sec</h3> : ''
-          }
-        </div>:
-        <div>
-          <div styleName={coinStyle}>
-            <div styleName={'face front'}>Heads</div>
-            <div styleName={'face back'}>Tails</div>
+          <div styleName={'flip'}>
+            <div styleName={coinStyle} style={{transform: `rotatex(${rotate}deg)`}}>
+              <div styleName={'face front'}>{playerOne && playerOne.username}</div>
+              <div styleName={'face back'}>{playerTwo && playerTwo.username}</div>
+            </div>
+            <Circle style={{width: '200px', margin: '0 auto', position: 'absolute', top: '0', left: '0'}}
+                    percent={percent}
+                    strokeWidth="4"
+                    strokeColor={this.getStrokeColor()}
+            />
           </div>
-          <Circle style={{width: '200px', margin: '0 auto', position: 'absolute', top: '0', left: '0'}}
-            percent={percent}
-            strokeWidth="4"
-            strokeColor={this.getStrokeColor()}
-          />
         </div>
-      }
       </div>
     )
   }
 
   usersChance(totalBets, betAmount) {
     const result = parseFloat(Math.round((betAmount / totalBets) * 100) / 100).toFixed(4) * 100;
-    console.log('User Chance: ', result);
-    debugger;
     return result;
   }
 
   renderGame() {
-    const degreeFlipped = 3600;
+
     const { user, games, params, gamePlays } = this.props;
 
     const game = games[params.id];
 
     let totalBets = 0;
 
-    game.GamePlays.forEach((gamePlay) => {
+    game.GamePlays.forEach((gamePlayId) => {
+      const gamePlay = gamePlays[gamePlayId];
       totalBets += parseInt(gamePlay.betAmount);
     });
 
     const usersInGame = game.GamePlays.map((gamePlayId) => {
       const gamePlay = gamePlays[gamePlayId];
-      const chance = this.usersChance(gamePlay.betAmount);
+      const chance = this.usersChance(totalBets, gamePlay.betAmount);
       return { userId: gamePlay.userId, username: gamePlay.User.username, betAmount: gamePlay.betAmount, chance }
     });
 
@@ -207,12 +153,10 @@ class GameContainer extends Component {
           />
         }
         <span styleName={'ticker'}>
-            <div styleName={'flip'}>
-              {
-                this.renderCoin()
-              }
-            </div>
-          </span>
+          {
+            game.GamePlays.length > 0 ? this.renderCoin(userIsInGame, others) : <span>Waiting for Players to Join...</span>
+          }
+        </span>
         {
           others.map((otherUser) => <GamePlayer username={otherUser.username}
                                            chance={otherUser.chance}

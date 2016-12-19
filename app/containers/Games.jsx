@@ -57,10 +57,9 @@ class Games extends Component {
     return (
       <div styleName='table'>
         <div styleName={'game-row'}>
+          <div>Created At</div>
           <div>Pot</div>
           <div>Players</div>
-          <div>Created By</div>
-          <div>Action</div>
         </div>
         {
             Object.keys(games).map((gameId) => {

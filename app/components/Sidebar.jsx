@@ -17,17 +17,17 @@ class Sidebar extends React.Component {
   render() {
     return (
       <div styleName={'SidebarContainer'}>
-        <Link to="/account/withdraw">
+        <Link to="/account/withdraw" activeClassName="active">
           <div styleName={'SidebarItemContainer'}>
             <div styleName={'SidebarTitle'}>Withdraw</div>
           </div>
         </Link>
-        <Link to="/account/deposit">
+        <Link to="/account/deposit" activeClassName="active">
           <div styleName={'SidebarItemContainer'}>
             <div styleName={'SidebarTitle'}>Deposit</div>
           </div>
         </Link>
-        <Link to="/account/settings">
+        <Link to="/account/settings" activeClassName="active">
           <div styleName={'SidebarItemContainer'}>
             <div styleName={'SidebarTitle'}>Settings</div>
           </div>

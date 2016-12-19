@@ -72,11 +72,13 @@ export default class GameEngine {
         this.game.status = GAME_STATES.COMPLETE;
         this.game.hash = outcome;
         this.game.save();
+        const randFlips = chance.integer({min: 1, max: 10});
         this.socket.emit('action', {
           type: BEGIN_GAME,
           gameId: this.gameId,
           status: GAME_STATES.COMPLETE,
-          outcome
+          outcome,
+          randFlips
         });
       } else {
         this.socket.emit('action', {
