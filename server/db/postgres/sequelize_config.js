@@ -18,7 +18,7 @@ module.exports = {
     username: process.env.PGUSER || 'webserver',
     password: process.env.PGPASS || '##Noah0812120309',
     database: process.env.PGDB || 'cryptoDuel',
-    host: 'localhost',
+    host: 'localhost:5432',
     dialect: 'postgres'
   }
 };
