@@ -1,12 +1,14 @@
 import _ from 'lodash';
-import { BET_STATES, CURRENCY } from './config/constants';
-import Models from './db/sequelize/models';
+import Models from '../db/sequelize/models';
 const { Game, GamePlay, User } = Models;
 import assert from 'assert';
-import { BEGIN_GAME, GAME_STARTING } from '../app/types';
-import { GAME_COUNTDOWN_SEC, GAME_STATES } from './config/constants';
+import { GAME_COUNTDOWN_SEC, GAME_STATES, BET_STATES, CURRENCY } from '../config/constants';
 import GameEngine from './GameEngine';
 import TransactionService from './TransactionService';
+
+const BEGIN_GAME = 'server/BEGIN_GAME';
+const GAME_LOBBY_TICK = 'GAME_LOBBY_TICK';
+const GAME_STARTING = 'server/GAME_STARTING';
 
 const transactionService = new TransactionService();
 

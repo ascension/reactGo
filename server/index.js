@@ -1,7 +1,8 @@
 import express from 'express';
 import webpack from 'webpack';
 import { ENV } from './config/appConfig';
-import { connect } from './db';
+import { connect, session as dbSession } from './db';
+import { sessionSecret } from './config/secrets';
 import passportConfig from './config/passport';
 import expressConfig from './config/express';
 import routesConfig from './config/routes';
@@ -9,7 +10,7 @@ const App = require('../public/assets/server');
 const app = express();
 import http from 'http';
 
-import socket from './socket';
+import socket from './utils/socket';
 
 
 /*
@@ -56,7 +57,8 @@ routesConfig(app);
 app.get('*', App.default);
 var server = http.createServer(app);
 
-socket(server);
+let sessionStore = dbSession();
+socket(server, sessionSecret, sessionStore);
 
 server.listen(3000);
 

@@ -1,12 +1,14 @@
 var socket_io = require('socket.io');
 var passportSocketIo = require("passport.socketio");
 var cookieParser = require('cookie-parser');
-import { session as dbSession } from '../server/db';
-import { sessionSecret } from '../server/config/secrets';
 import GameManager from './GameManager';
-import { ADD_MESSAGE, RECEIVE_MESSAGE, JOIN_GAME_SUCCESS, NOT_ENOUGH_BALANCE } from '../app/types';
-import Models from '../server/db/sequelize/models';
+const Models = require('../db/sequelize/models');
 const Message = Models.Message;
+
+const ADD_MESSAGE = 'server/ADD_MESSAGE';
+const RECEIVE_MESSAGE = 'RECEIVE_MESSAGE';
+const JOIN_GAME_SUCCESS = 'server/JOIN_GAME_SUCCESS';
+const NOT_ENOUGH_BALANCE = 'NOT_ENOUGH_BALANCE';
 
 // var ioCookieParser = require('socket.io-cookie');
 var restartTime = 5000; // How long from  game_starting -> game_started
@@ -83,18 +85,8 @@ function gameActions(action, clientSocket) {
 }
 
 var io = socket_io();
-let sessionStore = dbSession();
 const gameManager = new GameManager(io);
 
-
-io.use(passportSocketIo.authorize({
-  cookieParser: cookieParser,       // the same middleware you registrer in express
-  key:          'sessionId',       // the name of the cookie where express/connect stores its session_id
-  secret:       sessionSecret,    // the session_secret to parse the cookie
-  store:        sessionStore,        // we NEED to use a sessionstore. no memorystore please
-  success:      onAuthorizeSuccess,  // *optional* callback on success - read more below
-  fail:         onAuthorizeFail,     // *optional* callback on fail/error - read more below
-}));
 
 function onAuthorizeSuccess(data, accept){
   console.log('successful connection to socket.io');
@@ -127,12 +119,22 @@ function onAuthorizeFail(data, message, error, accept){
   // see: http://socket.io/docs/client-api/#socket > error-object
 }
 
-export default function(server) {
+export default function(server, sessionSecret, sessionStore) {
   console.log('setting up socket');
   io.attach(server);
 
   io.on('connection', onConnection);
   io.on('disconnect', onDisconnect);
+
+  io.use(passportSocketIo.authorize({
+    cookieParser: cookieParser,       // the same middleware you registrer in express
+    key:          'sessionId',       // the name of the cookie where express/connect stores its session_id
+    secret:       sessionSecret,    // the session_secret to parse the cookie
+    store:        sessionStore,        // we NEED to use a sessionstore. no memorystore please
+    success:      onAuthorizeSuccess,  // *optional* callback on success - read more below
+    fail:         onAuthorizeFail,     // *optional* callback on fail/error - read more below
+  }));
+
 
   function onDisconnect(socket) {
     connectedUsers--;

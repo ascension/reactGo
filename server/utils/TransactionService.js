@@ -1,5 +1,5 @@
-import { LEDGER_TXN_TYPES, CURRENCY } from './config/constants';
-import Models from './db/sequelize/models';
+import { LEDGER_TXN_TYPES, CURRENCY } from '../config/constants';
+import Models from '../db/sequelize/models';
 const { Ledger } = Models;
 import assert from 'assert';
 

@@ -1,9 +1,12 @@
 import Chance from 'chance';
 import crypto from  'crypto';
-import { BEGIN_GAME, GAME_STARTING, GAME_LOBBY_TICK } from '../app/types';
+
 const TICK_RATE = 150; // ping the client every X milliseconds
 const COUNTDOWN_TIME = 5000; // how many seconds do we countdown the timer.
-import { GAME_COUNTDOWN_SEC, GAME_TICK_INTERVAL, GAME_STATES } from './config/constants';
+import { GAME_COUNTDOWN_SEC, GAME_TICK_INTERVAL, GAME_STATES } from '../config/constants';
+
+const BEGIN_GAME = 'server/BEGIN_GAME';
+const GAME_LOBBY_TICK = 'GAME_LOBBY_TICK';
 
 // Server Seed should be composed of a
 const serverSecret = 'aspdf87j12l3kjnbjh1ta8sdfaklsdbfli8y71923nman,sdfhals';
