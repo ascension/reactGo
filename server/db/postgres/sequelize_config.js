@@ -14,11 +14,10 @@ module.exports = {
     dialect: 'postgres'
   },
   production: {
-    use_env_variable: 'POSTGRES_DB_URL',
     username: process.env.PGUSER || 'webserver',
-    password: process.env.PGPASS || '##Noah0812120309',
+    password: process.env.PGPASS || '1234567',
     database: process.env.PGDB || 'cryptoDuel',
-    host: 'localhost:5432',
+    host: '127.0.0.1',
     dialect: 'postgres'
   }
 };
