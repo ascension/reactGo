@@ -8,8 +8,8 @@ module.exports = {
   },
   test: {
     username: process.env.PGUSER || 'root',
-    password: null,
-    database: 'react_webpack_node_test',
+    password: process.env.PGPASS || null,
+    database: process.env.PGDB || 'react_webpack_node_test',
     host: '127.0.0.1',
     dialect: 'postgres'
   },
