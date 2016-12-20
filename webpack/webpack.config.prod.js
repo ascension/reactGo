@@ -37,20 +37,23 @@ var commonLoaders = [
         limit: 10000,
     }
   },
-  { test: /\.css$/,
-    loader: ExtractTextPlugin.extract('style-loader', 'css-loader?module!postcss-loader')
+  {
+    test: /\.scss$/,
+    exclude: /node_modules/,
+    include: /main.scss/,
+    loader: 'style!css!sass'
+  },
+  {
+    test: /\.scss$/,
+    exclude: /main.scss/,
+    loader: ExtractTextPlugin.extract(
+      'style-loader',
+      'css-loader?' +
+      'modules&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]' +
+      '!sass')
   }
 ];
 
-var postCSSConfig = function () {
-  return [
-    require('postcss-import')(),
-    require('postcss-cssnext')({
-      browsers: ['> 1%', 'last 2 versions']
-    }),
-    require('postcss-reporter')({ clearMessages: true })
-  ];
-};
 
 module.exports = [
   {
@@ -96,11 +99,11 @@ module.exports = [
     },
     resolve: {
       root: [path.join(__dirname, '..', 'app')],
-      extensions: ['', '.js', '.jsx', '.css']
+      extensions: ['', '.js', '.jsx', '.css', '.scss']
     },
     plugins: [
         // extract inline css from modules into separate files
-        new ExtractTextPlugin('styles/app.css', { allChunks: true }),
+        new ExtractTextPlugin('app.css'),
         new webpack.optimize.UglifyJsPlugin({
           compressor: {
             warnings: false
@@ -111,8 +114,7 @@ module.exports = [
           __DEVSERVER__: false
         }),
         new InlineEnviromentVariablesPlugin({ NODE_ENV: 'production' })
-    ],
-    postcss: postCSSConfig
+    ]
   }, {
     // The configuration for the server-side rendering
     name: 'server-side rendering',
@@ -135,14 +137,14 @@ module.exports = [
     },
     resolve: {
       root: [path.join(__dirname, '..', 'app')],
-      extensions: ['', '.js', '.jsx', '.css']
+      extensions: ['', '.js', '.jsx', '.css', '.scss']
     },
     plugins: [
         // Order the modules and chunks by occurrence.
         // This saves space, because often referenced modules
         // and chunks get smaller ids.
         new webpack.optimize.OccurenceOrderPlugin(),
-        new ExtractTextPlugin('styles/app.css', { allChunks: true }),
+        new ExtractTextPlugin('app.css'),
         new webpack.optimize.UglifyJsPlugin({
           compressor: {
             warnings: false
@@ -154,7 +156,6 @@ module.exports = [
         }),
         new webpack.IgnorePlugin(/vertx/),
         new InlineEnviromentVariablesPlugin({ NODE_ENV: 'production' })
-    ],
-    postcss: postCSSConfig
+    ]
   }
 ];
