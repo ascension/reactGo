@@ -15,10 +15,10 @@ module.exports = {
   },
   production: {
     use_env_variable: 'POSTGRES_DB_URL',
-    username: process.env.PGUSER || 'root',
-    password: process.env.PGPASS || null,
-    database: process.env.PGDB || 'react_webpack_node_production',
-    host: '127.0.0.1',
+    username: process.env.PGUSER || 'webserver',
+    password: process.env.PGPASS || '##Noah0812120309',
+    database: process.env.PGDB || 'cryptoDuel',
+    host: 'localhost',
     dialect: 'postgres'
   }
 };
