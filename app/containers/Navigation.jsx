@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { Link, IndexLink } from 'react-router';
 import { connect } from 'react-redux';
-import { logOut } from 'actions/users';
+import { logOut } from '../actions/users';
 import CSSModules from 'react-css-modules';
 import styles from '../css/components/navigation.scss';
 
