@@ -8,7 +8,7 @@ import createSocketIoMiddleware from 'redux-socket.io';
 import io from 'socket.io-client';
 import { browserHistory } from 'react-router';
 
-let socket = io();
+let socket = io('https://cryptoduel.com');
 
 socket.on('#navigate', function(path){
   browserHistory.push(path);
