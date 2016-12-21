@@ -8,7 +8,7 @@ import expressConfig from './config/express';
 import routesConfig from './config/routes';
 const App = require('../public/assets/server');
 const app = express();
-import http from 'https';
+import http from 'http';
 
 import socket from './utils/socket';
 
