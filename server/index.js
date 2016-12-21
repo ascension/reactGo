@@ -8,7 +8,7 @@ import expressConfig from './config/express';
 import routesConfig from './config/routes';
 const App = require('../public/assets/server');
 const app = express();
-import http from 'http';
+import http from 'https';
 
 import socket from './utils/socket';
 
@@ -60,6 +60,6 @@ var server = http.createServer(app);
 let sessionStore = dbSession();
 socket(server, sessionSecret, sessionStore);
 
-server.listen(3000);
+// server.listen(3000);
 
-// app.listen(app.get('port'));
+server.listen(app.get('port'));
