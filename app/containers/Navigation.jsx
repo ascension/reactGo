@@ -7,6 +7,11 @@ import styles from '../css/components/navigation.scss';
 
 @CSSModules(styles)
 class Navigation extends Component {
+  constructor(props) {
+    super(props);
+
+    this.handleLogoutClick = this.handleLogoutClick.bind(this);
+  }
   componentWillReceiveProps(nextProps) {
     debugger;
     console.log('nextProps: ', nextProps);
@@ -25,6 +30,10 @@ class Navigation extends Component {
     return this.isCurrentPath(path) ? 'navLink active' : 'navLink';
   }
 
+  handleLogoutClick() {
+    this.props.logOut()
+  }
+
   render() {
     return (
       <nav styleName={'navigation'} role="navigation">
@@ -32,7 +41,7 @@ class Navigation extends Component {
         <Link className="navLink" activeClassName="active" to="/games">Games</Link>
         <Link className="navLink"  activeClassName="active" to="/account">Account</Link>
         { this.props.user.authenticated ? (
-          <Link onClick={logOut} to="/">Logout</Link>
+          <Link onClick={this.handleLogoutClick}>Logout</Link>
         ) : (
           <Link to="/login">Log in</Link>
         )}
