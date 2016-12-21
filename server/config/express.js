@@ -73,6 +73,7 @@ export default (app) => {
     cookie: {
       httpOnly: true,
       secure: false,
+      domain:'.cryptoduel.com'
     },
     store: sessionStore
   };
