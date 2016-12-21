@@ -2,12 +2,12 @@ import Models from '../models';
 
 const User = Models.User;
 
-export default (email, password, done) =>
-  User.findOne({ where: { email } }).then((user) => {
-    if (!user) return done(null, false, { message: `There is no record of the email ${email}.` });
+export default (username, password, done) =>
+  User.findOne({ where: { username } }).then((user) => {
+    if (!user) return done(null, false, { message: `There is no record of this ${username}.` });
     return user.comparePassword(password).then(
       () => done(null, user),
-      () => done(null, false, { message: 'Your email/password combination is incorrect.' })
+      () => done(null, false, { message: 'Your username/password combination is incorrect.' })
     );
   }).catch((err) => {
     console.log(err);

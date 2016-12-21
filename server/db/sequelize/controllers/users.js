@@ -44,6 +44,7 @@ export function signUp(req, res, next) {
 
     const user = User.build({
       email: req.body.email,
+      username: req.body.email,
       password: req.body.password
     });
 

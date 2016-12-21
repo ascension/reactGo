@@ -23,13 +23,13 @@ class LoginOrRegister extends Component {
     event.preventDefault();
 
     const { manualLogin, signUp, user: { isLogin } } = this.props;
-    const email = ReactDOM.findDOMNode(this.refs.email).value;
+    const username = ReactDOM.findDOMNode(this.refs.username).value;
     const password = ReactDOM.findDOMNode(this.refs.password).value;
 
     if (isLogin) {
-      manualLogin({ email, password });
+      manualLogin({ username, password });
     } else {
-      signUp({ email, password });
+      signUp({ username, password });
     }
   }
 
@@ -38,7 +38,7 @@ class LoginOrRegister extends Component {
     if (isLogin) {
       return (
         <div className={'header'}>
-          <h1 className={'heading'}>Login with Email</h1>
+          <h1 className={'heading'}>Login</h1>
           <div className={'alternative'}>
             Not what you want?
             <a className={'alternative-link'}
@@ -50,7 +50,7 @@ class LoginOrRegister extends Component {
 
     return (
       <div className={'header'}>
-      <h1 className={'heading'}>Register with Email</h1>
+      <h1 className={'heading'}>Register</h1>
         <div className={'alternative'}>
           Already have an account?
           <a className={'alternative-link'}
@@ -71,27 +71,20 @@ class LoginOrRegister extends Component {
           <div className={'email-container'}>
             <form onSubmit={this.handleOnSubmit}>
               <input className={'input'}
-              type="email"
-              ref="email"
-              placeholder="email" />
+              type="username"
+              ref="username"
+              placeholder="username" />
               <input className={'input'}
               type="password"
               ref="password"
               placeholder="password" />
               <div className={'hint'}>
-              <div>Hint</div>
-              <div>email: example@ninja.com password: ninja</div>
               </div>
               <p className={'message' + message && message.length > 0 ? ' message-show' : ''}>{message}</p>
               <input className={'button'}
                 type="submit"
                 value={isLogin ? 'Login' : 'Register'} />
             </form>
-          </div>
-          <div className={'google-container'}>
-            <h1 className={'heading'}>Google Login Demo</h1>
-            <a className={'button'}
-          href="/auth/google">Login with Google</a>
           </div>
         </div>
       </div>
