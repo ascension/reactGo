@@ -72,11 +72,15 @@ export default (app) => {
     // If secure is set, and you access your site over HTTP, the cookie will not be set
     cookie: {
       httpOnly: true,
-      secure: false,
-      domain:'.cryptoduel.com'
+      secure: false
     },
     store: sessionStore
   };
+
+  // Set the cookie domain for production
+  if (ENV === 'production') {
+    sess.cookie.domain = '.cryptoduel.com';
+  }
 
   console.log('--------------------------');
   console.log('===> 😊  Starting Server . . .');
