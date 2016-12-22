@@ -57,9 +57,6 @@ routesConfig(app);
 app.get('*', App.default);
 var server = http.createServer(app);
 
-let sessionStore = dbSession();
-socket(server, sessionSecret, sessionStore);
-
-// server.listen(3000);
+socket(server);
 
 server.listen(app.get('port'));

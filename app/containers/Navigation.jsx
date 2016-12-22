@@ -41,9 +41,9 @@ class Navigation extends Component {
         <Link className="navLink" activeClassName="active" to="/games">Games</Link>
         <Link className="navLink"  activeClassName="active" to="/account">Account</Link>
         { this.props.user.authenticated ? (
-          <Link onClick={this.handleLogoutClick}>Logout</Link>
+          <Link onClick={this.handleLogoutClick} to="/">Logout</Link>
         ) : (
-          <Link to="/login">Log in</Link>
+          <Link to="/login" activeClassName="active">Log in</Link>
         )}
       </nav>
     );

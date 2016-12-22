@@ -1,0 +1,24 @@
+.login {
+  padding: 0 4em;
+  .container {
+    max-width: 500px;
+    margin: 0 auto;
+  }
+
+  .alternative {
+    text-align: center;
+    display: block;
+  }
+
+  .alternative-link {
+    width: 100%;
+    padding: 1em 0;
+    text-align: center;
+    display: block;
+  }
+
+  input[type=submit] {
+    margin-top: 0.5em;
+  }
+}
+

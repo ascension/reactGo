@@ -4,10 +4,8 @@ import CSSModules from 'react-css-modules';
 import { connect } from 'react-redux';
 import { manualLogin, signUp, toggleLoginMode } from 'actions/users';
 import styles from '../css/components/login.scss';
-import hourGlassSvg from 'images/hourglass.svg';
 
-
-
+@CSSModules(styles)
 class LoginOrRegister extends Component {
   /*
    * This replaces getInitialState. Likewise getDefaultProps and propTypes are just
@@ -34,27 +32,40 @@ class LoginOrRegister extends Component {
   }
 
   renderHeader() {
-    const { user: { isLogin } , toggleLoginMode } = this.props;
+    const { user: { isLogin } } = this.props;
     if (isLogin) {
       return (
         <div className={'header'}>
           <h1 className={'heading'}>Login</h1>
-          <div className={'alternative'}>
-            Not what you want?
-            <a className={'alternative-link'}
-              onClick={toggleLoginMode}> Register an Account</a>
-          </div>
         </div>
       );
     }
 
     return (
       <div className={'header'}>
-      <h1 className={'heading'}>Register</h1>
+        <h1 className={'heading'}>Register</h1>
+      </div>
+    );
+  }
+
+  renderFooter() {
+    const { user: { isLogin } , toggleLoginMode } = this.props;
+    if (isLogin) {
+      return (
+        <div className={'login-footer'}>
+          <div className={'alternative'}>
+            <a className={'alternative-link'}
+               onClick={toggleLoginMode}>Need an account?</a>
+          </div>
+        </div>
+      );
+    }
+
+    return (
+      <div className={'login-footer'}>
         <div className={'alternative'}>
-          Already have an account?
           <a className={'alternative-link'}
-            onClick={toggleLoginMode}> Login</a>
+             onClick={toggleLoginMode}>Already have an account?</a>
         </div>
       </div>
     );
@@ -64,20 +75,27 @@ class LoginOrRegister extends Component {
     const { isWaiting, message, isLogin } = this.props.user;
 
     return (
-      <div className={'login' + isWaiting ? ' waiting' : ''}>
+      <div className={'login'}>
         <div className={'container'}>
-          { this.renderHeader() }
-          <img className={'loading'} src={hourGlassSvg} />
           <div className={'email-container'}>
+            { this.renderHeader() }
             <form onSubmit={this.handleOnSubmit}>
-              <input className={'input'}
-              type="username"
-              ref="username"
-              placeholder="username" />
-              <input className={'input'}
-              type="password"
-              ref="password"
-              placeholder="password" />
+              <div>
+                <label htmlFor="username">Username</label>
+                <input className={'input'}
+                  type="text"
+                  ref="username"
+                  id="username"
+                />
+              </div>
+              <div>
+                <label htmlFor="password">Password</label>
+                <input className={'input'}
+                  type="password"
+                  ref="password"
+                  id="password"
+                />
+              </div>
               <div className={'hint'}>
               </div>
               <p className={'message' + message && message.length > 0 ? ' message-show' : ''}>{message}</p>
@@ -85,6 +103,7 @@ class LoginOrRegister extends Component {
                 type="submit"
                 value={isLogin ? 'Login' : 'Register'} />
             </form>
+            { this.renderFooter() }
           </div>
         </div>
       </div>
@@ -99,16 +118,11 @@ LoginOrRegister.propTypes = {
   toggleLoginMode: PropTypes.func.isRequired
 };
 
-// Function passed in to `connect` to subscribe to Redux store updates.
-// Any time it updates, mapStateToProps is called.
 function mapStateToProps({user}) {
   return {
     user
   };
 }
 
-// Connects React component to the redux store
-// It does not modify the component class passed to it
-// Instead, it returns a new, connected component class, for you to use.
-export default CSSModules(connect(mapStateToProps, { manualLogin, signUp, toggleLoginMode })(LoginOrRegister), styles);
+export default connect(mapStateToProps, { manualLogin, signUp, toggleLoginMode })(LoginOrRegister);
 

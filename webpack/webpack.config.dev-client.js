@@ -67,7 +67,7 @@ module.exports = {
     // Multiple entry with hot loader
     // https://github.com/glenjamin/webpack-hot-middleware/blob/master/example/webpack.config.multientry.js
     entry: {
-      app: ['./client', hotMiddlewareScript]
+      app: [hotMiddlewareScript, './client.jsx']
     },
     output: {
       // The output directory as absolute path
@@ -99,11 +99,6 @@ module.exports = {
         new webpack.DefinePlugin({
           __DEVCLIENT__: true,
           __DEVSERVER__: false
-        }),
-        new styleLintPlugin({
-          configFile: path.join(__dirname, '..', '.stylelintrc'),
-          context: path.join(__dirname, '..', 'app'),
-          files: '**/*.?(sa|sc|c)ss'
         })
     ]
 };

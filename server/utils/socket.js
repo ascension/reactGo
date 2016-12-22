@@ -72,7 +72,6 @@ function gameActions(action, clientSocket) {
     console.log(`User: ${clientSocket.request.user.id} Joining Game: ${action.gameId}`);
     return gameManager.userJoinGame(clientSocket.request.user, action.betAmount, action.gameId)
       .then((gamePlay) => {
-        io.to('chat').emit('chat', {msg: 'jerrod has joined the game.', userName: 'Jerrod'});
         gameManager.getGame(action.gameId)
           .then((game) => {
             io.emit("action", { type: JOIN_GAME_SUCCESS, game });
