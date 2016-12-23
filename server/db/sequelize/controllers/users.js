@@ -39,7 +39,7 @@ export function logout(req, res) {
 export function signUp(req, res, next) {
   User.findOne({ where: { username: req.body.username } }).then((existingUser) => {
     if (existingUser) {
-      return res.status(409).json({ message: 'Account with this email address already exists!' });
+      return res.status(409).json({ message: 'That username is already taken.' });
     }
 
     const user = User.build({

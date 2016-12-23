@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react';
+import Chance from 'chance';
 import ReactDOM from 'react-dom';
 import CSSModules from 'react-css-modules';
 import { connect } from 'react-redux';
@@ -27,7 +28,8 @@ class LoginOrRegister extends Component {
     if (isLogin) {
       manualLogin({ username, password });
     } else {
-      signUp({ username, password });
+      const email = ReactDOM.findDOMNode(this.refs.email).value;
+      signUp({ username, password, email });
     }
   }
 
@@ -73,7 +75,7 @@ class LoginOrRegister extends Component {
 
   render() {
     const { isWaiting, message, isLogin } = this.props.user;
-
+    const randPassword = Chance().string({length: 12, pool: 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'});
     return (
       <div className={'login'}>
         <div className={'container'}>
@@ -105,9 +107,11 @@ class LoginOrRegister extends Component {
               <div>
                 <label htmlFor="password">Password</label>
                 <input className={'input'}
-                  type="password"
+                  type="text"
                   ref="password"
                   id="password"
+                  value={randPassword}
+                  disabled
                 />
                 {
                   !isLogin &&
