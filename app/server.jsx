@@ -61,6 +61,7 @@ export default function render(req, res) {
       message: '',
       isLogin: true,
       username: req.user ? req.user.username : '',
+      bitcoinAddress: req.user ? req.user.bitcoinAddress : '',
       id: req.user ? req.user.id : null
     }
   }, history);

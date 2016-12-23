@@ -12,10 +12,6 @@ class Navigation extends Component {
 
     this.handleLogoutClick = this.handleLogoutClick.bind(this);
   }
-  componentWillReceiveProps(nextProps) {
-    debugger;
-    console.log('nextProps: ', nextProps);
-  }
 
   isCurrentPath(path) {
     if (this.props.routing.locationBeforeTransitions) {

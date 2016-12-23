@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import PageInner from '../../components/Layout/PageInner';
 import CSSModules from 'react-css-modules';
 import styles from '../../css/pages/Deposit.scss'
 
+@CSSModules(styles)
 class Deposit extends Component {
 
   constructor(props) {
@@ -34,18 +36,26 @@ class Deposit extends Component {
   }
 
   render() {
+    const { user: { bitcoinAddress } } = this.props;
     return (
       <PageInner>
         <form styleName="depositForm" onSubmit={this.handleSubmit}>
           <div>
             <label htmlFor="amount">Bitcoin Address</label>
-            <input id="amount" ref="amount" title="Withdrawal Address" type="number" onChange={this.handleAmountChange} disabled={true}/>
-            <a href="bitcoin:1MCyfDp3AhbXQC3XjLwcmSp6wozTSPbYEJ">Bitcoin Link</a>
+            <input
+              id="amount"
+              ref="amount"
+              title="Withdrawal Address"
+              type="text"
+              value={bitcoinAddress}
+              onChange={this.handleAmountChange} disabled={true}
+            />
+            <a href={`bitcoin:${bitcoinAddress}`}>Bitcoin Link</a>
           </div>
           <div>
             <img
               className="show-for-medium-up qr"
-              src="https://blockchain.info/qr?data=1MCyfDp3AhbXQC3XjLwcmSp6wozTSPbYEJ&amp;size=150"/>
+              src={`https://blockchain.info/qr?data=${bitcoinAddress}&size=150`}/>
           </div>
         </form>
       </PageInner>
@@ -53,4 +63,10 @@ class Deposit extends Component {
   }
 }
 
-export default CSSModules(Deposit, styles);
+function mapStateToProps(state) {
+  return {
+    user: state.user
+  };
+}
+
+export default connect(mapStateToProps, {})(Deposit);

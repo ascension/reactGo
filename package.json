@@ -75,6 +75,7 @@
     "babel-preset-react-hmre": "^1.1.1",
     "babel-preset-stage-0": "^6.5.0",
     "bcrypt-nodejs": "0.0.3",
+    "bitcoinjs-lib": "2.3.0",
     "bluebird": "^3.4.6",
     "body-parser": "^1.15.0",
     "chai": "^3.5.0",

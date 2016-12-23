@@ -109,10 +109,18 @@ const id = (state = null, action) => {
   }
 };
 
+const bitcoinAddress = (state = null, action) => {
+  switch (action.type) {
+    default:
+      return state;
+  }
+};
+
 const userReducer = combineReducers({
   isLogin,
   isWaiting,
   authenticated,
+  bitcoinAddress,
   message,
   username,
   isAdmin,

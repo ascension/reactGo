@@ -88,6 +88,20 @@ class LoginOrRegister extends Component {
                   id="username"
                 />
               </div>
+              {
+                !isLogin &&
+                <div>
+                  <label htmlFor="email">*Recovery Email</label>
+                  <input className={'input'}
+                         type="email"
+                         ref="email"
+                         id="email"
+                  />
+                  <small className="input-error">
+                    Entering your e-mail is optional, but if you lose your password, you will lose your account.
+                  </small>
+                </div>
+              }
               <div>
                 <label htmlFor="password">Password</label>
                 <input className={'input'}
@@ -95,6 +109,12 @@ class LoginOrRegister extends Component {
                   ref="password"
                   id="password"
                 />
+                {
+                  !isLogin &&
+                  <small className="input-error">
+                    For your own security, we picked this strong and unique password for you. Write it down!
+                  </small>
+                }
               </div>
               <div className={'hint'}>
               </div>

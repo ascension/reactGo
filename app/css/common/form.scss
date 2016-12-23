@@ -6,6 +6,11 @@ form {
     margin-bottom: 1em;
   }
 
+  input + .input-error {
+    margin-top: -0.5em;
+    margin-bottom: 0.5em;
+  }
+
   label {
     color: #868d9b;
     font-size: .75em;
@@ -24,4 +29,10 @@ h1.heading {
   color: #fff;
   font-weight: 300;
   text-indent: -1px;
+}
+
+.input-error {
+  display: block;
+  color: #EC4142;
+  font-size: 0.75em;
 }
