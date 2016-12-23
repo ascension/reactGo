@@ -16,6 +16,9 @@ class LoginOrRegister extends Component {
   constructor(props) {
     super(props);
     this.handleOnSubmit = this.handleOnSubmit.bind(this);
+    this.state = {
+      passwordValue: ''
+    }
   }
 
   handleOnSubmit(event) {
@@ -31,6 +34,12 @@ class LoginOrRegister extends Component {
       const email = ReactDOM.findDOMNode(this.refs.email).value;
       signUp({ username, password, email });
     }
+  }
+
+  handlePasswordChange(event) {
+    this.setState({
+      passwordValue: event.target.value
+    })
   }
 
   renderHeader() {
@@ -76,6 +85,7 @@ class LoginOrRegister extends Component {
   render() {
     const { isWaiting, message, isLogin } = this.props.user;
     const randPassword = Chance().string({length: 12, pool: 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'});
+    const passwordValue = isLogin ? this.state.passwordValue : randPassword;
     return (
       <div className={'login'}>
         <div className={'container'}>
@@ -107,11 +117,12 @@ class LoginOrRegister extends Component {
               <div>
                 <label htmlFor="password">Password</label>
                 <input className={'input'}
-                  type="text"
+                  type={isLogin ? "password" : "text"}
                   ref="password"
                   id="password"
-                  value={randPassword}
-                  disabled
+                  onChange={this.handlePasswordChange}
+                  value={passwordValue}
+                  disabled={!isLogin}
                 />
                 {
                   !isLogin &&
