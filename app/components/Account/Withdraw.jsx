@@ -2,36 +2,28 @@ import React, { Component } from 'react';
 import PageInner from '../../components/Layout/PageInner';
 import Table from '../../components/common/Table';
 import CSSModules from 'react-css-modules';
-import styles from '../../css/pages/Withdraw.scss'
+import styles from '../../css/pages/Withdraw.scss';
+import { connect } from 'react-redux';
 
+import { withdraw } from '../../actions/users';
+
+@CSSModules(styles)
 class Withdraw extends Component {
 
   constructor(props) {
     super(props);
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.handleAmountChange = this.handleAmountChange.bind(this);
-    this.handlePasswordChange = this.handlePasswordChange.bind(this);
   }
 
   handleSubmit(event) {
-    debugger;
+    const { withdrawAction } = this.props;
     event.preventDefault();
-    console.log('amount', this.refs.amount.value, this.refs.password.value);
+    withdrawAction({
+      amount: this.refs.amount.value,
+      password: this.refs.password.value,
+      withdrawalAddress: this.refs.address.value
+    });
     // TODO - Call Action here.
-  }
-  
-  handleAmountChange(event) {
-    this.setState((prevState) => {
-      return {
-        withdrawalAmount: event.target.value
-      }
-    });
-  }
-
-  handlePasswordChange(event) {
-    this.setState({
-      password: event.target.value
-    });
   }
 
   render() {
@@ -42,15 +34,15 @@ class Withdraw extends Component {
           <form styleName="withdrawForm" onSubmit={this.handleSubmit}>
             <div>
               <label htmlFor="amount">Amount</label>
-              <input id="amount" ref="amount" title="Withdrawal Amount" type="number" onChange={this.handleAmountChange}/>
+              <input id="amount" ref="amount" title="Withdrawal Amount" type="number"/>
             </div>
             <div>
               <label htmlFor="address">Withdrawal Address</label>
-              <input id="address" ref="address" title="Withdrawal Address" type="text" onChange={this.handleAmountChange}/>
+              <input id="address" ref="address" title="Withdrawal Address" type="text"/>
             </div>
             <div>
               <label htmlFor="password">Password</label>
-              <input id="password" ref="password" title="Withdrawal Address" type="password" onChange={this.handlePasswordChange}/>
+              <input id="password" ref="password" title="Withdrawal Address" type="password"/>
             </div>
             <div>
               <button type="submit">Withdraw</button>
@@ -70,4 +62,8 @@ class Withdraw extends Component {
   }
 }
 
-export default CSSModules(Withdraw, styles);
+function mapStateToProps() {
+  return {};
+}
+
+export default connect(mapStateToProps, { withdrawAction: withdraw })(Withdraw);

@@ -6,7 +6,7 @@ import styles from '../css/components/message.scss';
 
 const Message = ({message, type, dismissMessage}) => {
 
-  let className = message && message.length > 0 ? ' show' : '';
+  let className = message && message.length > 0 ? 'alert show' : '';
   className += type === 'SUCCESS' ? ' success' : '';
   className += type === 'ERROR' ? ' error' : '';
 

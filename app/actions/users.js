@@ -61,6 +61,26 @@ export function signUpSuccess(message) {
   };
 }
 
+// Withdraw Action Creators
+export function beginWithdrawal() {
+  return {
+    type: types.WITHDRAWAL_REQUEST_BEGIN
+  };
+}
+
+export function withdrawalSuccess() {
+  return {
+    type: types.WITHDRAWAL_REQUEST_SUCCESS
+  }
+}
+
+export function withdrawalFailure(message) {
+  return {
+    type: types.WITHDRAWAL_REQUEST_FAILURE,
+    message
+  }
+}
+
 // Log Out Action Creators
 export function beginLogout() {
   return { type: types.LOGOUT_USER};
@@ -98,13 +118,15 @@ export function manualLogin(data) {
 }
 
 export function withdraw(data) {
+  console.log('attempting withdraw: ', data);
   return dispatch => {
+    dispatch(beginWithdrawal());
     return makeUserRequest('post', data, '/withdraw')
       .then((response) => {
-        dispatch(withdrawSuccess())
+        dispatch(withdrawalSuccess(response.data))
       })
       .catch(error => {
-        dispatch(withdrawError(error));
+        dispatch(withdrawalFailure(getMessage(error)));
       });
   }
 }

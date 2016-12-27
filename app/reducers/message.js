@@ -11,6 +11,7 @@ export default function message(state = {
   type: 'SUCCESS'
 }, action = {}) {
   switch (action.type) {
+    case types.WITHDRAWAL_REQUEST_FAILURE:
     case types.NOT_ENOUGH_BALANCE:
       return {...state, message: action.message, type: 'ERROR'};
     case types.LOGIN_SUCCESS_USER:
