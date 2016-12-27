@@ -43,7 +43,8 @@ const message = (
       return '';
     case types.LOGIN_ERROR_USER:
     case types.SIGNUP_ERROR_USER:
-      return action.message;
+      if (action.message) return action.message;
+      return state;
     default:
       return state;
   }
@@ -104,6 +105,9 @@ const isMod = (state = false, action) => {
 
 const id = (state = null, action) => {
   switch (action.type) {
+    case types.LOGIN_SUCCESS_USER:
+    case types.SIGNUP_SUCCESS_USER:
+      return action.user.id;
     default:
       return state;
   }
@@ -111,6 +115,10 @@ const id = (state = null, action) => {
 
 const bitcoinAddress = (state = null, action) => {
   switch (action.type) {
+    case types.LOGIN_SUCCESS_USER:
+    case types.SIGNUP_SUCCESS_USER:
+      if (action.user.bitcoinAddress) return action.user.bitcoinAddress;
+      return state;
     default:
       return state;
   }

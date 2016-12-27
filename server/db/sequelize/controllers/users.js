@@ -1,6 +1,7 @@
 import passport from 'passport';
 import Models from '../models';
 const User = Models.User;
+import { deriveAddress } from '../../../utils/bitcoin';
 
 /**
  * POST /login
@@ -17,7 +18,12 @@ export function login(req, res, next) {
     return req.logIn(user, (loginErr) => {
       if (loginErr) return res.status(401).json({ message: loginErr });
       return res.status(200).json({
-        message: 'You have been successfully logged in.'
+        message: 'You have been successfully logged in.',
+        user: {
+          id: user.id,
+          bitcoinAddress: deriveAddress(user.id),
+          username: user.username
+        }
       });
     });
   })(req, res, next);

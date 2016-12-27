@@ -16,6 +16,7 @@ class LoginOrRegister extends Component {
   constructor(props) {
     super(props);
     this.handleOnSubmit = this.handleOnSubmit.bind(this);
+    this.handlePasswordChange = this.handlePasswordChange.bind(this);
     this.state = {
       passwordValue: ''
     }
