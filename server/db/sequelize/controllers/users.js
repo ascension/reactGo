@@ -4,7 +4,7 @@ const User = Models.User;
 import { LEDGER_TXN_TYPES, CURRENCY } from '../../../config/constants';
 import { deriveAddress } from '../../../utils/bitcoin';
 import LedgerService from '../../../services/LedgerService';
-
+import { Address } from 'bitcore-lib';
 const ledgerService = new LedgerService();
 
 const INVALID_WITHDRAWAL_ADDRESS_ERROR_MSG = 'Not a valid destination address';
@@ -57,12 +57,15 @@ export function withdraw(req, res) {
       console.error('User is not logged in or found when trying to withdrawal');
       return apiErrorResponse(res, WITHDRAWAL_ERROR_MSG);
     }
+    const { amount, withdrawalAddress } = req.body;
 
-    // Not a valid destination address
+    // Validate withdrawal address with bitcoin.Address
+    if (!withdrawalAddress && !Address.isValid(withdrawalAddress)) {
+      return apiErrorResponse(res, INVALID_WITHDRAWAL_ADDRESS_ERROR_MSG, 404)
+    }
 
     return user.comparePassword(req.body.password).then((passwordResult) => {
       console.log('Withdraw Password Result: ', passwordResult);
-      const { amount, withdrawalAddress } = req.body;
       return ledgerService.withdrawFunds(req.user.id, CURRENCY.BTC, amount, withdrawalAddress)
         .then((withdrawSuccess) => {
           console.log('Withdrawal Success: ', withdrawSuccess);
