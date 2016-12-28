@@ -37,7 +37,7 @@ module.exports = (sequelize, DataTypes) => {
     bitcoinAddress: {
       type: DataTypes.VIRTUAL,
       get: function() {
-        return deriveAddress(this.get('id'));
+        return this.get('id') ? deriveAddress(parseInt(this.get('id'))) : '';
       }
     },
     username: {
