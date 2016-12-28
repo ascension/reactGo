@@ -54,10 +54,11 @@ export function beginSignUp() {
   return { type: types.SIGNUP_USER };
 }
 
-export function signUpSuccess(message) {
+export function signUpSuccess(message, user) {
   return {
     type: types.SIGNUP_SUCCESS_USER,
-    message
+    message,
+    user
   };
 }
 
@@ -138,7 +139,7 @@ export function signUp(data) {
     return makeUserRequest('post', data, '/signup')
       .then(response => {
         if (response.status === 200) {
-          dispatch(signUpSuccess(response.data.message));
+          dispatch(signUpSuccess(response.data.message, response.data.user));
           dispatch(push('/'));
         } else {
           dispatch(signUpError('Oops! Something went wrong'));

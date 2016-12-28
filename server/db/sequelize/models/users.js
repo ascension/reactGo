@@ -1,6 +1,8 @@
 import Promise from 'bluebird';
 import bcryptNode from 'bcrypt-nodejs';
 const bcrypt = Promise.promisifyAll(bcryptNode);
+import { deriveAddress } from '../../../utils/bitcoin';
+
 
 // Other oauthtypes to be added
 
@@ -31,6 +33,12 @@ module.exports = (sequelize, DataTypes) => {
     name: {
       type: DataTypes.STRING,
       defaultValue: ''
+    },
+    bitcoinAddress: {
+      type: DataTypes.VIRTUAL,
+      get: function() {
+        return deriveAddress(this.get('id'));
+      }
     },
     username: {
       type: DataTypes.STRING
@@ -79,12 +87,9 @@ module.exports = (sequelize, DataTypes) => {
       toJSON() {
         return {
           id: this.id,
-          email: this.email,
+          username: this.username,
+          bitcoinAddress: this.bitcoinAddress,
           profile: {
-            name: this.name,
-            gender: this.gender,
-            location: this.location,
-            website: this.website,
             picture: this.picture
           }
         };

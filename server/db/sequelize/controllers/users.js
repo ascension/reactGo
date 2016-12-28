@@ -27,11 +27,7 @@ export function login(req, res, next) {
       if (loginErr) return res.status(401).json({ message: loginErr });
       return res.status(200).json({
         message: 'You have been successfully logged in.',
-        user: {
-          id: user.id,
-          bitcoinAddress: deriveAddress(user.id),
-          username: user.username
-        }
+        user: user.toJSON()
       });
     });
   })(req, res, next);
@@ -113,11 +109,14 @@ export function signUp(req, res, next) {
       password: req.body.password
     });
 
+
+
     return user.save().then(() => {
       req.logIn(user, (err) => {
         if (err) return apiErrorResponse(res, err, 401);
         return res.status(200).json({
-          message: 'You have been successfully logged in.'
+          message: 'You have been successfully logged in.',
+          user: user.toJSON()
         });
       });
     });
