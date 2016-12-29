@@ -22,7 +22,8 @@ export default (app) => {
   if (usersController) {
     app.post('/login', usersController.login);
     app.post('/signup', usersController.signUp);
-    app.post('/withdraw', isAuthenticated, usersController.withdraw);
+    app.post('/api/withdrawal', isAuthenticated, usersController.withdraw);
+    app.get('/api/withdrawal', isAuthenticated, usersController.getWithdrawals);
     app.post('/logout', usersController.logout);
   } else {
     console.warn(unsupportedMessage('users routes'));

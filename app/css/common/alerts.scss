@@ -7,10 +7,12 @@
   top: 0;
   left: 0;
   right: 0;
+  font-weight: 500;
 }
 
 .success {
-  background-color: $colorSuccess;
+  color: #105925;
+  background-color: $colorNeonGreen;
 }
 
 .error {

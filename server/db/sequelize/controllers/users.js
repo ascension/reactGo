@@ -85,6 +85,22 @@ export function withdraw(req, res) {
 }
 
 /**
+ * GET /withdrawal
+ */
+export function getWithdrawals(req, res) {
+  ledgerService.getWithdrawals(req.user.id)
+    .then((withdrawals) => {
+      if(withdrawals === null) {
+        return res.status(200).json([]);
+      }
+      return res.status(200).json(withdrawals);
+    })
+    .catch((error) => {
+      return apiErrorResponse(res, 'Error getting user withdrawals.')
+    });
+}
+
+/**
  * POST /logout
  */
 export function logout(req, res) {
@@ -129,5 +145,6 @@ export default {
   login,
   logout,
   withdraw,
+  getWithdrawals,
   signUp
 };

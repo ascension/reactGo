@@ -1,7 +1,7 @@
 import React from 'react';
 import { Route, IndexRoute } from 'react-router';
 
-import { fetchGameData, fetchGame } from './fetch-data';
+import { fetchGameData, fetchGame, fetchWithdrawalData } from './fetch-data';
 import App from 'containers/App';
 import Games from 'containers/Games';
 import Game from 'containers/GameContainer';
@@ -47,7 +47,7 @@ export default (store) => {
       <Route path="register" component={Register} onEnter={redirectAuth} />
       <Route path="account" component={Account} onEnter={requireAuth}>
         <IndexRoute component={Dashboard}/>
-        <Route path="withdraw" component={Withdraw}/>
+        <Route path="withdraw" component={Withdraw} fetchData={fetchWithdrawalData}/>
         <Route path="deposit" component={Deposit}/>
       </Route>
       <Route path="test" component={TestPage}/>

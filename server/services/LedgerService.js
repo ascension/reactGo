@@ -49,7 +49,10 @@ class LedgerService {
     };
     return this.model.create(withdrawalEntry);
   }
-  
+
+  getWithdrawals(userId) {
+    return this.model.find({ where: { userId, type: LEDGER_TXN_TYPES.WITHDRAWAL }});
+  }
 }
 
 export default LedgerService;
