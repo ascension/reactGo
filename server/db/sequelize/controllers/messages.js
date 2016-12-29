@@ -8,7 +8,6 @@ const sequelize = Models.sequelize;
  */
 export function all(req, res) {
   const channel = req.params.channel ? req.params.channel : 'Lobby';
-  console.log('Get Messages: ', channel );
   return Message.findAll({
     include: [{
       model: Models.Channel,
@@ -23,7 +22,7 @@ export function all(req, res) {
     res.json(messages);
   }).catch((err) => {
     console.log(err);
-    res.status(500).send('Error in first query');
+    res.status(500).send('Error in findAll query');
   });
 }
 
