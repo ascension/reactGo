@@ -8,6 +8,7 @@ class CreateGame extends Component {
 
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleCheckboxChange = this.handleCheckboxChange.bind(this);
   }
 
   handleChange(event) {
@@ -19,9 +20,16 @@ class CreateGame extends Component {
   }
 
   handleSubmit(event) {
-    const { onSubmit } = this.props;
-    console.log('handleSubmit', event.target.value);
-    onSubmit(event.target.value);
+    const { onSubmit, allowLowerBet, betAmount } = this.props;
+    onSubmit(betAmount, allowLowerBet);
+  }
+
+  handleCheckboxChange(event) {
+    const newValue = event.target.checked;
+
+    if (typeof this.props.onCheckboxChange === 'function') {
+      this.props.onCheckboxChange(event, newValue);
+    }
   }
 
   render() {
@@ -31,6 +39,15 @@ class CreateGame extends Component {
           Bet Amount
           <input type="number" className={'input'} onChange={this.handleChange} value={this.props.betAmount}/>
         </label>
+        <label>
+          Allow Lower Bets
+          <input
+            type="checkbox"
+            value={this.props.allowLowerBet}
+            onChange={this.handleCheckboxChange}
+            checked={this.props.allowLowerBet}
+          />
+        </label>
         <button type="submit" className={'game-btn'} onClick={this.handleSubmit}>Create Game</button>
       </div>
     );
@@ -39,8 +56,10 @@ class CreateGame extends Component {
 
 CreateGame.propTypes = {
   onChange: PropTypes.func.isRequired,
+  onCheckboxChange: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
   betAmount: PropTypes.number,
+  allowLowerBet: PropTypes.bool,
   show: PropTypes.bool
 };
 

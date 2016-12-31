@@ -97,10 +97,11 @@ export function joinGame(gameId) {
 //   }
 // }
 
-export function createGame(betAmount) {
+export function createGame(minBetAmount, allowLowerBet = false) {
   return (dispatch, getState) => {
     const data = {
-      betAmount
+      minBetAmount,
+      allowLowerBet
     };
 
     return makeGameRequest('post', false, data)

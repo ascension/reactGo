@@ -1,11 +1,18 @@
 import { userService } from '../services';
 import { normalize, arrayOf } from 'normalizr';
-import gameSchema from '../schemas/gameSchema';
+import ledgerSchema from '../schemas/ledgerSchema';
 
 export const fetchWithdrawalData = () => {
   return userService.getWithdrawals()
     .then(res => {
-      console.log('getWithdrawals: ', res.data);
-      return res.data;
+      const normalized = normalize(res.data, arrayOf(ledgerSchema));
+      return normalized;
     });
+};
+
+export const fetchDepositData = () => {
+  return userService.getDeposits((res) => {
+    const normalized = normalize(res.data, arrayOf(ledgerSchema));
+    return normalized;
+  })
 };

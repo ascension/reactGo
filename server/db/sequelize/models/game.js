@@ -31,6 +31,15 @@ module.exports = function(sequelize, DataTypes) {
         GAME_STATES.COMPLETE),
       allowNull: true
     },
+    minBetAmount: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    },
+    allowLowerBet: {
+      type: DataTypes.BOOLEAN,
+      allowNull: true,
+      defaultValue: false
+    },
     hash: {
       type: DataTypes.TEXT,
       allowNull: true

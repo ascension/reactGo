@@ -6,9 +6,11 @@ import unsupportedMessage from '../db/unsupportedMessage';
 import { controllers, passport as passportConfig } from '../db';
 
 const usersController = controllers && controllers.users;
+const accountsController = controllers && controllers.accounts;
 const topicsController = controllers && controllers.topics;
 const gamesController = controllers && controllers.games;
 const messagesController = controllers && controllers.messages;
+const ledgerController = controllers && controllers.ledger;
 
 function isAuthenticated(req, res, next) {
   if (req.isAuthenticated())
@@ -24,6 +26,7 @@ export default (app) => {
     app.post('/signup', usersController.signUp);
     app.post('/api/withdrawal', isAuthenticated, usersController.withdraw);
     app.get('/api/withdrawal', isAuthenticated, usersController.getWithdrawals);
+    app.get('/api/ledger/:txnType', isAuthenticated, ledgerController.get);
     app.post('/logout', usersController.logout);
   } else {
     console.warn(unsupportedMessage('users routes'));
@@ -65,6 +68,15 @@ export default (app) => {
   }
 
   // game routes
+  if (gamesController) {
+    app.get('/api/game', gamesController.all);
+    app.get('/api/game/:id', gamesController.one);
+    app.post('/api/game', isAuthenticated, gamesController.add);
+    app.post('/api/game/:id/join', isAuthenticated, gamesController.join);
+    app.put('/api/game/:id', isAuthenticated, gamesController.update);
+  }
+
+  // account routes
   if (gamesController) {
     app.get('/api/game', gamesController.all);
     app.get('/api/game/:id', gamesController.one);

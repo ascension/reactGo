@@ -51,8 +51,89 @@ class LedgerService {
   }
 
   getWithdrawals(userId) {
-    return this.model.find({ where: { userId, type: LEDGER_TXN_TYPES.WITHDRAWAL }});
+    return this.getEntriesByTxnType(userId, LEDGER_TXN_TYPES.WITHDRAWAL);
+  }
+
+  getEntriesByTxnType(userId, txnType) {
+    return this.model.findAll({ where: { userId, type: txnType }});
+  }
+
+  userDeposit(userId, amount, currency = CURRENCY.BTC) {
+    assert(typeof userId === 'number');
+    assert(typeof amount === 'number');
+
+    return this.model.findOne({ where: { userId, currency }, order: 'id DESC'})
+      .then((lastEntry) => {
+        let balanceBefore = 0;
+        if (lastEntry) {
+          balanceBefore = parseInt(lastEntry.balanceAfter);
+        }
+
+        const balanceAfter = parseInt(balanceBefore) + convertDepositToInteger(amount);
+
+        // Convert based on currency
+        const deposit = {
+          userId,
+          amount: parseInt(amount),
+          balanceBefore,
+          balanceAfter,
+          currency,
+          type: LEDGER_TXN_TYPES.DEPOSIT
+        };
+
+        return this.model.create(deposit);
+      })
+      .catch((error) => {
+        console.log(error);
+        throw error;
+      });
+  }
+
+  userWithdrawal(userId, withdrawalAmount, txnId, currency = CURRENCY.BTC) {
+    return this.getUsersLastEntryByCurrency(userId, currency)
+      .then((lastEntry) => {
+        assert(withdrawalAmount <= lastEntry.balanceAfter);
+
+        const withdrawal = {
+          userId,
+          amount: withdrawalAmount,
+          txnId,
+          currency,
+          type: LEDGER_TXN_TYPES.WITHDRAWAL
+        };
+        return this.model.create(withdrawal);
+      });
+  }
+
+  userTransfer(fromUserId, toUserId, transferAmount, currency = CURRENCY.BTC) {
+    return this.getUsersLastEntryByCurrency(fromUserId, currency)
+      .then((lastEntry) => {
+        assert(transferAmount <= lastEntry.balanceAfter);
+
+        const transferFrom = {
+          userId: fromUserId,
+          amount: transferAmount,
+          currency,
+          type: LEDGER_TXN_TYPES.TRANSFER
+        };
+
+        const transferTo = {
+          userId: toUserId,
+          amount: transferAmount,
+          currency,
+          type: LEDGER_TXN_TYPES.TRANSFER
+        };
+
+        return this.model.create(transferFrom)
+          .then(() => {
+            return this.model.create(transferTo);
+          });
+      });
   }
 }
 
 export default LedgerService;
+
+function convertDepositToInteger(amount) {
+  return parseInt(amount);
+}

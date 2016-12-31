@@ -14,12 +14,14 @@ class Games extends Component {
     super(props);
 
     this.state = {
-      betAmount: 0
+      betAmount: 0,
+      allowLowerBet: false
     };
 
     this.betAmountOnChange = this.betAmountOnChange.bind(this);
     this.closeCreateGameForm = this.closeCreateGameForm.bind(this);
     this.onSubmitCreateGame = this.onSubmitCreateGame.bind(this);
+    this.checkboxChange = this.checkboxChange.bind(this);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -28,6 +30,14 @@ class Games extends Component {
   betAmountOnChange(event, newValue) {
     this.setState({
       betAmount: parseInt(newValue)
+    })
+  }
+
+  checkboxChange(event, newValue) {
+    this.setState({
+      allowLowerBet: newValue
+    }, function(){
+      console.log('newState: ', this.state);
     })
   }
 
@@ -82,8 +92,10 @@ class Games extends Component {
           <CreateGame
             onSubmit={createGame}
             onChange={this.betAmountOnChange}
+            onCheckboxChange={this.checkboxChange}
             show={true}
             betAmount={this.state.betAmount}
+            allowLowerBet={this.state.allowLowerBet}
           />
         </div>
         <div style={{height: '100%', marginBottom:'2em'}}>

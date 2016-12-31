@@ -47,6 +47,7 @@ export function add(req, res) {
     gameType: GAME_TYPES.COIN_FLIP,
     maxPlayers: 2
   });
+  console.log('newGame: ', newGame);
   return Game.create(newGame).then((createdGame) => {
     return Game.find({
         where: {

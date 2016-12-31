@@ -22,6 +22,22 @@ const games = (state = [], action) => {
       return state;
   }
 };
+
+const withdrawals = (state = {}, action) => {
+  switch (action.type) {
+    case types.REQUEST_SUCCESS:
+      debugger;
+      if (action.data && action.data.entities) {
+        const { ledgerTxns } = action.data.entities;
+        return { ...state, ...ledgerTxns }
+      }
+      return state;
+    default:
+      return state;
+  }
+
+};
+
 const username = (state = '', action) => {
   switch (action.type) {
     default:
@@ -133,6 +149,7 @@ const userReducer = combineReducers({
   username,
   isAdmin,
   isMod,
+  withdrawals,
   id
 });
 

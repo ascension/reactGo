@@ -59,4 +59,15 @@ var server = http.createServer(app);
 
 socket(server);
 
+var other_server = require("socket.io-client")('10.136.8.113:8099');
+
+other_server.on("connect",function(){
+  other_server.on('message',function(data){
+    // We received a message from Server 2
+    // We are going to forward/broadcast that message to the "Lobby" room
+    console.log('Receiving Message from another server: ', data);
+  });
+});
+
+
 server.listen(app.get('port'));

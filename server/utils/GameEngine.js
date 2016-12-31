@@ -42,7 +42,6 @@ export default class GameEngine {
 
   appendServerSeed(clientSeed, rollCount) {
     this.serverSeed +=  `|${clientSeed}:${rollCount}`;
-    console.log('clientSeed', clientSeed);
   }
 
   runGame() {
@@ -66,10 +65,8 @@ export default class GameEngine {
     const rollSeed = hash256(this.serverSeed);
     const chance = Chance(rollSeed);
     const outcome = chance.weighted(players, weights);
-    console.log('*** Game Outcome *** ', outcome);
     this.interval = setInterval(() => {
       this.remainingWaitTime = this.remainingWaitTime - GAME_TICK_INTERVAL;
-      console.log('remainingWaitTime: ', this.remainingWaitTime);
       if (this.remainingWaitTime < 0) {
         clearInterval(this.interval);
         this.game.status = GAME_STATES.COMPLETE;
