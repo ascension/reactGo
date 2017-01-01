@@ -127,7 +127,7 @@ export function signUp(req, res, next) {
 
 
 
-    return user.save().then(() => {
+    return user.save({ omitNull: true }).then(() => {
       req.logIn(user, (err) => {
         if (err) return apiErrorResponse(res, err, 401);
         return res.status(200).json({
