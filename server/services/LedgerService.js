@@ -142,7 +142,7 @@ class LedgerService {
             const currency = CURRENCY.BTC;
             return this.getUserBalanceByCurrency(userId, currency)
               .then((usersLastLedgerEntry) => {
-                const currentBalance = usersLastLedgerEntry.balanceAfter;
+                const currentBalance = usersLastLedgerEntry ? usersLastLedgerEntry.balanceAfter || 0;
                 return this.model.create({
                   userId,
                   txnId,
