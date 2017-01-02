@@ -134,9 +134,9 @@ class LedgerService {
   processWithdrawals(userToAmounts) {
     Object.keys(userToAmounts).forEach((userId) => {
       const txnId = userToAmounts[userId].txnId;
-      const amount = userToAmounts[userId].amount / 100;
+      const amount = userToAmounts[userId].amount;
 
-      this.model.find({ where: { txnId } })
+      this.model.find({ where: { userId, txnId } })
         .then((foundTxn) => {
           if(!foundTxn) {
             const currency = CURRENCY.BTC;
@@ -151,7 +151,7 @@ class LedgerService {
                   balanceBefore: currentBalance,
                   balanceAfter: currentBalance + amount,
                   type: LEDGER_TXN_TYPES.DEPOSIT
-                });
+                }, { omitNull: true });
               });
           }
         });
