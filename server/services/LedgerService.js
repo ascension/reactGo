@@ -147,6 +147,7 @@ class LedgerService {
                   userId,
                   txnId,
                   currency,
+                  amount,
                   balanceBefore: currentBalance,
                   balanceAfter: currentBalance + amount,
                   type: LEDGER_TXN_TYPES.DEPOSIT
