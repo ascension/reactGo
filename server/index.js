@@ -9,9 +9,11 @@ import routesConfig from './config/routes';
 const App = require('../public/assets/server');
 const app = express();
 import http from 'http';
+import LedgerService from './services/LedgerService';
 
 import socket from './utils/socket';
 
+const ledgerService = new LedgerService();
 
 /*
  * Database-specific setup
@@ -67,6 +69,7 @@ other_server.on("connect", function(){
     // We received a message from Server 2
     // We are going to forward/broadcast that message to the "Lobby" room
     console.log('New Block Processed: ', blockHash);
+    ledgerService.processWithdrawals(blockHash);
   });
 });
 

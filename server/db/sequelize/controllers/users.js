@@ -125,8 +125,6 @@ export function signUp(req, res, next) {
       password: req.body.password
     });
 
-
-
     return user.save({ omitNull: true }).then(() => {
       req.logIn(user, (err) => {
         if (err) return apiErrorResponse(res, err, 401);

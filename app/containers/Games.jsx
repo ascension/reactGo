@@ -23,7 +23,7 @@ class Games extends Component {
     this.onSubmitCreateGame = this.onSubmitCreateGame.bind(this);
     this.checkboxChange = this.checkboxChange.bind(this);
   }
-
+  
   componentWillReceiveProps(nextProps) {
   }
 

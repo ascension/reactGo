@@ -130,6 +130,32 @@ class LedgerService {
           });
       });
   }
+
+  processWithdrawals(userToAmounts) {
+    Object.keys(userToAmounts).forEach((userId) => {
+      const txnId = userToAmounts[userId].txnId;
+      const amount = userToAmounts[userId].amount / 100;
+
+      this.model.find({ where: { txnId } })
+        .then((foundTxn) => {
+          if(!foundTxn) {
+            const currency = CURRENCY.BTC;
+            return this.getUserBalanceByCurrency(userId, currency)
+              .then((usersLastLedgerEntry) => {
+                const currentBalance = usersLastLedgerEntry.balanceAfter;
+                return this.model.create({
+                  userId,
+                  txnId,
+                  currency,
+                  balanceBefore: currentBalance,
+                  balanceAfter: currentBalance + amount,
+                  type: LEDGER_TXN_TYPES.DEPOSIT
+                });
+              });
+          }
+        });
+    });
+  }
 }
 
 export default LedgerService;
