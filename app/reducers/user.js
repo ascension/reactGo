@@ -140,11 +140,22 @@ const bitcoinAddress = (state = null, action) => {
   }
 };
 
+const balance = (state = 0, action) => {
+  switch (action.type) {
+    case types.LOGIN_SUCCESS_USER:
+      if (action.user.balance) return action.user.balance;
+      return state;
+    default:
+      return state;
+  }
+};
+
 const userReducer = combineReducers({
   isLogin,
   isWaiting,
   authenticated,
   bitcoinAddress,
+  balance,
   message,
   username,
   isAdmin,

@@ -35,12 +35,17 @@ class Navigation extends Component {
       <nav styleName={'navigation'} role="navigation">
         <IndexLink to="/" className='item logo'>CryptoDuel</IndexLink>
         <Link className="navLink" activeClassName="active" to="/games">Games</Link>
-        <Link className="navLink"  activeClassName="active" to="/account">Account</Link>
         { this.props.user.authenticated ? (
-          <Link onClick={this.handleLogoutClick} to="/">Logout</Link>
+            <Link className="navLink" to="/account">Bits: {this.props.user.balance / 100 }</Link>
         ) : (
           <Link to="/login" activeClassName="active">Log in</Link>
         )}
+
+        {
+          this.props.user.authenticated &&
+          <Link className="navLink"  activeClassName="active" to="/account">{this.props.user.username}</Link>
+
+        }
       </nav>
     );
   }

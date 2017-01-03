@@ -22,7 +22,6 @@ module.exports = (sequelize, DataTypes) => {
     id: {
       type: DataTypes.INTEGER,
       primaryKey: true,
-      autoIncrement: true
     },
     email: {
       type: DataTypes.STRING,
@@ -33,7 +32,8 @@ module.exports = (sequelize, DataTypes) => {
     },
     balance: {
       type: DataTypes.BIGINT,
-      allowNull: true
+      allowNull: true,
+      defaultValue: 0
     },
     name: {
       type: DataTypes.STRING,
@@ -94,6 +94,7 @@ module.exports = (sequelize, DataTypes) => {
           id: this.id,
           username: this.username,
           bitcoinAddress: this.bitcoinAddress,
+          balance: this.balance,
           profile: {
             picture: this.picture
           }
