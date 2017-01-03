@@ -26,7 +26,6 @@ const games = (state = [], action) => {
 const withdrawals = (state = {}, action) => {
   switch (action.type) {
     case types.REQUEST_SUCCESS:
-      debugger;
       if (action.data && action.data.entities) {
         const { ledgerTxns } = action.data.entities;
         return { ...state, ...ledgerTxns }
@@ -142,6 +141,8 @@ const bitcoinAddress = (state = null, action) => {
 
 const balance = (state = 0, action) => {
   switch (action.type) {
+    case types.UPDATE_USER_BALANCE:
+      return action.user.balance;
     case types.LOGIN_SUCCESS_USER:
       if (action.user.balance) return action.user.balance;
       return state;

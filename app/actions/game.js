@@ -1,16 +1,16 @@
 /* eslint consistent-return: 0, no-else-return: 0*/
-import * as types from '../types';
-/* eslint consistent-return: 0, no-else-return: 0*/
 import { polyfill } from 'es6-promise';
 import request from 'axios';
-import md5 from 'spark-md5';
+// import md5 from 'spark-md5';
 import { browserHistory } from 'react-router';
 import { push } from 'react-router-redux';
-import { normalize, arrayOf } from 'normalizr';
-import gameSchema from '../schemas/gameSchema';
+// import { normalize, arrayOf } from 'normalizr';
+
+import * as types from '../types';
+// import gameSchema from '../schemas/gameSchema';
+/* eslint consistent-return: 0, no-else-return: 0*/
 
 polyfill();
-
 
 export function makeGameRequest(method, id, data, api = '/api/game') {
   return request[method](api + (id ? ('/' + id) : ''), data);
@@ -25,20 +25,13 @@ export function beginGame(user_id, amount) {
   };
 }
 
-export function joinGameRequest(gameId) {
-  return {
-    type: types.JOIN_GAME,
-    gameId
-  };
-}
-
 export function joinGameFailure(error) {
   const { msg } = error;
 
   return {
     type: types.JOIN_GAME_ERROR,
     msg
-  }
+  };
 }
 
 export function navigateToGame(gameId) {
@@ -57,14 +50,15 @@ export function createGameRequest(newGame) {
     updatedAt,
     GamePlays,
     maxPlayers
-  }
+  };
 }
+
 function joinGameRequest(gameId, betAmount) {
   return {
     type: types.JOIN_GAME,
     gameId,
     betAmount
-  }
+  };
 }
 
 export function joinGame(gameId) {
@@ -77,8 +71,8 @@ export function joinGame(gameId) {
 
     // browserHistory.push('/game/' + gameId);
     const betAmount = 100000;
-    return dispatch(joinGameRequest(gameId, betAmount))
-  }
+    return dispatch(joinGameRequest(gameId, betAmount));
+  };
 }
 
 // export function joinGame(gameId) {
@@ -98,7 +92,7 @@ export function joinGame(gameId) {
 // }
 
 export function createGame(minBetAmount, allowLowerBet = false) {
-  return (dispatch, getState) => {
+  return (dispatch) => {
     const data = {
       minBetAmount,
       allowLowerBet

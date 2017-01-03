@@ -18,7 +18,23 @@ class LedgerService {
   constructor() {
     this.model = Ledger;
   }
-  
+
+  create(modelToCreate, callback) {
+    return this.model.create(modelToCreate)
+      .then((newEntity) => {
+        if (callback)
+          callback(undefined, newEntity);
+
+        return newEntity;
+      })
+      .catch((error) => {
+        if (callback)
+          callback(error);
+
+        throw error;
+      });
+  }
+
   getUserBalanceByCurrency(userId, currency) {
     return this.model.findOne({ where: { userId, currency }, order: 'id DESC'});
   }
@@ -102,6 +118,20 @@ class LedgerService {
           type: LEDGER_TXN_TYPES.WITHDRAWAL
         };
         return this.model.create(withdrawal);
+      });
+  }
+  
+  userWinnings(userId, winningAmount, gameId, currency = CURRENCY.BTC) {
+    return this.getUserBalanceByCurrency(userId, currency)
+      .then((lastEntry) => {
+        const ledgerEntry = {
+          userId,
+          gameId,
+          amount: lastEntry.balanceAfter + winningAmount,
+          currency
+        };
+
+        return this.model.create(ledgerEntry);
       });
   }
 

@@ -27,7 +27,8 @@ export default class GameEngine {
     this.game = Game;
     this.gameId = Game.id; // ID is from the DB.
     this.players = Game.GamePlays; // { userId: 100000 } - Key will be the users ID and their bet.
-    this.serverSeed = hash256(serverSecret);
+    // this.serverSeed = hash256(serverSecret);
+    this.serverSeed = hash256(Chance().guid());
     this.socket = socket;
     this.state = GAME_STATES.WAITING;
     this.remainingWaitTime = GAME_COUNTDOWN_SEC;
@@ -35,13 +36,21 @@ export default class GameEngine {
   }
 
   /**
-   *
+   * gameHash is 'serverSeed|playerSeed:playerRollCount|playerTwoSeed:playerTwoRollCount'
    * @param clientSeed - Seed provided by client.
    * @param rollCount - How many rolls have been performs with this clientSeed
    */
 
   appendServerSeed(clientSeed, rollCount) {
     this.serverSeed +=  `|${clientSeed}:${rollCount}`;
+  }
+
+  handlePayouts(game, winningUserId) {
+
+  }
+
+  getServerSeedForGame() {
+    return hash256(this.serverSeed);
   }
 
   runGame() {
@@ -59,11 +68,16 @@ export default class GameEngine {
       const weight = player.betAmount / totalBets;
       weights.push(player.betAmount / totalBets);
       playerWeights[player.userId] = weight;
+      console.log('playerWeights: ', playerWeights);
+      // TODO - Get Client Seed from Users GampePlay.
+      const clientSeed = `${Chance().guid()}:${player.userId}`;
+      this.appendServerSeed(clientSeed, 1);
       return player.userId;
     });
     
     const rollSeed = hash256(this.serverSeed);
-    const chance = Chance(rollSeed);
+    console.log('chance: ', this.getServerSeedForGame());
+    const chance = Chance(this.getServerSeedForGame());
     const outcome = chance.weighted(players, weights);
     this.interval = setInterval(() => {
       this.remainingWaitTime = this.remainingWaitTime - GAME_TICK_INTERVAL;

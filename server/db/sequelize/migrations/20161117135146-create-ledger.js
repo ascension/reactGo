@@ -50,6 +50,7 @@ module.exports = {
           LEDGER_TXN_TYPES.DEPOSIT,
           LEDGER_TXN_TYPES.TRANSFER,
           LEDGER_TXN_TYPES.WITHDRAWAL,
+          LEDGER_TXN_TYPES.WINNINGS,
           LEDGER_TXN_TYPES.HOUSE_CUT
         ),
         allowNull: false

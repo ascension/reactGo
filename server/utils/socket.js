@@ -12,6 +12,7 @@ const ADD_MESSAGE = 'server/ADD_MESSAGE';
 const RECEIVE_MESSAGE = 'RECEIVE_MESSAGE';
 const JOIN_GAME_SUCCESS = 'server/JOIN_GAME_SUCCESS';
 const NOT_ENOUGH_BALANCE = 'NOT_ENOUGH_BALANCE';
+const UPDATE_USER_BALANCE = 'UPDATE_USER_BALANCE';
 
 // var ioCookieParser = require('socket.io-cookie');
 var restartTime = 5000; // How long from  game_starting -> game_started
@@ -74,6 +75,10 @@ function gameActions(action, clientSocket) {
       .then((gamePlay) => {
         gameManager.getGame(action.gameId)
           .then((game) => {
+            clientSocket.request.user.reload().then(() => {
+              clientSocket.emit('action', { type: UPDATE_USER_BALANCE, user: clientSocket.request.user });
+            });
+
             io.emit("action", { type: JOIN_GAME_SUCCESS, game });
             clientSocket.emit('#navigate', '/game/' + action.gameId);
           });
@@ -90,15 +95,26 @@ var io = socket_io();
 let sessionStore = dbSession();
 const gameManager = new GameManager(io);
 
+var SocketManager = function() {
+  this.sockets = {};
+  this.onAuthorizeSuccess = this.onAuthorizeSuccess.bind(this);
+  this.onAuthorizeFail = this.onAuthorizeFail.bind(this);
+};
 
-io.use(passportSocketIo.authorize({
-  cookieParser: cookieParser,       // the same middleware you registrer in express
-  key:          'sessionId',       // the name of the cookie where express/connect stores its session_id
-  secret:       sessionSecret,    // the session_secret to parse the cookie
-  store:        sessionStore,        // we NEED to use a sessionstore. no memorystore please
-  success:      onAuthorizeSuccess,  // *optional* callback on success - read more below
-  fail:         onAuthorizeFail,     // *optional* callback on fail/error - read more below
-}));
+SocketManager.prototype.onAuthorizeSuccess = function(clientSocket, accept) {
+  console.log('successful connection to socket.io');
+
+  // The accept-callback still allows us to decide whether to
+  // accept the connection or not.
+  // accept(null, true);
+
+  // OR
+
+  // If you use socket.io@1.X the callback looks different
+  if (clientSocket.isAuthenticated()) {
+    accept();
+  }
+};
 
 function onAuthorizeSuccess(data, accept){
   console.log('successful connection to socket.io');
@@ -113,7 +129,7 @@ function onAuthorizeSuccess(data, accept){
   accept();
 }
 
-function onAuthorizeFail(data, message, error, accept){
+SocketManager.prototype.onAuthorizeFail = function(data, message, error, accept){
   if(error)
     throw new Error(message);
   console.log('failed connection to socket.io:', message);
@@ -131,20 +147,37 @@ function onAuthorizeFail(data, message, error, accept){
   // see: http://socket.io/docs/client-api/#socket > error-object
 }
 
+var socketManager = new SocketManager();
+
+io.use(passportSocketIo.authorize({
+  cookieParser: cookieParser,       // the same middleware you registrer in express
+  key:          'sessionId',       // the name of the cookie where express/connect stores its session_id
+  secret:       sessionSecret,    // the session_secret to parse the cookie
+  store:        sessionStore,        // we NEED to use a sessionstore. no memorystore please
+  success:      socketManager.onAuthorizeSuccess,  // *optional* callback on success - read more below
+  fail:         socketManager.onAuthorizeFail,     // *optional* callback on fail/error - read more below
+}));
+
 export default function(server) {
+  var sockets = {};
   console.log('setting up socket');
   io.attach(server);
 
-  io.on('connection', onConnection);
-  io.on('disconnect', onDisconnect);
+  io.on('connection', onConnection.bind(this));
+  io.on('disconnect', onDisconnect.bind(this));
 
   function onDisconnect(socket) {
     connectedUsers--;
     console.log('Socket Disconnected: ', socket.id);
-    console.log('connectedUsers:', connectedUsers);
   }
   
   function onConnection(clientSocket) {
+    if (clientSocket.request.isAuthenticated())
+      sockets[clientSocket.request.user.id] = sockets[clientSocket.request.user.id] ? [...sockets[clientSocket.request.user.id], clientSocket.id]  : [clientSocket.id];
+    // console.log('onConnection: ', clientSocket.request.isAuthenticated());
+    // console.log('onConnection: ', clientSocket.request.user);
+    
+    console.log('sockets: ', sockets);
     clientSocket.on('action', (action, ack) => {
       if (clientSocket.request.isAuthenticated()) {
         clientSocket.join('chat');
@@ -158,5 +191,5 @@ export default function(server) {
         console.log('User is...!');
       }
     });
-  }
+  };
 }

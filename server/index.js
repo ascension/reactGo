@@ -65,7 +65,7 @@ var other_server = require("socket.io-client")('http://192.34.61.117:8099');
 
 other_server.on("connect", function(){
   console.log('** Connected to Bitcoind **');
-  other_server.on('new-block',function(blockHash){
+  other_server.on('new-block', function(blockHash){
     // We received a message from Server 2
     // We are going to forward/broadcast that message to the "Lobby" room
     console.log('New Block Processed: ', blockHash);
