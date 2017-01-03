@@ -1,0 +1,12 @@
+CREATE TRIGGER updateUserBalance AFTER INSERT ON "Ledger"
+FOR EACH ROW
+EXECUTE PROCEDURE update_user_balance();
+
+CREATE OR REPLACE FUNCTION update_user_balance()
+  RETURNS trigger AS
+$update_user_balance$
+BEGIN
+  UPDATE "Users" SET balance = NEW."balanceAfter" WHERE "Users".id = NEW."userId";
+  RETURN NULL;
+END;
+$update_user_balance$ LANGUAGE plpgsql;
