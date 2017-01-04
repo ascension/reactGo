@@ -38,6 +38,7 @@ class Deposit extends Component {
   render() {
     const { user: { bitcoinAddress } } = this.props;
     return (
+      <div>
       <PageInner>
         <form styleName="depositForm" onSubmit={this.handleSubmit}>
           <div>
@@ -50,15 +51,19 @@ class Deposit extends Component {
               value={bitcoinAddress}
               onChange={this.handleAmountChange} disabled={true}
             />
-            <a href={`bitcoin:${bitcoinAddress}`}>Bitcoin Link</a>
           </div>
-          <div>
+          <div styleName="qrCodeContainer">
             <img
               className="show-for-medium-up qr"
               src={`https://blockchain.info/qr?data=${bitcoinAddress}&size=150`}/>
+            <a styleName="bitcoinLink" href={`bitcoin:${bitcoinAddress}`}>Bitcoin Link</a>
           </div>
         </form>
       </PageInner>
+        <PageInner>
+          <h1>Deposit History</h1>
+        </PageInner>
+      </div>
     );
   }
 }
