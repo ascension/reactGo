@@ -4,6 +4,7 @@ var cookieParser = require('cookie-parser');
 import { session as dbSession } from '../db';
 import { sessionSecret } from '../config/secrets';
 import GameManager from './GameManager';
+import LedgerService from '../services/LedgerService';
 
 const Models = require('../db/sequelize/models');
 const Message = Models.Message;
@@ -16,7 +17,7 @@ const UPDATE_USER_BALANCE = 'UPDATE_USER_BALANCE';
 
 // var ioCookieParser = require('socket.io-cookie');
 var restartTime = 5000; // How long from  game_starting -> game_started
-
+const ledgerService = new LedgerService();
 
 class Game {
   constructor(socket, gameId) {
@@ -160,9 +161,10 @@ io.use(passportSocketIo.authorize({
 
 export default function(server) {
   var sockets = {};
+
   console.log('setting up socket');
   io.attach(server);
-
+  connectToBitcoinD();
   io.on('connection', onConnection.bind(this));
   io.on('disconnect', onDisconnect.bind(this));
 
@@ -176,7 +178,8 @@ export default function(server) {
       sockets[clientSocket.request.user.id] = sockets[clientSocket.request.user.id] ? [...sockets[clientSocket.request.user.id], clientSocket.id]  : [clientSocket.id];
     // console.log('onConnection: ', clientSocket.request.isAuthenticated());
     // console.log('onConnection: ', clientSocket.request.user);
-    
+
+    io.to(clientSocket.id).emit('TESTING: ' + clientSocket.id);
     console.log('sockets: ', sockets);
     clientSocket.on('action', (action, ack) => {
       if (clientSocket.request.isAuthenticated()) {
@@ -192,4 +195,31 @@ export default function(server) {
       }
     });
   };
+
+  function connectToBitcoinD() {
+    var other_server = require("socket.io-client")('http://192.34.61.117:8099');
+
+    other_server.on("connect", function(){
+      console.log('** Connected to Bitcoind **');
+      other_server.on('new-block', function(deposits){
+        // We received a message from Server 2
+        // We are going to forward/broadcast that message to the "Lobby" room
+        console.log('New Block Processed: ', deposits);
+        ledgerService.processDeposits(deposits)
+          .then(() => {
+            Object.keys(deposits).forEach(function(userId){
+              var amount = deposits[userId]['amount'];
+              if (sockets[userId]) {
+                sockets[userId].forEach(function (socketId) {
+                  console.log('emitting to: ', socketId);
+                  io.to(socketId).emit('action', { type: 'DEPOSIT_ALERT', message: 'Deposit Successful: ' + amount + ' bits has been added to your balance.' });
+                })
+              }
+            });
+          });
+      });
+    });
+  }
+
+
 }

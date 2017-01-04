@@ -163,7 +163,6 @@ class TypeAheadTextBox extends Component {
               {
                 Object.keys(this.state.filteredUsers).map((userId) => {
                   const user = mockUsers[userId];
-                  debugger;
                   const listStyle = { backgroundColor: this.state.focusedOption == userId ? 'grey' : '' };
                   return (
                     <li

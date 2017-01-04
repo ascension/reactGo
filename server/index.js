@@ -13,8 +13,6 @@ import LedgerService from './services/LedgerService';
 
 import socket from './utils/socket';
 
-const ledgerService = new LedgerService();
-
 /*
  * Database-specific setup
  * - connect to MongoDB using mongoose
@@ -60,18 +58,5 @@ app.get('*', App.default);
 var server = http.createServer(app);
 
 socket(server);
-
-var other_server = require("socket.io-client")('http://192.34.61.117:8099');
-
-other_server.on("connect", function(){
-  console.log('** Connected to Bitcoind **');
-  other_server.on('new-block', function(blockHash){
-    // We received a message from Server 2
-    // We are going to forward/broadcast that message to the "Lobby" room
-    console.log('New Block Processed: ', blockHash);
-    ledgerService.processWithdrawals(blockHash);
-  });
-});
-
 
 server.listen(app.get('port'));

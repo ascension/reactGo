@@ -14,6 +14,7 @@ export default function message(state = {
     case types.WITHDRAWAL_REQUEST_FAILURE:
     case types.NOT_ENOUGH_BALANCE:
       return {...state, message: action.message, type: 'ERROR'};
+    case types.DEPOSIT_ALERT:
     case types.LOGIN_SUCCESS_USER:
     case types.SIGNUP_SUCCESS_USER:
       return {...state, message: action.message, type: 'SUCCESS'};

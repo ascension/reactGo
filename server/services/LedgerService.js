@@ -161,31 +161,33 @@ class LedgerService {
       });
   }
 
-  processWithdrawals(userToAmounts) {
-    Object.keys(userToAmounts).forEach((userId) => {
-      const txnId = userToAmounts[userId].txnId;
-      const amount = userToAmounts[userId].amount;
+  processDeposits(userToAmounts) {
+    return Promise.all(
+      Object.keys(userToAmounts).map((userId) => {
+        const txnId = userToAmounts[userId].txnId;
+        const amount = parseInt(userToAmounts[userId].amount);
 
-      this.model.find({ where: { userId, txnId } })
-        .then((foundTxn) => {
-          if(!foundTxn) {
-            const currency = CURRENCY.BTC;
-            return this.getUserBalanceByCurrency(userId, currency)
-              .then((usersLastLedgerEntry) => {
-                const currentBalance = usersLastLedgerEntry ? usersLastLedgerEntry.balanceAfter : 0;
-                return this.model.create({
-                  userId,
-                  txnId,
-                  currency,
-                  amount,
-                  balanceBefore: currentBalance,
-                  balanceAfter: currentBalance + amount,
-                  type: LEDGER_TXN_TYPES.DEPOSIT
-                }, { omitNull: true });
-              });
-          }
-        });
-    });
+        return this.model.find({ where: { userId, txnId } })
+          .then((foundTxn) => {
+            if(!foundTxn) {
+              const currency = CURRENCY.BTC;
+              return this.getUserBalanceByCurrency(userId, currency)
+                .then((usersLastLedgerEntry) => {
+                  const currentBalance = usersLastLedgerEntry ? usersLastLedgerEntry.balanceAfter : 0;
+                  return this.model.create({
+                    userId,
+                    txnId,
+                    currency,
+                    amount,
+                    balanceBefore: currentBalance,
+                    balanceAfter: parseInt(currentBalance) + parseInt(amount),
+                    type: LEDGER_TXN_TYPES.DEPOSIT
+                  }, { omitNull: true });
+                });
+            }
+          });
+      })
+    );
   }
 }
 

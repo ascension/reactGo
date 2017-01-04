@@ -13,7 +13,6 @@ class GamePlayer extends Component {
     let outcomeIsSet = false;
 
     if (gameOutcome !== null) {
-      debugger;
       outcomeIsSet = outcomeIsSet !== null;
       userIsWinner = userId == gameOutcome;
     }
