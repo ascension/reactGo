@@ -7,13 +7,25 @@ import Message from '../components/ChatMessage';
 
 const initialChannel = 'Lobby';
 
-@CSSModules(styles)
+@CSSModules(styles, { allowMultiple: true })
 class ChatBox extends Component {
   constructor(props) {
     super(props);
     this.handleKeyPress = this.handleKeyPress.bind(this);
     this.submitMessage = this.submitMessage.bind(this);
     this.setMessageRef = this.setMessageRef.bind(this);
+
+    this.state = {
+      isOpen: props.isOpen
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const { isOpen } = nextProps;
+    console.log('newProps: ', nextProps);
+    this.setState({
+      isOpen
+    });
   }
 
   handleKeyPress(event) {
@@ -55,10 +67,31 @@ class ChatBox extends Component {
   }
 
   render() {
-    const { user, messages } = this.props;
+    const { user, messages, toggleChat } = this.props;
+    const { isOpen } = this.state;
+    console.log('isOpen: ', isOpen);
+    const chatContainerStyle = ['chatContainer'];
+
+    if (!isOpen) chatContainerStyle.push('closed');
+
     return (
-      <div styleName='chatContainer'>
-        <h2 styleName='chat-header'>Chat</h2>
+      <div styleName={chatContainerStyle.join(' ')}>
+            <div>
+              <div styleName='chat-header'>
+                <div style={{flex: '1'}}>
+                  <i className="fa fa-users" aria-hidden="true"/>
+                </div>
+                <div style={{flex: '1'}}>
+                  <h2 >Chat</h2>
+                </div>
+                <div style={{flex: '1', justifyContent: 'flex-end'}}>
+                  {
+                    isOpen ? <div styleName="cross-icon" onClick={toggleChat}/> :
+                      <div styleName="chat-icon" onClick={toggleChat}/>
+                  }
+                </div>
+              </div>
+            </div>
         <div styleName='chat-window'>
           <ul className="chat-messages">
             {
@@ -86,6 +119,8 @@ ChatBox.propTypes = {
   user: PropTypes.object.isRequired,
   channels: PropTypes.array.isRequired,
   activeChannel: PropTypes.string.isRequired,
+  isOpen: PropTypes.bool.isRequired,
+  toggleChat: PropTypes.func.isRequired
 };
 
 function mapStateToProps(state) {

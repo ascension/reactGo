@@ -17,9 +17,9 @@ const MainSection = ({ topics, onIncrement, onDecrement, onDestroy }) => {
   });
 
   return (
-    <div className={main-section'}>
-      <h3 className={header'}>Vote for your favorite hack day idea</h3>
-      <ul className={list'}>{topicItems}</ul>
+    <div className={'main-section'}>
+      <h3 className={'header'}>Vote for your favorite hack day idea</h3>
+      <ul className={'list'}>{topicItems}</ul>
     </div>
   );
 };

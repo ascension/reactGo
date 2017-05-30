@@ -47,7 +47,7 @@ export default (store) => {
       <Route path="register" component={Register} onEnter={redirectAuth} />
       <Route path="account" component={Account} onEnter={requireAuth}>
         <IndexRoute component={Dashboard}/>
-        <Route path="withdraw" component={Withdraw} fetchData={fetchWithdrawalData}/>
+        <Route path="withdraw" component={Withdraw}/>
         <Route path="deposit" component={Deposit}/>
       </Route>
       <Route path="test" component={TestPage}/>

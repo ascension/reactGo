@@ -13,30 +13,6 @@ const isLogin = (
   }
 };
 
-const games = (state = [], action) => {
-  switch (action.type) {
-    case types.CREATE_GAME:
-      if (state) return [...state, action.gameId];
-      else return state;
-    default:
-      return state;
-  }
-};
-
-const withdrawals = (state = {}, action) => {
-  switch (action.type) {
-    case types.REQUEST_SUCCESS:
-      if (action.data && action.data.entities) {
-        const { ledgerTxns } = action.data.entities;
-        return { ...state, ...ledgerTxns }
-      }
-      return state;
-    default:
-      return state;
-  }
-
-};
-
 const username = (state = '', action) => {
   switch (action.type) {
     default:
@@ -161,7 +137,6 @@ const userReducer = combineReducers({
   username,
   isAdmin,
   isMod,
-  withdrawals,
   id
 });
 

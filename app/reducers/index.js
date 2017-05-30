@@ -6,6 +6,7 @@ import channels from 'reducers/channels';
 import gamePlay from 'reducers/gamePlay';
 import activeChannel from 'reducers/activeChannel';
 import game from 'reducers/game';
+import withdrawal from 'reducers/withdrawal';
 import { routerReducer as routing } from 'react-router-redux';
 import * as types from 'types';
 
@@ -26,6 +27,7 @@ const isFetching = ( state = false, action ) => {
 const rootReducer = combineReducers({
   isFetching,
   game,
+  withdrawal,
   user,
   message,
   messages,

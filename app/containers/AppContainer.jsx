@@ -6,16 +6,41 @@ import CSSModules from 'react-css-modules';
 import styles from '../css/components/game-container.scss';
 import { Circle } from 'rc-progress';
 import ChatBox from './Chat';
+import ChatSidebar from '../components/Chat/ChatSidebar';
 
-@CSSModules(styles)
+@CSSModules(styles, { allowMultiple: true })
 class GameContainer extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      isOpen: true
+    };
+
+    this.toggleChat = this.toggleChat.bind(this);
+  }
+
+  toggleChat() {
+    this.setState((prevState) => {
+      return {
+        isOpen: !prevState.isOpen
+      }
+    });
+  }
+
   render() {
     const { hasSidebar } = this.props;
+    const { isOpen } = this.state;
+
     const styleName = 'appContainer' + hasSidebar ? ' hasSidebar' : '';
+
+    let sidebarStyle = 'sidebarWrapper';
+    sidebarStyle += isOpen ? '' : ' chatClosed';
+
     return (
       <div styleName='flex'>
-        <div styleName="sidebarWrapper">
-          <ChatBox/>
+        <div styleName={sidebarStyle}>
+          <ChatBox isOpen={isOpen} toggleChat={this.toggleChat}/>
         </div>
         <div styleName={'contentWrapper'}>
           <Navigation />

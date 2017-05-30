@@ -63,6 +63,7 @@ export default function render(req, res) {
       username: req.user ? req.user.username : '',
       bitcoinAddress: req.user ? req.user.bitcoinAddress : '',
       balance: req.user ? req.user.balance : 0,
+      withdrawals: req.user ? req.user.Ledger : [],
       id: req.user ? req.user.id : null
     }
   }, history);
@@ -91,6 +92,7 @@ export default function render(req, res) {
    */
   match({routes, location: req.url}, (err, redirect, props) => {
     if (err) {
+      console.log('error 500: ', err);
       res.status(500).json(err);
     } else if (redirect) {
       res.redirect(302, redirect.pathname + redirect.search);
@@ -113,6 +115,7 @@ export default function render(req, res) {
           <!doctype html>
           <html ${header.htmlAttributes.toString()}>
             <head>
+              <script src="https://use.fontawesome.com/03de9aba32.js"></script>
               ${header.title.toString()}
               ${header.meta.toString()}
               ${header.link.toString()}

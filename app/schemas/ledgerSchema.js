@@ -1,4 +1,4 @@
 import { Schema } from 'normalizr';
-const ledger = new Schema('ledgerTxns');
+const ledger = new Schema('ledgers');
 
 export default ledger;

@@ -1,0 +1,21 @@
+.wrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  max-width: 50px;
+  max-height: 50vh;
+}
+
+.item {
+  flex: 1;
+  max-height: 2.25em;
+  width: 100%;
+  text-align: center;
+
+}
+.logo {
+  @extend .item;
+  margin-top: 0;
+}
+
+

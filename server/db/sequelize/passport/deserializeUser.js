@@ -1,11 +1,10 @@
 import Models from '../models';
-// import { deriveAddress } from '../../../utils/bitcoin';
 
 const User = Models.User;
+const Ledger = Models.Ledger;
 
 export default (id, done) => {
-  User.findById(id).then((user) => {
-    // user.bitcoinAddress = deriveAddress(user.id);
+  User.findById(id, { include: [{ model: Ledger }] }).then((user) => {
     done(null, user);
   }).catch(done);
 };

@@ -82,6 +82,10 @@ module.exports = (sequelize, DataTypes) => {
         User.hasMany(models.Token, {
           foreignKey: 'userId'
         });
+
+        User.hasMany(models.Ledger, {
+          foreignKey: 'userId'
+        });
       }
     },
 

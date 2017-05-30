@@ -12,6 +12,13 @@ const gamesController = controllers && controllers.games;
 const messagesController = controllers && controllers.messages;
 const ledgerController = controllers && controllers.ledger;
 
+function isAuthenticatedApi(req, res, next) {
+  if (req.isAuthenticated())
+    return next();
+
+  res.status(401);
+}
+
 function isAuthenticated(req, res, next) {
   if (req.isAuthenticated())
     return next();
@@ -24,9 +31,9 @@ export default (app) => {
   if (usersController) {
     app.post('/login', usersController.login);
     app.post('/signup', usersController.signUp);
-    app.post('/api/withdrawal', isAuthenticated, usersController.withdraw);
-    app.get('/api/withdrawal', isAuthenticated, usersController.getWithdrawals);
-    app.get('/api/ledger/:txnType', isAuthenticated, ledgerController.get);
+    app.post('/api/withdrawal', isAuthenticatedApi, usersController.withdraw);
+    app.get('/api/withdrawal', isAuthenticatedApi, usersController.getWithdrawals);
+    app.get('/api/ledger/:txnType', isAuthenticatedApi, ledgerController.get);
     app.post('/logout', usersController.logout);
   } else {
     console.warn(unsupportedMessage('users routes'));
@@ -71,23 +78,23 @@ export default (app) => {
   if (gamesController) {
     app.get('/api/game', gamesController.all);
     app.get('/api/game/:id', gamesController.one);
-    app.post('/api/game', isAuthenticated, gamesController.add);
-    app.post('/api/game/:id/join', isAuthenticated, gamesController.join);
-    app.put('/api/game/:id', isAuthenticated, gamesController.update);
+    app.post('/api/game', isAuthenticatedApi, gamesController.add);
+    app.post('/api/game/:id/join', isAuthenticatedApi, gamesController.join);
+    app.put('/api/game/:id', isAuthenticatedApi, gamesController.update);
   }
 
   // account routes
   if (gamesController) {
     app.get('/api/game', gamesController.all);
     app.get('/api/game/:id', gamesController.one);
-    app.post('/api/game', isAuthenticated, gamesController.add);
-    app.post('/api/game/:id/join', isAuthenticated, gamesController.join);
-    app.put('/api/game/:id', isAuthenticated, gamesController.update);
+    app.post('/api/game', isAuthenticatedApi, gamesController.add);
+    app.post('/api/game/:id/join', isAuthenticatedApi, gamesController.join);
+    app.put('/api/game/:id', isAuthenticatedApi, gamesController.update);
   }
 
   // message routes
   if (messagesController) {
     app.get('/message/:channel', messagesController.all);
-    app.post('/message', isAuthenticated, messagesController.add);
+    app.post('/message', isAuthenticatedApi, messagesController.add);
   }
 };

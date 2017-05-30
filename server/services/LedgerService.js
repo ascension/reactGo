@@ -67,7 +67,11 @@ class LedgerService {
   }
 
   getWithdrawals(userId) {
-    return this.getEntriesByTxnType(userId, LEDGER_TXN_TYPES.WITHDRAWAL);
+    return this.getEntriesByTxnType(userId, LEDGER_TXN_TYPES.WITHDRAWAL)
+      .then((getWithdrawals) => {
+        console.log('getWithdrawals: ', getWithdrawals);
+        return getWithdrawals;
+      });
   }
 
   getEntriesByTxnType(userId, txnType) {
@@ -127,7 +131,7 @@ class LedgerService {
         const ledgerEntry = {
           userId,
           gameId,
-          amount: lastEntry.balanceAfter + winningAmount,
+          amount: parseInt(lastEntry.balanceAfter) + parseInt(winningAmount),
           currency
         };
 

@@ -90,12 +90,11 @@ export function withdraw(req, res) {
 export function getWithdrawals(req, res) {
   ledgerService.getWithdrawals(req.user.id)
     .then((withdrawals) => {
-      if(withdrawals === null) {
-        return res.status(200).json([]);
-      }
+      console.log('withdrawals: ', withdrawals);
       return res.status(200).json(withdrawals);
     })
     .catch((error) => {
+      console.log('withdrawals error: ', error);
       return apiErrorResponse(res, 'Error getting user withdrawals.')
     });
 }

@@ -3,12 +3,17 @@
 
 .chatContainer {
   overflow-y: scroll;
+  flex: 1;
   display: flex;
   -webkit-flex-direction: column; /* Safari */
   flex-direction:         column;
   height: 100vh;
-  min-width: 350px;
+  //min-width: 350px;
   background-color: $colorAppPrimary;
+}
+
+.closed {
+ display: inherit;
 }
 
 .chat-window {
@@ -17,8 +22,42 @@
 }
 
 .chat-header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+
+  text-align: center;
   margin-left: 15px;
   color: $colorNeonGreen;
+}
+
+.chat-icon {
+  font-size: 1.5em;
+  margin: 1em 0;
+  background-image: url("../../images/chat_green.svg");
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center center;
+  height: 25px;
+  width: 100%;
+  -webkit-transition: opacity .5s ease;
+  transition: opacity .5s ease;;
+  opacity: 1;
+}
+
+.cross-icon {
+  font-size: 1.5em;
+  margin: 1em 0;
+  background-image: url("../../images/cross.svg");
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center center;
+  height: 20px;
+  width: 100%;
+  -webkit-transition: opacity .5s ease;
+  transition: opacity .5s ease;;
+  opacity: 1;
 }
 
 .chat-window ul {
