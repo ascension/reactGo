@@ -5,6 +5,7 @@ const User = Models.User;
 const GamePlay = Models.GamePlay;
 const sequelize = Models.sequelize;
 import { GAME_TYPES, BET_STATES } from '../../../config/constants';
+import { getSocket } from '../../../../server';
 
 /**
  * List
@@ -41,7 +42,7 @@ export function one(req, res) {
 /**
  * Add a Game
  */
-export function add(req, res) {
+export function add(req, res, socket) {
   const newGame = Object.assign({}, req.body, {
     userId: req.session.passport.user,
     gameType: GAME_TYPES.COIN_FLIP,
@@ -58,6 +59,7 @@ export function add(req, res) {
         }]
       }
     ).then((foundGame) => {
+      getSocket().emit('action', { type: 'server/NEW_GAME_CREATED', payload: foundGame });
       res.status(200).send(foundGame);
     });
   }).catch((err) => {

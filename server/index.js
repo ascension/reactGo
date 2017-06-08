@@ -11,7 +11,7 @@ const app = express();
 import http from 'http';
 import LedgerService from './services/LedgerService';
 
-import socket from './utils/socket';
+import initSocket from './utils/socket';
 
 /*
  * Database-specific setup
@@ -56,7 +56,8 @@ routesConfig(app);
  */
 app.get('*', App.default);
 var server = http.createServer(app);
-
-socket(server);
-
+export const socket = initSocket(server);
+export const getSocket = () => {
+  return socket;
+};
 server.listen(app.get('port'));
