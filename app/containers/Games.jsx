@@ -3,8 +3,10 @@ import { connect } from 'react-redux';
 import { createGame, joinGame } from '../actions/game';
 import CSSModules from 'react-css-modules';
 import styles from '../css/components/game.scss';
-import CreateGame from '../components/CreateGame';
 import Loader from '../components/Loader';
+import TotalSummary from '../components/Summary/TotalSummary';
+import UserSummary from '../components/Summary/UserSummary';
+import { SummaryContainer } from '../components/Summary';
 
 import GameRow from '../components/GameRow';
 
@@ -18,27 +20,8 @@ class Games extends Component {
       allowLowerBet: false
     };
 
-    this.betAmountOnChange = this.betAmountOnChange.bind(this);
     this.closeCreateGameForm = this.closeCreateGameForm.bind(this);
     this.onSubmitCreateGame = this.onSubmitCreateGame.bind(this);
-    this.checkboxChange = this.checkboxChange.bind(this);
-  }
-  
-  componentWillReceiveProps(nextProps) {
-  }
-
-  betAmountOnChange(event, newValue) {
-    this.setState({
-      betAmount: parseInt(newValue)
-    })
-  }
-
-  checkboxChange(event, newValue) {
-    this.setState({
-      allowLowerBet: newValue
-    }, function(){
-      console.log('newState: ', this.state);
-    })
   }
 
   onSubmitCreateGame(event) {
@@ -54,7 +37,7 @@ class Games extends Component {
   calculateGamePot(gamePlays) {
     let totalBets = 0;
 
-    gamePlays.forEach((gp) => {
+    gamePlays.forEach(gp => {
       totalBets += gp.betAmount;
     });
 
@@ -65,46 +48,31 @@ class Games extends Component {
     const { games } = this.props;
 
     return (
-      <div styleName='table'>
+      <div styleName="table">
         <div styleName={'game-row'}>
           <div>Created At</div>
           <div>Pot</div>
           <div>Players</div>
+          <div />
         </div>
-        {
-            Object.keys(games).map((gameId) => {
-              const game = games[gameId];
-              const { gamePlays, joinGame, user } = this.props;
-              return(
-                <GameRow key={game.id} game={game} user={user} gamePlays={gamePlays} joinGame={joinGame}/>
-              )
-            })
-        }
+        {games.map(game => {
+          const { gamePlays, joinGame, user } = this.props;
+          return <GameRow key={game.id} game={game} user={user} gamePlays={gamePlays} joinGame={joinGame} />;
+        })}
       </div>
     );
   }
 
   render() {
-    const { games, createGame, gamePlays } = this.props;
+    const { games, createGame, gamePlays, isLoading } = this.props;
     return (
       <div styleName={'gameTable'}>
-        <div>
-          <CreateGame
-            onSubmit={createGame}
-            onChange={this.betAmountOnChange}
-            onCheckboxChange={this.checkboxChange}
-            show={true}
-            betAmount={this.state.betAmount}
-            allowLowerBet={this.state.allowLowerBet}
-          />
-        </div>
-        <div style={{height: '100%', marginBottom:'2em'}}>
-          {
-            Object.keys(games).length > 0 ?
-              this.renderGamesTable()
-              :
-              <Loader isLoading={true}/>
-          }
+        <SummaryContainer>
+          <TotalSummary />
+          <UserSummary createGame={createGame} />
+        </SummaryContainer>
+        <div style={{ height: '100%', marginBottom: '2em' }}>
+          {isLoading ? <Loader isLoading={true} /> : this.renderGamesTable()}
         </div>
       </div>
     );
@@ -117,10 +85,15 @@ Games.propTypes = {
 };
 
 function mapStateToProps(state) {
+  const games = Object.values(state.game.games).filter(game => {
+    return game.status !== 'COMPLETE';
+  });
   return {
-    games: state.game.games,
+    gameIds: games,
+    games: games,
     gamePlays: state.gamePlay.gamePlays,
-    user: state.user
+    user: state.user,
+    isLoading: state.isFetching
   };
 }
 

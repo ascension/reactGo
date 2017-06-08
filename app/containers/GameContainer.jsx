@@ -5,7 +5,26 @@ import styles from '../css/components/game-container.scss';
 import { Circle } from 'rc-progress';
 import { GAME_STATES } from '../../server/config/constants';
 import GamePlayer from '../components/GamePlayer';
+import styled from 'styled-components';
+import FlippingCoin from '../components/Coin';
 
+const GameBoard = styled.div`
+  display: flex;
+  width: 100%;
+  flex-direction: row;
+  padding: 25px;
+`;
+
+const WaitingForPlayer = styled.div`
+  height: 100%;
+  margin: auto;
+  flex: 1;
+`;
+
+const CoinWrapper = styled.div`
+  flex: 2;
+  height: 100%;
+`;
 let tm;
 
 @CSSModules(styles, { allowMultiple: true })
@@ -53,128 +72,134 @@ class GameContainer extends Component {
     return games[params.id];
   }
 
-  renderCoin(currentUser, otherUsers) {
+  renderCoin(playerOne, playerTwo) {
     const { params } = this.props;
 
     const { games } = this.state;
 
     const game = games[params.id];
 
-    const percent = game.status === GAME_STATES.STARTING ? (parseInt(this.state.timeRemaining) / 5000) * 100 : (game.GamePlays.length / game.maxPlayers) * 100;
+    const percent = game.status === GAME_STATES.STARTING
+      ? parseInt(this.state.timeRemaining) / 5000 * 100
+      : game.GamePlays.length / game.maxPlayers * 100;
     const gameIsFull = game.GamePlays.length === game.maxPlayers;
 
     // If Current user is undefined it means they are an observer.
-    let playerOne = {};
-    let playerTwo = {};
-
-    if(currentUser) {
-      playerOne = {...currentUser};
-      playerTwo = {...otherUsers[0]}
-    } else if(otherUsers[0] && otherUsers[1]) {
-      playerOne = {...otherUsers[0]};
-      playerTwo = {...otherUsers[1]};
-    }
+    // let playerOne = {};
+    // let playerTwo = {};
+    //
+    // if(playerOne) {
+    //   playerOne = {...playerOne};
+    //   playerTwo = {...playerTwo[0]}
+    // } else if(playerTwo[0] && playerTwo[1]) {
+    //   playerOne = {...playerTwo[0]};
+    //   playerTwo = {...playerTwo[1]};
+    // }
 
     let coinStyle = 'card';
     // coinStyle += this.state.isFlipping ? ' flipped' : '';
     let rotate = '0';
-    if (game.status === GAME_STATES.COMPLETE && game.hash == playerOne.userId) {
-      rotate = 2 * -180 * 10;
+    debugger;
+    if (game.status === GAME_STATES.COMPLETE && game.winningUserId === playerOne.userId) {
+      rotate = -1080;
+      // rotate = 2 * -180 * 10;
+    } else if (game.status === GAME_STATES.COMPLETE && game.winningUserId === playerTwo.userId) {
+      rotate = -1260;
+      // rotate = 2 * -180 * 10 + 180;
     }
-    else if (game.status === GAME_STATES.COMPLETE && game.hash == playerTwo.userId) {
-      rotate = (2 * -180 * 10) + 180;
-    }
-
 
     console.log('rotating: ', rotate);
     return (
-      <div>
-        <div>
-          <div styleName={'flip'}>
-            <div styleName={coinStyle} style={{transform: `rotatex(${rotate}deg)`}}>
-              <div styleName={'face front'}>{playerOne && playerOne.username}</div>
-              <div styleName={'face back'}>{playerTwo && playerTwo.username}</div>
-            </div>
-            <Circle style={{width: '200px', margin: '0 auto', position: 'absolute', top: '0', left: '0'}}
-                    percent={percent}
-                    strokeWidth="4"
-                    strokeColor={this.getStrokeColor()}
-            />
-          </div>
-        </div>
-      </div>
-    )
+      <FlippingCoin transform={rotate} front={playerOne.username} back={playerTwo ? playerTwo.username : ''} showBack={false}/>
+      // <div>
+      //   <div>
+      //     <div styleName={'flip'}>
+      //       <div styleName={coinStyle} style={{ transform: `rotatex(${rotate}deg)` }}>
+      //         <div styleName={'face front'}>{playerOne && playerOne.username}</div>
+      //         <div styleName={'face back'}>{playerTwo && playerTwo.username}</div>
+      //       </div>
+      //       <Circle
+      //         style={{ width: '200px', margin: '0 auto', position: 'absolute', top: '0', left: '0' }}
+      //         percent={percent}
+      //         strokeWidth="4"
+      //         strokeColor={this.getStrokeColor()}
+      //       />
+      //     </div>
+      //   </div>
+      // </div>
+    );
   }
 
   usersChance(totalBets, betAmount) {
-    const result = parseFloat(Math.round((betAmount / totalBets) * 100) / 100).toFixed(4) * 100;
+    const result = parseFloat(Math.round(betAmount / totalBets * 100) / 100).toFixed(4) * 100;
     return result;
   }
 
   renderGame() {
-
     const { user, games, params, gamePlays } = this.props;
 
     const game = games[params.id];
 
     let totalBets = 0;
 
-    game.GamePlays.forEach((gamePlayId) => {
+    game.GamePlays.forEach(gamePlayId => {
       const gamePlay = gamePlays[gamePlayId];
       totalBets += parseInt(gamePlay.betAmount);
     });
 
-    const usersInGame = game.GamePlays.map((gamePlayId) => {
+    const usersInGame = game.GamePlays.map(gamePlayId => {
       const gamePlay = gamePlays[gamePlayId];
       const chance = this.usersChance(totalBets, gamePlay.betAmount);
-      return { userId: gamePlay.userId, username: gamePlay.User.username, betAmount: gamePlay.betAmount, chance }
+      return { userId: gamePlay.userId, username: gamePlay.User.username, betAmount: gamePlay.betAmount, chance };
     });
 
     //If current user isnt in the game this means they are an observer.
-    const userIsInGame = usersInGame.find((gamePlay) => {
-      return gamePlay.userId === user.id;
-    });
+    let playerOne, playerTwo;
+    if (usersInGame[0]) {
+      playerOne = usersInGame[0];
+    }
+    if (usersInGame[1]) {
+      playerTwo = usersInGame[1];
+    }
 
-    const others = usersInGame.filter((gamePlay) => {
+    const others = usersInGame.filter(gamePlay => {
       return gamePlay.userId !== user.id;
     });
 
     return (
-      <div>
-        {
-          userIsInGame &&
+      <GameBoard>
+        {playerOne &&
           <GamePlayer
-            key={user.id}
-            username={userIsInGame.username}
-            chance={userIsInGame.chance}
-            userId={user.id}
-            betAmount={userIsInGame.betAmount}
-            gameOutcome={game.hash}
-          />
-        }
-        <span styleName={'ticker'}>
-          {
-            game.GamePlays.length > 0 ? this.renderCoin(userIsInGame, others) : <span>Waiting for Players to Join...</span>
-          }
-        </span>
-        {
-          others.map((otherUser) => <GamePlayer username={otherUser.username}
-                                           chance={otherUser.chance}
-                                           userId={otherUser.userId}
-                                           key={otherUser.userId}
-                                           betAmount={otherUser.betAmount}
-                                           gameOutcome={game.hash}/>)
-        }
-      </div>
+            key={playerOne.userId}
+            username={playerOne.username}
+            chance={playerOne.chance}
+            userId={playerOne.userId}
+            betAmount={playerOne.betAmount}
+            winningUserId={game.winningUserId}
+          />}
+        <CoinWrapper>
+          {game.GamePlays.length > 0
+            ? this.renderCoin(playerOne, playerTwo)
+            : <span>Waiting for Players to Join...</span>}
+        </CoinWrapper>
+        {playerTwo
+          ? <GamePlayer
+              username={playerTwo.username}
+              chance={playerTwo.chance}
+              userId={playerTwo.userId}
+              key={playerTwo.userId}
+              betAmount={playerTwo.betAmount}
+              winningUserId={game.winningUserId}
+            />
+          : <WaitingForPlayer> Waiting for player to join...</WaitingForPlayer>}
+      </GameBoard>
     );
   }
 
   render() {
     return (
       <div styleName={'players'}>
-        {
-          this.gameExists() ? this.renderGame() : <div><h1>Loading...</h1></div>
-        }
+        {this.gameExists() ? this.renderGame() : <div><h1>Loading...</h1></div>}
       </div>
     );
   }
@@ -189,7 +214,8 @@ function mapStateToProps(state) {
   return {
     games: state.game.games,
     gamePlays: state.gamePlay.gamePlays,
-    user: state.user
+    user: state.user,
+    isLoading: state.isFetching
   };
 }
 

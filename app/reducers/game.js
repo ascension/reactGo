@@ -8,6 +8,9 @@ const game = (
   action
 ) => {
   switch (action.type) {
+    case types.NEW_GAME_CREATED:
+      return { ...action.payload, status: 'WAITING', remainingWaitTime: 5000 };
+
     case types.CREATE_GAME:
       return { ...action, status: 'WAITING', remainingWaitTime: 5000 };
     case types.GAME_LOBBY_TICK:
@@ -17,9 +20,11 @@ const game = (
         return newGame;
       }
       return state;
+    case types.GAME_STARTING:
     case types.BEGIN_GAME:
       if (state.id === action.gameId) {
-        return { ...state, status: action.status, hash: action.outcome };
+        const { winningUserId, secret, hash, status } = action;
+        return { ...state, status, hash, action, winningUserId, secret  };
       }
       return state;
     case types.JOIN_GAME_SUCCESS:
@@ -40,6 +45,8 @@ const games = (
         return { ...state, ...games }
       }
       return state;
+    case types.NEW_GAME_CREATED:
+      return {...state, [action.payload.id]: game(undefined, action)};
     case types.CREATE_GAME:
       return {...state, [action.id]: game(undefined, action)};
     case types.GAME_LOBBY_TICK:
@@ -48,6 +55,11 @@ const games = (
       }
       return state;
     case types.BEGIN_GAME:
+      if (state[action.gameId]) {
+        return { ...state, [action.gameId]: game(state[action.gameId], action) };
+      }
+      return state;
+    case types.GAME_STARTING:
       if (state[action.gameId]) {
         return { ...state, [action.gameId]: game(state[action.gameId], action) };
       }

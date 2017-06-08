@@ -13,20 +13,18 @@ const messagesController = controllers && controllers.messages;
 const ledgerController = controllers && controllers.ledger;
 
 function isAuthenticatedApi(req, res, next) {
-  if (req.isAuthenticated())
-    return next();
+  if (req.isAuthenticated()) return next();
 
   res.status(401);
 }
 
 function isAuthenticated(req, res, next) {
-  if (req.isAuthenticated())
-    return next();
+  if (req.isAuthenticated()) return next();
 
   res.redirect('/login');
 }
 
-export default (app) => {
+export default (app, socket) => {
   // user routes
   if (usersController) {
     app.post('/login', usersController.login);
@@ -46,17 +44,18 @@ export default (app) => {
     // /auth/google/return
     // Authentication with google requires an additional scope param, for more info go
     // here https://developers.google.com/identity/protocols/OpenIDConnect#scope-param
-    app.get('/auth/google', passport.authenticate('google', {
-      scope: [
-        'https://www.googleapis.com/auth/userinfo.profile',
-        'https://www.googleapis.com/auth/userinfo.email'
-      ]
-    }));
+    app.get(
+      '/auth/google',
+      passport.authenticate('google', {
+        scope: ['https://www.googleapis.com/auth/userinfo.profile', 'https://www.googleapis.com/auth/userinfo.email']
+      })
+    );
 
     // Google will redirect the user to this URL after authentication. Finish the
     // process by verifying the assertion. If valid, the user will be logged in.
     // Otherwise, the authentication has failed.
-    app.get('/auth/google/callback',
+    app.get(
+      '/auth/google/callback',
       passport.authenticate('google', {
         successRedirect: '/',
         failureRedirect: '/login'
@@ -78,7 +77,9 @@ export default (app) => {
   if (gamesController) {
     app.get('/api/game', gamesController.all);
     app.get('/api/game/:id', gamesController.one);
-    app.post('/api/game', isAuthenticatedApi, gamesController.add);
+    app.post('/api/game', isAuthenticatedApi, (req, res) => {
+      return gamesController.add(req, res, socket);
+    });
     app.post('/api/game/:id/join', isAuthenticatedApi, gamesController.join);
     app.put('/api/game/:id', isAuthenticatedApi, gamesController.update);
   }

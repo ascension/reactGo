@@ -30,6 +30,7 @@ export const LOGOUT_ERROR_USER = 'LOGOUT_ERROR_USER';
 // Games Events
 export const CREATE_GAME = 'CREATE_GAME';
 export const BEGIN_GAME = 'server/BEGIN_GAME';
+export const NEW_GAME_CREATED = 'server/NEW_GAME_CREATED';
 export const GAME_STARTING = 'server/GAME_STARTING';
 export const GAME_LOBBY_TICK = 'GAME_LOBBY_TICK';
 export const GAME_FLIP_TICK = 'GAME_LOBBY_TICK';

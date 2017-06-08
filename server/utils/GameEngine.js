@@ -1,5 +1,6 @@
 import Chance from 'chance';
-import crypto from  'crypto';
+import crypto from 'crypto';
+import assert from 'assert';
 
 const TICK_RATE = 150; // ping the client every X milliseconds
 const COUNTDOWN_TIME = 5000; // how many seconds do we countdown the timer.
@@ -7,18 +8,14 @@ import { GAME_COUNTDOWN_SEC, GAME_TICK_INTERVAL, GAME_STATES } from '../config/c
 
 const BEGIN_GAME = 'server/BEGIN_GAME';
 const GAME_LOBBY_TICK = 'GAME_LOBBY_TICK';
-
-// Server Seed should be composed of a
-const serverSecret = 'aspdf87j12l3kjnbjh1ta8sdfaklsdbfli8y71923nman,sdfhals';
-
-var serverSeed = hash256(serverSecret);
+const GAME_STARTING = 'server/GAME_STARTING';
 
 let rolls = 0;
 
 // Incrementing the roll count must happen server side.
 function hash256(toBeHashed) {
-  var sha256 = crypto.createHash("sha256");
-  return sha256.update(toBeHashed).digest("hex");
+  var sha256 = crypto.createHash('sha256');
+  return sha256.update(toBeHashed).digest('hex');
 }
 
 export default class GameEngine {
@@ -28,7 +25,8 @@ export default class GameEngine {
     this.gameId = Game.id; // ID is from the DB.
     this.players = Game.GamePlays; // { userId: 100000 } - Key will be the users ID and their bet.
     // this.serverSeed = hash256(serverSecret);
-    this.serverSeed = hash256(Chance().guid());
+    this.secret = hash256(Chance().guid());
+    this.serverSeed = this.secret;
     this.socket = socket;
     this.state = GAME_STATES.WAITING;
     this.remainingWaitTime = GAME_COUNTDOWN_SEC;
@@ -42,12 +40,10 @@ export default class GameEngine {
    */
 
   appendServerSeed(clientSeed, rollCount) {
-    this.serverSeed +=  `|${clientSeed}:${rollCount}`;
+    this.serverSeed += `|${clientSeed}:${rollCount}`;
   }
 
-  handlePayouts(game, winningUserId) {
-
-  }
+  handlePayouts(game, winningUserId) {}
 
   getServerSeedForGame() {
     return hash256(this.serverSeed);
@@ -60,11 +56,13 @@ export default class GameEngine {
 
     const playerWeights = {};
 
-    this.players.forEach((player) => {
+    this.players.forEach(player => {
       totalBets += player.betAmount;
     });
 
-    const players = this.players.map((player) => {
+    assert(this.players.length >= 2);
+
+    const players = this.players.map(player => {
       const weight = player.betAmount / totalBets;
       weights.push(player.betAmount / totalBets);
       playerWeights[player.userId] = weight;
@@ -74,35 +72,51 @@ export default class GameEngine {
       this.appendServerSeed(clientSeed, 1);
       return player.userId;
     });
-    
+
     const rollSeed = hash256(this.serverSeed);
-    console.log('chance: ', this.getServerSeedForGame());
+    console.log('secret: ', this.secret);
+    console.log('seed: ', this.serverSeed);
+
     const chance = Chance(this.getServerSeedForGame());
-    const outcome = chance.weighted(players, weights);
-    this.interval = setInterval(() => {
-      this.remainingWaitTime = this.remainingWaitTime - GAME_TICK_INTERVAL;
-      if (this.remainingWaitTime < 0) {
-        clearInterval(this.interval);
-        this.game.status = GAME_STATES.COMPLETE;
-        this.game.hash = outcome;
-        this.game.save();
-        const randFlips = chance.integer({min: 1, max: 10});
-        this.socket.emit('action', {
-          type: BEGIN_GAME,
-          gameId: this.gameId,
-          status: GAME_STATES.COMPLETE,
-          outcome,
-          randFlips
-        });
-      } else {
-        this.socket.emit('action', {
-          type: GAME_LOBBY_TICK,
-          gameId: this.gameId,
-          status: GAME_STATES.IN_PROGRESS,
-          remainingWaitTime: this.remainingWaitTime
-        });
-      }
-    }, GAME_TICK_INTERVAL);
+    const winningUserId = chance.weighted(players, weights);
+
+    // GAME_STARTING Emit Hash
+    this.socket.emit('action', {
+      type: GAME_STARTING,
+      gameId: this.gameId,
+      hash: this.getServerSeedForGame()
+    });
+
+    this.interval = setInterval(
+      () => {
+        this.remainingWaitTime = this.remainingWaitTime - GAME_TICK_INTERVAL;
+        if (this.remainingWaitTime < 0) {
+          clearInterval(this.interval);
+          this.game.status = GAME_STATES.COMPLETE;
+          // this.game.hash = outcome;
+          this.game.hash = this.getServerSeedForGame();
+          this.game.save();
+          const randFlips = chance.integer({ min: 1, max: 10 });
+          this.socket.emit('action', {
+            type: BEGIN_GAME,
+            gameId: this.gameId,
+            status: GAME_STATES.COMPLETE,
+            winningUserId,
+            hash: this.game.hash,
+            secret: this.secret,
+            randFlips
+          });
+        } else {
+          this.socket.emit('action', {
+            type: GAME_LOBBY_TICK,
+            gameId: this.gameId,
+            status: GAME_STATES.IN_PROGRESS,
+            remainingWaitTime: this.remainingWaitTime
+          });
+        }
+      },
+      GAME_TICK_INTERVAL
+    );
     // record outcome in DB
     // emit result to players
   }
