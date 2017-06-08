@@ -1,10 +1,15 @@
 import React, { Component, PropTypes } from 'react';
 import CSSModules from 'react-css-modules';
 import styles from '../css/components/game.scss';
+import { createGame } from '../actions/game';
 
 class CreateGame extends Component {
   constructor(props) {
     super(props);
+
+    this.state = {
+      betAmount: 0
+    };
 
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -17,11 +22,14 @@ class CreateGame extends Component {
     if (typeof this.props.onChange === 'function') {
       this.props.onChange(event, newValue);
     }
+
+    this.setState({
+      betAmount: parseInt(newValue)
+    });
   }
 
-  handleSubmit(event) {
-    const { onSubmit, allowLowerBet, betAmount } = this.props;
-    onSubmit(betAmount, allowLowerBet);
+  handleSubmit() {
+    this.props.createGame(this.state.betAmount);
   }
 
   handleCheckboxChange(event) {
@@ -30,6 +38,10 @@ class CreateGame extends Component {
     if (typeof this.props.onCheckboxChange === 'function') {
       this.props.onCheckboxChange(event, newValue);
     }
+
+    this.setState({
+      allowLowerBet: newValue
+    });
   }
 
   render() {
@@ -37,18 +49,18 @@ class CreateGame extends Component {
       <div style={{visibility: this.props.show ? 'visible' : 'hidden'}}>
         <label>
           Bet Amount
-          <input type="number" className={'input'} onChange={this.handleChange} value={this.props.betAmount}/>
+          <input type="number" className="input" onChange={this.handleChange} value={this.state.betAmount}/>
         </label>
         <label>
           Allow Lower Bets
           <input
             type="checkbox"
-            value={this.props.allowLowerBet}
+            value={this.state.allowLowerBet}
             onChange={this.handleCheckboxChange}
-            checked={this.props.allowLowerBet}
+            checked={this.state.allowLowerBet}
           />
         </label>
-        <button type="submit" className={'game-btn'} onClick={this.handleSubmit}>Create Game</button>
+        <button type="submit" className="game-btn" onClick={this.handleSubmit}>Create Game</button>
       </div>
     );
   }

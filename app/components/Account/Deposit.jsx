@@ -15,7 +15,6 @@ class Deposit extends Component {
   }
 
   handleSubmit(event) {
-    debugger;
     event.preventDefault();
     console.log('amount', this.refs.amount.value, this.refs.password.value);
     // TODO - Call Action here.

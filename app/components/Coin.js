@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import React, { PropTypes } from 'react';
 
 export const CoinWrapper = styled.div`
   -webkit-perspective: 800;
@@ -57,9 +58,72 @@ export const CoinWrapper = styled.div`
     cursor: pointer;
   }
   .flip .card .back {
-    -webkit-transform: rotatex(${prop => props.degree}deg);
+    -webkit-transform: rotatex(180deg);
     background: #FF9900;
     color: black;
     cursor: pointer;
   }
 `;
+
+
+const Coin = styled.div`
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    transform: rotatex(${props => props.transform}deg);
+    transform-style: preserve-3d;
+    transition: 5s;
+`;
+
+const CoinFace = styled.div`
+  margin: 0;
+  display: block;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  border-radius: 100px;
+  border: 5px solid orange;
+`;
+
+const CoinFront = styled(CoinFace)`
+    background: green;
+    height: 100%;
+    backface-visibility: hidden;
+`;
+const CoinBack = styled(CoinFace)`
+    background: red;
+    height: 100%;
+    transform: rotatex(180deg);
+    backface-visibility: hidden;
+`;
+
+const propTypes = {};
+const defaultProps = {};
+
+const FlippingCoin = (props) => {
+    const { transform, front, back, showBack } = props;
+
+    return (
+      <CoinWrapper>
+          <Coin transform={transform}>
+            <CoinFront>
+                <div style={{lineHeight: '200px', textAlign: 'center'}}>
+                    {showBack ? back : front}
+                </div>
+            </CoinFront>
+            <CoinBack showBack={showBack}>
+                <div style={{lineHeight: '200px', textAlign: 'center'}}>
+                  {showBack ? front : back}
+                </div>
+            </CoinBack>
+          </Coin>
+      </CoinWrapper>
+    );
+};
+
+FlippingCoin.propTypes = propTypes;
+FlippingCoin.defaultProps = defaultProps;
+
+export default FlippingCoin;
+
