@@ -1,33 +1,26 @@
-* Allow users to join games
-    * Create Game Plays Table
-        * Capture userId, betAmount, hash of (userId, betAmount, serverBetSeed)
-    * Create Ledger
-        * Id
-        * User_id
-        * source_txn_id - Bitcoin Transaction ID
-        * balance_before
-        * balance_after
-        * balance_type - Allows us to hold multiple user balances (Currencies)
-        * Txn Types: Deposit, Withdrawal, Transfer, Bet, Cancel Bet, Winnings, House Cut, Invest
-    * Socket.io
-        * Create Global Channel for Games
-        * Global Chat Channel
-        * 
-        
+### User Profile
+- [ ] Allow users to upload their own avatar img
+    - [ ] Avatar images will need a way to be reported by a user for NSFW content.
 
-## Game Steps
-* CREATE_GAME
-    * Check User Balance
-    * Record Bet
-        * This prevents the user from over allocating available funds to many games. 
-        * Also prevents games from halting because the user now doesnt have enough balance.
-        * PENDING_BET
-        
-* JOIN_GAME
-    * Add 
-    * PENDING_BET - User, Amount
-    * 
-* CANCEL_BET
-* GAME_COUNTDOWN
-* GAME_FLIPPING
-    
+### Chat
+- [ ] Create channels
+
+### Deposits
+- [ ] Allow user deposits
+
+### Withdrawals
+- [ ] Allow user withdrawals
+
+### Moderators
+- [ ] Add user role for mods.
+- [ ] Create way for mods to mute users.
+- [ ] Create way for mods hide NSFW avatar images.
+
+### Info Pages
+- [ ] FAQ
+- [ ] Provably Fair
+ 
+### Ethereum Support 
+ - [ ] Support Ether Deposits 
+    - https://github.com/trapp/ethereum-bip44
+    - https://github.com/ethereumjs/ethereumjs-wallet (Preferred)

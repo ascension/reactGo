@@ -2,6 +2,7 @@ import { LEDGER_TXN_TYPES, CURRENCY } from '../config/constants';
 import Models from '../db/sequelize/models';
 const { Ledger } = Models;
 import assert from 'assert';
+import Result from '../utils/Result';
 
 const INSUFFICIENT_FUNDS = 'INSUFFICIENT_FUNDS';
 
@@ -78,9 +79,14 @@ class LedgerService {
     return this.model.findAll({ where: { userId, type: txnType }});
   }
 
-  userDeposit(userId, amount, currency = CURRENCY.BTC) {
+  userDeposit(userId, amount, txnId, currency = CURRENCY.BTC) {
     assert(typeof userId === 'number');
     assert(typeof amount === 'number');
+    assert(typeof txnId === 'string');
+
+    console.info(`USER ${userId} DEPOSIT - Amount: ${amount} ${currency} - TxnID: ${txnId}`);
+
+    const result = new Result();
 
     return this.model.findOne({ where: { userId, currency }, order: 'id DESC'})
       .then((lastEntry) => {
@@ -97,11 +103,13 @@ class LedgerService {
           amount: parseInt(amount),
           balanceBefore,
           balanceAfter,
+          txnId,
           currency,
           type: LEDGER_TXN_TYPES.DEPOSIT
         };
-
-        return this.model.create(deposit);
+        result.data = this.model.create(deposit);
+        console.log('USER_DEPOSIT -> result.data', result.data);
+        return result.data;
       })
       .catch((error) => {
         console.log(error);

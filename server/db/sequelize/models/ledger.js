@@ -27,19 +27,19 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: true
     },
     amount: {
-      type: DataTypes.BIGINT,
+      type: DataTypes.DECIMAL,
       allowNull: false
     },
     balanceBefore: {
-      type: DataTypes.BIGINT,
+      type: DataTypes.DECIMAL,
       allowNull: false
     },
     balanceAfter: {
-      type: DataTypes.BIGINT,
+      type: DataTypes.DECIMAL,
       allowNull: false
     },
     currency: {
-      type: DataTypes.ENUM(CURRENCY.BTC),
+      type: DataTypes.ENUM(CURRENCY.BTC, CURRENCY.ETH, CURRENCY.LTC),
       allowNull: false
     },
     type: {

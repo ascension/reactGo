@@ -1,7 +1,7 @@
 import Promise from 'bluebird';
 import bcryptNode from 'bcrypt-nodejs';
 const bcrypt = Promise.promisifyAll(bcryptNode);
-import { deriveAddress } from '../../../utils/bitcoin';
+import { deriveAddress, deriveEthereumAddress } from '../../../utils/bitcoin';
 
 
 // Other oauthtypes to be added
@@ -44,6 +44,12 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.VIRTUAL,
       get: function() {
         return this.get('id') ? deriveAddress(parseInt(this.get('id'))) : '';
+      }
+    },
+    ethereumAddress: {
+      type: DataTypes.VIRTUAL,
+      get: function() {
+        return this.get('id') ? deriveEthereumAddress(parseInt(this.get('id'))) : '';
       }
     },
     username: {
@@ -99,6 +105,7 @@ module.exports = (sequelize, DataTypes) => {
           id: this.id,
           username: this.username,
           bitcoinAddress: this.bitcoinAddress,
+          ethereumAddress: this.ethereumAddress,
           balance: this.balance,
           profile: {
             picture: this.picture

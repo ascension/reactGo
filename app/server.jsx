@@ -62,6 +62,7 @@ export default function render(req, res) {
       isLogin: true,
       username: req.user ? req.user.username : '',
       bitcoinAddress: req.user ? req.user.bitcoinAddress : '',
+      ethereumAddress: req.user ? req.user.ethereumAddress : '',
       balance: req.user ? req.user.balance : 0,
       withdrawals: req.user ? req.user.Ledger : [],
       id: req.user ? req.user.id : null

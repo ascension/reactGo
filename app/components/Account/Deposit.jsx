@@ -35,7 +35,7 @@ class Deposit extends Component {
   }
 
   render() {
-    const { user: { bitcoinAddress } } = this.props;
+    const { user: { bitcoinAddress, ethereumAddress } } = this.props;
     return (
       <div>
       <PageInner>
@@ -59,6 +59,27 @@ class Deposit extends Component {
           </div>
         </form>
       </PageInner>
+        <PageInner>
+          <form styleName="depositForm" onSubmit={this.handleSubmit}>
+            <div>
+              <label htmlFor="amount">Ethereum Address</label>
+              <input
+                id="amount"
+                ref="amount"
+                title="Withdrawal Address"
+                type="text"
+                value={ethereumAddress}
+                onChange={this.handleAmountChange} disabled={true}
+              />
+            </div>
+            <div styleName="qrCodeContainer">
+              <img
+                className="show-for-medium-up qr"
+                src={`https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${ethereumAddress}`}/>
+              <a styleName="bitcoinLink" href={`bitcoin:${ethereumAddress}`}>Ethereum Link</a>
+            </div>
+          </form>
+        </PageInner>
         <PageInner>
           <h1>Deposit History</h1>
         </PageInner>

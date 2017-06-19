@@ -10,6 +10,7 @@ const App = require('../public/assets/server');
 const app = express();
 import http from 'http';
 import LedgerService from './services/LedgerService';
+import connectEtherRPC from './services/EthereumRPC';
 
 import initSocket from './utils/socket';
 
@@ -60,4 +61,7 @@ export const socket = initSocket(server);
 export const getSocket = () => {
   return socket;
 };
+
+connectEtherRPC();
+
 server.listen(app.get('port'));

@@ -32,7 +32,7 @@ function GameRow(props) {
       return gamePlay.userId === user.id;
     });
 
-    const loggedInText = userHasAlreadyJoined ? 'Already Joined' : 'Join Game';
+    const loggedInText = userHasAlreadyJoined ? 'Already Joined' : 'Join';
 
     return (
       <button
@@ -49,11 +49,10 @@ function GameRow(props) {
 
   return (
     <div styleName={'game-row'} key={game.id}>
-      <div styleName={'game-row-time'}>{moment(game.createdAt).format('MM-DD-YYYY')}</div>
-      <div>{game.GamePlays ? calculateGamePot() : '0'} bits</div>
       <div>{game.GamePlays.length} / {game.maxPlayers}</div>
+      <div>{game.GamePlays ? calculateGamePot() : '0'} bits</div>
       <div styleName="flex-none">
-        <NavigationButton buttonText="VIEW GAME" link={`/game/${game.id}`} className="game-btn"/>
+        <NavigationButton buttonText="VIEW" link={`/game/${game.id}`} className="game-btn"/>
       </div>
       <div styleName="flex-none">
         {

@@ -50,9 +50,8 @@ class Games extends Component {
     return (
       <div styleName="table">
         <div styleName={'game-row'}>
-          <div>Created At</div>
-          <div>Pot</div>
           <div>Players</div>
+          <div>Pot</div>
           <div />
         </div>
         {games.map(game => {
@@ -66,13 +65,17 @@ class Games extends Component {
   render() {
     const { games, createGame, gamePlays, isLoading } = this.props;
     return (
-      <div styleName={'gameTable'}>
-        <SummaryContainer>
-          <TotalSummary />
-          <UserSummary createGame={createGame} />
-        </SummaryContainer>
-        <div style={{ height: '100%', marginBottom: '2em' }}>
-          {isLoading ? <Loader isLoading={true} /> : this.renderGamesTable()}
+      <div>
+        <div styleName={'gameTable'}>
+          <SummaryContainer>
+            <TotalSummary />
+            <UserSummary createGame={createGame} />
+          </SummaryContainer>
+        </div>
+        <div styleName={'gameTable'}>
+          <div style={{ height: '100%', marginBottom: '2em' }}>
+            {isLoading ? <Loader isLoading={true} /> : this.renderGamesTable()}
+          </div>
         </div>
       </div>
     );

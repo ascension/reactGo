@@ -115,6 +115,19 @@ const bitcoinAddress = (state = null, action) => {
   }
 };
 
+const ethereumAddress = (state = null, action) => {
+  switch (action.type) {
+    case types.LOGIN_SUCCESS_USER:
+    case types.SIGNUP_SUCCESS_USER:
+      debugger
+      if (action.user.ethereumAddress) return action.user.ethereumAddress;
+      return state;
+    default:
+      debugger
+      return state;
+  }
+};
+
 const balance = (state = 0, action) => {
   switch (action.type) {
     case types.UPDATE_USER_BALANCE:
@@ -132,6 +145,7 @@ const userReducer = combineReducers({
   isWaiting,
   authenticated,
   bitcoinAddress,
+  ethereumAddress,
   balance,
   message,
   username,
